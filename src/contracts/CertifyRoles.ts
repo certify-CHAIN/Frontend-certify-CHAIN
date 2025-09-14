@@ -78,7 +78,7 @@ export const CertifyRolesABI = [
   }
 ];
 
-export const getContract = (providerOrSigner: any) => {
-  const contractAddress = "0xDaC5fd597801Fe86422fE64D714F9F6452424927"; // ✅ Dirección correcta
-  return new ethers.Contract(contractAddress, CertifyRolesABI, providerOrSigner);
+export const getContract = (signer: ethers.Signer) => {
+  const contractAddress = "0xdb889623dc83756c2fd75a8c2ca8b16761c35751"; // ✅ Dirección correcta
+  return new ethers.Contract(contractAddress, CertifyRolesABI, signer);
 };

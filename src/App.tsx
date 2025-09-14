@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { getContract } from "./contracts/CertifyRoles";
-import Web3Modal from "web3modal";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount, useDisconnect, useWalletClient } from "wagmi";
 import AdminPanel from "./components/AdminPanel";
 import DirectorPanel from "./components/DirectorPanel";
 import StudentPanel from "./components/StudentPanel";
@@ -12,12 +13,32 @@ import logoDark from "./assets/logo-black.svg";
 // Tipos para los roles
 type UserRole = "admin" | "director" | "student" | null;
 
+// Función para convertir wallet client a ethers signer
+function walletClientToSigner(walletClient: any) {
+  if (!walletClient) return null;
+  
+  const { account, chain, transport } = walletClient;
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  };
+  const provider = new ethers.BrowserProvider(transport, network);
+  const signer = provider.getSigner(account.address);
+  return signer;
+}
+
 const App = () => {
-  const [account, setAccount] = useState<string>("");
   const [userRole, setUserRole] = useState<UserRole>(null);
   const [loading, setLoading] = useState(false);
   const [modoOscuro, setModoOscuro] = useState(true);
-  const [signer, setSigner] = useState<ethers.Signer | null>(null); // Nuevo estado para el signer
+  
+  // Hook de RainbowKit/Wagmi para obtener la cuenta conectada
+  const { address, isConnected, isConnecting } = useAccount();
+  // Hook para obtener el wallet client (equivalente a signer en viem)
+  const { data: walletClient } = useWalletClient();
+  // Hook para desconectar la wallet
+  const { disconnect } = useDisconnect();
 
   // Verificar rol basado en la dirección de la wallet
   const verificarRol = async (
@@ -37,26 +58,31 @@ const App = () => {
     }
   };
 
-  const conectarBilletera = async () => {
-    setLoading(true);
-    try {
-      const web3Modal = new Web3Modal();
-      const conexion = await web3Modal.connect();
-      const proveedor = new ethers.BrowserProvider(conexion);
-      const firmante = await proveedor.getSigner();
-      const direccion = await firmante.getAddress();
+  // Efecto para verificar el rol cuando se conecta una wallet
+  useEffect(() => {
+    const checkUserRole = async () => {
+      if (isConnected && address && walletClient) {
+        setLoading(true);
+        try {
+          // Convertir wallet client a ethers signer
+          const signer = await walletClientToSigner(walletClient);
+          if (signer) {
+            const rol = await verificarRol(address, signer);
+            setUserRole(rol);
+          }
+        } catch (error) {
+          console.error("Error verificando rol:", error);
+          setUserRole(null);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setUserRole(null);
+      }
+    };
 
-      const rol = await verificarRol(direccion, firmante);
-
-      setAccount(direccion);
-      setUserRole(rol);
-      setSigner(firmante); // Guardar el signer en el estado
-    } catch (error) {
-      console.error("Error conectando billetera:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    checkUserRole();
+  }, [isConnected, address, walletClient]);
 
   const alternarModo = () => {
     setModoOscuro(!modoOscuro);
@@ -72,9 +98,8 @@ const App = () => {
   }, [modoOscuro]);
 
   const desconectar = () => {
-    setAccount("");
+    disconnect();
     setUserRole(null);
-    setSigner(null); // Limpiar el signer al desconectar
   };
 
   // Modificar el useEffect del widget para que se active/desactive según el estado de la cuenta
@@ -91,7 +116,7 @@ const App = () => {
       }
     };
 
-    if (!account) {
+    if (!isConnected) {
       // Primero remover cualquier instancia existente
       removeExistingScript();
 
@@ -117,7 +142,7 @@ const App = () => {
     return () => {
       removeExistingScript();
     };
-  }, [account]); // Dependencia del estado de account
+  }, [isConnected]);
 
   return (
     <div
@@ -160,15 +185,15 @@ const App = () => {
               </button>
 
               {/* Estado de conexión */}
-              {account && (
+              {/* {isConnected && (
                 <div className="flex items-center space-x-3">
                   <span
                     className={`text-sm font-medium ${
                       modoOscuro ? "text-gray-300" : "text-gray-600"
                     }`}
                   >
-                    {`${account.substring(0, 6)}...${account.substring(
-                      account.length - 4
+                    {`${address?.substring(0, 6)}...${address?.substring(
+                      address.length - 4
                     )}`}
                   </span>
                   <button
@@ -183,7 +208,16 @@ const App = () => {
                     {loading ? "Desconectando..." : "Desconectar"}
                   </button>
                 </div>
-              )}
+              )} */}
+              
+              {/* Botón de conexión de RainbowKit */}
+              <ConnectButton 
+                showBalance={true}
+                accountStatus={{
+                  smallScreen: 'avatar',
+                  largeScreen: 'full',
+                }}
+              />
             </div>
           </div>
         </div>
@@ -191,7 +225,12 @@ const App = () => {
 
       {/* Contenido principal basado en el rol */}
       <main className="flex flex-1 items-center justify-center min-h-[calc(100vh-80px)] relative z-10">
-        {!account ? (
+        {isConnecting ? (
+          <div className={`text-center p-8 rounded-xl shadow-lg ${modoOscuro ? "bg-gray-800 text-white" : "bg-white text-gray-800"}`}>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p>Conectando...</p>
+          </div>
+        ) : !isConnected ? (
           <div
             className={`text-center max-w-2xl mx-auto flex flex-col justify-center items-center w-full p-8 rounded-xl shadow-lg ${
               modoOscuro ? "bg-gray-800" : "bg-white"
@@ -229,57 +268,17 @@ const App = () => {
               Conecta tu billetera para acceder al panel correspondiente según
               tu rol en la plataforma.
             </p>
-            
-            <button
-              onClick={conectarBilletera}
-              disabled={loading}
-              className={`px-8 py-3 rounded-lg font-semibold shadow transition-all duration-200 relative overflow-hidden
-                ${
-                  modoOscuro
-                    ? "bg-blue-600 text-white"
-                    : "bg-blue-500 text-white"
-                }
-                ${loading ? "opacity-50 cursor-not-allowed" : ""}
-                group
-              `}
-              style={{ zIndex: 1 }}
-            >
-
-              <span
-                className="absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                style={{
-                  background:
-                    "linear-gradient(270deg, #ff0080, #7928ca, #00ffea, #ff0080)",
-                  backgroundSize: "600% 600%",
-                  animation: "rgbGlow 2s linear infinite",
-                  filter: "blur(12px)",
-                  zIndex: 0,
-                }}
-              />
-              <span className="relative z-10">
-                {loading ? "Conectando..." : "Conectar Wallet"}
-              </span>
-              <style>
-                {`
-                  @keyframes rgbGlow {
-                    0% { background-position: 0% 50%; }
-                    50% { background-position: 100% 50%; }
-                    100% { background-position: 0% 50%; }
-                  }
-                `}
-              </style>
-            </button>
           </div>
         ) : userRole === "admin" ? (
-          <AdminPanel account={account} modoOscuro={modoOscuro} />
+          <AdminPanel account={address || ""} modoOscuro={modoOscuro} />
         ) : userRole === "director" ? (
           <DirectorPanel
-            account={account}
+            account={address || ""}
             modoOscuro={modoOscuro}
-            signer={signer!} // Pasamos el signer al DirectorPanel
+            walletClient={walletClient}
           />
         ) : (
-          <StudentPanel account={account} modoOscuro={modoOscuro} />
+          <StudentPanel account={address || ""} modoOscuro={modoOscuro} />
         )}
       </main>
     </div>
