@@ -117,7 +117,7 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
 
   // Función para compartir certificado
   const compartirCertificado = (certificado: Certificado) => {
-    const enlace = `https://certifi-chain.vercel.app/${certificado.id}`;
+    const enlace = `https://frontend-certify-chain.vercel.app/${certificado.id}`;
     navigator.clipboard.writeText(enlace);
     setMensajeCompartir("✅ Enlace copiado al portapapeles");
     setTimeout(() => setMensajeCompartir(null), 3000);
