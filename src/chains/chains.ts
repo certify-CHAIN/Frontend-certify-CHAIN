@@ -4,7 +4,6 @@ import type { Chain } from "wagmi/chains";
 export const somniaTestnet: Chain = {
   id: 50312,
   name: "Somnia Shannon Testnet",
-  network: "somnia-shannon-testnet",
   nativeCurrency: {
     decimals: 18,
     name: "Somnia Token",
