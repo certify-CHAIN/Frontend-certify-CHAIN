@@ -525,7 +525,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                       {/* QR (gener QR con ID) */}
                       <div className="absolute top-4 right-4">
                         <QRCodeSVG
-                          value={`${"https://certifi-chain.vercel.app"}/${certificadoId}`}
+                          value={`${"https://frontend-certify-chain.vercel.app"}/${certificadoId}`}
                           size={80}
                         />
                       </div>
