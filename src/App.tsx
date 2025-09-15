@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { getContract } from "./contracts/CertifyRoles";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useDisconnect, useWalletClient } from "wagmi";
+import { useAccount, useWalletClient } from "wagmi";
 import AdminPanel from "./components/AdminPanel";
 import DirectorPanel from "./components/DirectorPanel";
 import StudentPanel from "./components/StudentPanel";
@@ -30,7 +30,7 @@ function walletClientToSigner(walletClient: any) {
 
 const App = () => {
   const [userRole, setUserRole] = useState<UserRole>(null);
-  const [loading, setLoading] = useState(false);
+  const [,setLoading] = useState(false);
   const [modoOscuro, setModoOscuro] = useState(true);
   
   // Hook de RainbowKit/Wagmi para obtener la cuenta conectada
@@ -183,32 +183,6 @@ const App = () => {
               >
                 {modoOscuro ? "☀️" : "🌙"}
               </button>
-
-              {/* Estado de conexión */}
-              {/* {isConnected && (
-                <div className="flex items-center space-x-3">
-                  <span
-                    className={`text-sm font-medium ${
-                      modoOscuro ? "text-gray-300" : "text-gray-600"
-                    }`}
-                  >
-                    {`${address?.substring(0, 6)}...${address?.substring(
-                      address.length - 4
-                    )}`}
-                  </span>
-                  <button
-                    onClick={desconectar}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      modoOscuro
-                        ? "bg-red-600 hover:bg-red-700 text-white"
-                        : "bg-red-500 hover:bg-red-600 text-white"
-                    }`}
-                    disabled={loading}
-                  >
-                    {loading ? "Desconectando..." : "Desconectar"}
-                  </button>
-                </div>
-              )} */}
               
               {/* Botón de conexión de RainbowKit */}
               <ConnectButton 
