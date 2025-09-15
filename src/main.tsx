@@ -8,14 +8,7 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  mainnet,
-  sepolia,
-  polygon,
-  optimism,
-  arbitrum,
-  base,
-} from "wagmi/chains";
+
 
 import App from "./App.tsx";
 import CertificatePage from "./CertificatePage";
@@ -26,7 +19,7 @@ import { somniaTestnet } from "./chains/chains";
 const config = getDefaultConfig({
   appName: "Mi App RainbowKit",
   projectId: "4764cb0b8852760547f5a36b9d826354",
-  chains: [mainnet, sepolia, polygon, optimism, arbitrum, base, somniaTestnet],
+  chains: [somniaTestnet],
   ssr: true,
 });
 

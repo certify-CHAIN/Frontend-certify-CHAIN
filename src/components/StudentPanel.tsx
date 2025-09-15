@@ -25,10 +25,10 @@ interface Certificado {
 }
 
 // Configuración de Supabase (usar las mismas credenciales)
-const supabase = createClient(
-  "https://llemzfnbfdxwxqhpfhzv.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsZW16Zm5iZmR4d3hxaHBmaHp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMTI5NzMsImV4cCI6MjA3MDU4ODk3M30.TLDKGeJcDtGSLMITfABeFLucNoApEYuRYzgz9lhbziE"
-);
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
   const [certificados, setCertificados] = useState<Certificado[]>([]);
@@ -105,7 +105,7 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
 
   // Función para ver transacción en blockchain (Sepolia Etherscan)
   const verTransaccionBlockchain = (txHash: string) => {
-    const blockchainExplorer = "https://sepolia.etherscan.io/tx/";
+    const blockchainExplorer = "https://shannon-explorer.somnia.network/tx/";
     window.open(`${blockchainExplorer}${txHash}`, "_blank");
   };
 

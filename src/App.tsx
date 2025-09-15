@@ -38,7 +38,7 @@ const App = () => {
   // Hook para obtener el wallet client (equivalente a signer en viem)
   const { data: walletClient } = useWalletClient();
   // Hook para desconectar la wallet
-  const { disconnect } = useDisconnect();
+  //const { disconnect } = useDisconnect();
 
   // Verificar rol basado en la dirección de la wallet
   const verificarRol = async (
@@ -97,10 +97,10 @@ const App = () => {
     }
   }, [modoOscuro]);
 
-  const desconectar = () => {
-    disconnect();
-    setUserRole(null);
-  };
+  // const desconectar = () => {
+  //   disconnect();
+  //   setUserRole(null);
+  // };
 
   // Modificar el useEffect del widget para que se active/desactive según el estado de la cuenta
   useEffect(() => {
@@ -275,7 +275,7 @@ const App = () => {
           <DirectorPanel
             account={address || ""}
             modoOscuro={modoOscuro}
-            walletClient={walletClient}
+            //walletClient={walletClient}
           />
         ) : (
           <StudentPanel account={address || ""} modoOscuro={modoOscuro} />

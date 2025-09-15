@@ -20,10 +20,14 @@ interface Certificado {
 }
 
 // Configuración de Supabase
-const supabase = createClient(
-  'https://llemzfnbfdxwxqhpfhzv.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsZW16Zm5iZmR4d3hxaHBmaHp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMTI5NzMsImV4cCI6MjA3MDU4ODk3M30.TLDKGeJcDtGSLMITfABeFLucNoApEYuRYzgz9lhbziE'
-);
+// const supabase = createClient(
+//   'https://llemzfnbfdxwxqhpfhzv.supabase.co',
+//   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsZW16Zm5iZmR4d3hxaHBmaHp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMTI5NzMsImV4cCI6MjA3MDU4ODk3M30.TLDKGeJcDtGSLMITfABeFLucNoApEYuRYzgz9lhbziE'
+// );
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const CertificatePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -410,7 +414,7 @@ const CertificatePage: React.FC = () => {
 
               {certificado.tx_hash && (
                 <button
-                  onClick={() => abrirEnlace(`https://sepolia.etherscan.io/tx/${certificado.tx_hash}`)}
+                  onClick={() => abrirEnlace(`https://shannon-explorer.somnia.network/tx/${certificado.tx_hash}`)}
                   className="w-full p-4 bg-purple-950 hover:bg-purple-900 border border-purple-700 rounded-xl transition-colors text-center"
                 >
                   <div className="text-2xl mb-2">⛓️</div>
