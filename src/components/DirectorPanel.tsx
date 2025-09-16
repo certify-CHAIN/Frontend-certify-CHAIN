@@ -351,7 +351,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
       setMintStatus("💰 Obteniendo precio actual...");
       const currentPrice = await contract.mintPrice();
       console.log("💰 Precio en wei:", currentPrice.toString());
-      console.log("💰 Precio en ETH:", ethers.formatEther(currentPrice));
+      console.log("💰 Precio en STT:", ethers.formatEther(currentPrice));
 
       // Verificar wallet
       if (!ethers.isAddress(walletToMint)) {
@@ -775,7 +775,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                         >
                           {isLoadingPrice
                             ? "⏳ Cargando..."
-                            : `${mintPrice} ETH`}
+                            : `${mintPrice} STT`}
                         </span>
                       </div>
                       <p

@@ -16,7 +16,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
   const [studentAddress, setStudentAddress] = useState("");
   const [estudiantes, setEstudiantes] = useState<string[]>([]);
 
-  const contractAddress = "0xdb889623dc83756c2fd75a8c2ca8b16761c35751"; // <-- actualiza esto
+  const contractAddress = "0x786E41e7a24C8B9031b91749F8f1A649457CC1BF"; // <-- actualiza esto
   const abi = abiJson.abi;
 
   const getContract = async () => {
