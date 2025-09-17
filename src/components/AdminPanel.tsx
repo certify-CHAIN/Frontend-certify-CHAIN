@@ -8,19 +8,19 @@ interface AdminPanelProps {
 }
 
 const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
-  const [activeTab, setActiveTab] = useState("instituciones");
+  const [activeTab, setActiveTab] = useState("institutions");
   const [directorAddress, setDirectorAddress] = useState("");
-  const [mensaje, setMensaje] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [directores, setDirectores] = useState<string[]>([]);
   const [studentAddress, setStudentAddress] = useState("");
   const [estudiantes, setEstudiantes] = useState<string[]>([]);
 
-  const contractAddress = "0x786E41e7a24C8B9031b91749F8f1A649457CC1BF"; // <-- actualiza esto
+  const contractAddress = "0x786E41e7a24C8B9031b91749F8f1A649457CC1BF"; // <-- update this
   const abi = abiJson.abi;
 
   const getContract = async () => {
-    if (!window.ethereum) throw new Error("MetaMask no está disponible");
+    if (!window.ethereum) throw new Error("MetaMask is not available");
 
     const provider = new BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -33,12 +33,12 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
       const result = await contract.getAllDirectors();
       setDirectores(result);
     } catch (error) {
-      console.error("Error al obtener directores:", error);
+      console.error("Error fetching directors:", error);
     }
   };
 
   useEffect(() => {
-    if (activeTab === "directores") {
+    if (activeTab === "directors") {
       fetchDirectores();
     }
   }, [activeTab]);
@@ -49,7 +49,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
       const contract = await getContract();
       const tx = await contract.addDirector(directorAddress);
       await tx.wait();
-      setMensaje(`Director ${directorAddress} agregado exitosamente.`);
+      setMessage(`Director ${directorAddress} successfully added.`);
       setDirectorAddress("");
     } catch (error: unknown) {
       if (
@@ -58,9 +58,9 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
         "code" in error &&
         (error as { code?: string }).code === "ACTION_REJECTED"
       ) {
-        setMensaje("❌ Acción cancelada por el usuario.");
+        setMessage("❌ Action canceled by the user.");
       } else {
-        setMensaje(
+        setMessage(
           `⚠️ Error: ${
             typeof error === "object" && error !== null && "message" in error
               ? (error as { message?: string }).message
@@ -79,13 +79,13 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
       const contract = await getContract();
       const tx = await contract.removeDirector(directorAddress);
       await tx.wait();
-      setMensaje(`Director ${directorAddress} eliminado exitosamente.`);
+      setMessage(`Director ${directorAddress} successfully removed.`);
       setDirectorAddress("");
     } catch (error: any) {
       if (error.code === "ACTION_REJECTED") {
-        setMensaje("❌ Acción cancelada por el usuario.");
+        setMessage("❌ Action canceled by the user.");
       } else {
-        setMensaje(`⚠️ Error: ${error.message || error}`);
+        setMessage(`⚠️ Error: ${error.message || error}`);
       }
     } finally {
       setLoading(false);
@@ -98,7 +98,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
       const result = await contract.getAllStudents();
       setEstudiantes(result);
     } catch (error) {
-      console.error("Error al obtener estudiantes:", error);
+      console.error("Error fetching students:", error);
     }
   };
 
@@ -108,14 +108,14 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
       const contract = await getContract();
       const tx = await contract.addStudent(studentAddress);
       await tx.wait();
-      setMensaje(`Estudiante ${studentAddress} agregado exitosamente.`);
+      setMessage(`Student ${studentAddress} successfully added.`);
       setStudentAddress("");
-      fetchEstudiantes(); // actualizar lista
+      fetchEstudiantes(); // update list
     } catch (error: any) {
       if (error.code === "ACTION_REJECTED") {
-        setMensaje("❌ Acción cancelada por el usuario.");
+        setMessage("❌ Action canceled by the user.");
       } else {
-        setMensaje(`⚠️ Error: ${error.message || error}`);
+        setMessage(`⚠️ Error: ${error.message || error}`);
       }
     } finally {
       setLoading(false);
@@ -128,14 +128,14 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
       const contract = await getContract();
       const tx = await contract.removeStudent(studentAddress);
       await tx.wait();
-      setMensaje(`Estudiante ${studentAddress} eliminado exitosamente.`);
+      setMessage(`Student ${studentAddress} successfully removed.`);
       setStudentAddress("");
-      fetchEstudiantes(); // actualizar lista
+      fetchEstudiantes(); // update list
     } catch (error: any) {
       if (error.code === "ACTION_REJECTED") {
-        setMensaje("❌ Acción cancelada por el usuario.");
+        setMessage("❌ Action canceled by the user.");
       } else {
-        setMensaje(`⚠️ Error: ${error.message || error}`);
+        setMessage(`⚠️ Error: ${error.message || error}`);
       }
     } finally {
       setLoading(false);
@@ -143,7 +143,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
   };
 
   useEffect(() => {
-  if (activeTab === "estudiantes") {
+  if (activeTab === "students") {
     fetchEstudiantes();
   }
 }, [activeTab]);
@@ -156,7 +156,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
           modoOscuro ? "text-white" : "text-gray-800"
         }`}
       >
-        Panel de Administración
+        Administration Panel
       </h1>
 
       <div
@@ -165,11 +165,11 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
         }`}
       >
         {[
-          "instituciones",
-          "directores",
-          "estudiantes",
-          "configuracion",
-          "auditoria",
+          "institutions",
+          "directors",
+          "students",
+          "configuration",
+          "audit",
         ].map((tab) => (
           <button
             key={tab}
@@ -194,39 +194,37 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
           modoOscuro ? "bg-gray-800" : "bg-white shadow"
         }`}
       >
-        {activeTab === "instituciones" && (
+        {activeTab === "institutions" && (
           <div>
             <h2
               className={`text-xl font-semibold mb-4 ${
                 modoOscuro ? "text-white" : "text-gray-800"
               }`}
             >
-              Gestión de Instituciones
+              Institutions Management
             </h2>
             <p className={modoOscuro ? "text-gray-300" : "text-gray-600"}>
-              Aquí puedes agregar, editar o eliminar instituciones autorizadas
-              para emitir certificados.
+              Here you can add, edit or remove authorized institutions to issue certificates.
             </p>
           </div>
         )}
 
-        {activeTab === "directores" && (
+        {activeTab === "directors" && (
           <div>
             <h2
               className={`text-xl font-semibold mb-4 ${
                 modoOscuro ? "text-white" : "text-gray-800"
               }`}
             >
-              Gestión de Directores
+              Directors Management
             </h2>
             <p className={modoOscuro ? "text-gray-300" : "text-gray-600 mb-4"}>
-              Administra los directores y administrativos que pueden gestionar
-              certificados.
+              Manage directors and administrators who can handle certificates.
             </p>
 
             <input
               type="text"
-              placeholder="Dirección del director"
+              placeholder="Director's address"
               value={directorAddress}
               onChange={(e) => setDirectorAddress(e.target.value)}
               className="border px-4 py-2 w-full mb-4 rounded"
@@ -238,18 +236,18 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
                 disabled={loading}
                 className="bg-blue-500 text-white px-4 py-2 rounded"
               >
-                Agregar Director
+                Add Director
               </button>
               <button
                 onClick={handleRemoveDirector}
                 disabled={loading}
                 className="bg-red-500 text-white px-4 py-2 rounded"
               >
-                Eliminar Director
+                Remove Director
               </button>
             </div>
 
-            {mensaje && (
+            {message && (
               <div
                 className={`mt-4 p-2 rounded ${
                   modoOscuro
@@ -257,7 +255,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
                     : "bg-gray-100 text-green-700"
                 }`}
               >
-                {mensaje}
+                {message}
               </div>
             )}
 
@@ -268,7 +266,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
                     modoOscuro ? "text-white" : "text-gray-800"
                   }`}
                 >
-                  Lista de Directores:
+                  Directors List:
                 </h3>
                 <ul className="list-disc pl-5">
                   {directores.map((dir, index) => (
@@ -287,22 +285,22 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
           </div>
         )}
 
-        {activeTab === "estudiantes" && (
+        {activeTab === "students" && (
           <div>
             <h2
               className={`text-xl font-semibold mb-4 ${
                 modoOscuro ? "text-white" : "text-gray-800"
               }`}
             >
-              Gestión de Estudiantes
+              Students Management
             </h2>
             <p className={modoOscuro ? "text-gray-300" : "text-gray-600 mb-4"}>
-              Administra los estudiantes autorizados a recibir certificados.
+              Manage students authorized to receive certificates.
             </p>
 
             <input
               type="text"
-              placeholder="Dirección del estudiante"
+              placeholder="Student's address"
               value={studentAddress}
               onChange={(e) => setStudentAddress(e.target.value)}
               className="border px-4 py-2 w-full mb-4 rounded"
@@ -314,18 +312,18 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
                 disabled={loading}
                 className="bg-green-500 text-white px-4 py-2 rounded"
               >
-                Agregar Estudiante
+                Add Student
               </button>
               <button
                 onClick={handleRemoveStudent}
                 disabled={loading}
                 className="bg-red-500 text-white px-4 py-2 rounded"
               >
-                Eliminar Estudiante
+                Remove Student
               </button>
             </div>
 
-            {mensaje && (
+            {message && (
               <div
                 className={`mt-4 p-2 rounded ${
                   modoOscuro
@@ -333,7 +331,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
                     : "bg-gray-100 text-green-700"
                 }`}
               >
-                {mensaje}
+                {message}
               </div>
             )}
 
@@ -344,7 +342,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
                     modoOscuro ? "text-white" : "text-gray-800"
                   }`}
                 >
-                  Lista de Estudiantes:
+                  Students List:
                 </h3>
                 <ul className="list-disc pl-5">
                   {estudiantes.map((stu, index) => (
@@ -358,6 +356,36 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
                 </ul>
               </div>
             )}
+          </div>
+        )}
+
+        {activeTab === "configuration" && (
+          <div>
+            <h2
+              className={`text-xl font-semibold mb-4 ${
+                modoOscuro ? "text-white" : "text-gray-800"
+              }`}
+            >
+              System Configuration
+            </h2>
+            <p className={modoOscuro ? "text-gray-300" : "text-gray-600"}>
+              General settings and parameters of the certification system.
+            </p>
+          </div>
+        )}
+
+        {activeTab === "audit" && (
+          <div>
+            <h2
+              className={`text-xl font-semibold mb-4 ${
+                modoOscuro ? "text-white" : "text-gray-800"
+              }`}
+            >
+              Activity Audit
+            </h2>
+            <p className={modoOscuro ? "text-gray-300" : "text-gray-600"}>
+              Record of all activities performed in the system.
+            </p>
           </div>
         )}
       </div>
