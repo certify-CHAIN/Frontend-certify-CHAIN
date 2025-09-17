@@ -1,18 +1,17 @@
 import { useRef, useState, useEffect } from "react";
 import html2canvas from "html2canvas";
 import { PinataSDK } from "pinata";
-import certificadoImg from "../assets/certificado2.jpg";
+import certificadoImg from "../assets/ofiSomniaCertify.png";
 import { ethers } from "ethers";
 import { getCertiChainTokenContract } from "../contracts/CertiChainToken";
 import { QRCodeSVG } from "qrcode.react";
 import { createClient } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";
 
-
 interface DirectorPanelProps {
   account: string;
   modoOscuro: boolean;
-  signer?: ethers.Signer; // Añadido signer como prop opcional
+  signer?: ethers.Signer;
 }
 
 // Configuración de Supabase
@@ -40,8 +39,6 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
   const [mintPrice, setMintPrice] = useState("0");
   const [isLoadingPrice, setIsLoadingPrice] = useState(false);
   const [isMinting, setIsMinting] = useState(false);
-
-  // Estado para almacenar el ID del certificado creado
   const [certificadoId, setCertificadoId] = useState<string>(uuidv4());
 
   const [jsonData, setJsonData] = useState({
@@ -67,7 +64,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
         .from("certificados")
         .insert([
           {
-            id: certificadoId, // Usar el ID generado
+            id: certificadoId,
             nombre_estudiante: nombreEstudiante,
             institucion: institucionNombre,
             wallet_destinatario: walletDestinatario,
@@ -182,7 +179,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
     };
   }, []);
 
-  // SUBIR IMAGEN
+  // SUBIR IMAGEN - Función optimizada para calidad 1536x1024px
   const handleUpload = async () => {
     if (!nombre || !institucion) {
       setUploadStatus("⚠️ Por favor completa todos los campos.");
@@ -190,15 +187,102 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
     }
 
     try {
-      setUploadStatus("🖼️ Generando imagen...");
-      const canvas = await html2canvas(certRef.current!, {
+      setUploadStatus("🖼️ Generando imagen en alta calidad...");
+
+      // Asegurar que el componente esté renderizado completamente
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const certElement = certRef.current;
+      if (!certElement) {
+        throw new Error("Elemento de certificado no encontrado");
+      }
+
+      // Esperar a que todas las imágenes se carguen
+      const images = certElement.querySelectorAll('img');
+      await Promise.all(
+        Array.from(images).map((img) => {
+          if (img.complete) return Promise.resolve();
+          return new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+            // Timeout de seguridad
+            setTimeout(reject, 10000);
+          });
+        })
+      );
+
+      console.log("✅ Todas las imágenes están cargadas");
+
+      // Obtener las dimensiones reales del elemento
+      const rect = certElement.getBoundingClientRect();
+      
+      // Calcular las dimensiones para mantener la calidad original
+      const targetWidth = 1536;
+      const targetHeight = 1024;
+      const scale = Math.max(targetWidth / rect.width, targetHeight / rect.height);
+
+      console.log(`📏 Dimensiones originales: ${rect.width}x${rect.height}`);
+      console.log(`🎯 Dimensiones objetivo: ${targetWidth}x${targetHeight}`);
+      console.log(`⚡ Escala calculada: ${scale}`);
+
+      // Configuración optimizada para html2canvas con resolución exacta
+      const canvas = await html2canvas(certElement, {
         useCORS: true,
-        scale: 2,
+        scale: scale, // Escala calculada para alcanzar 1536x1024
+        allowTaint: false,
+        backgroundColor: "#ffffff",
+        logging: true, // Activar logging para debug
+        width: targetWidth / scale, // Ancho ajustado
+        height: targetHeight / scale, // Alto ajustado
+        scrollX: 0,
+        scrollY: 0,
+        foreignObjectRendering: false, // Desactivar para mejor compatibilidad con img
+        removeContainer: true,
+        imageTimeout: 15000, // Timeout más largo para cargar imágenes
+        onclone: (clonedDoc) => {
+          // Asegurar que las imágenes se carguen en el clon
+          const clonedElement = clonedDoc.getElementById("certificado-element");
+          if (clonedElement) {
+            const img = clonedElement.querySelector('img');
+            if (img) {
+              img.crossOrigin = "anonymous";
+              img.style.width = "100%";
+              img.style.height = "100%";
+              img.style.objectFit = "contain";
+            }
+          }
+        },
       });
 
+      console.log(`✅ Canvas generado: ${canvas.width}x${canvas.height}`);
+
+      // Si el canvas no tiene las dimensiones exactas, redimensionarlo
+      let finalCanvas = canvas;
+      if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+        console.log("🔄 Redimensionando canvas a resolución exacta...");
+        finalCanvas = document.createElement('canvas');
+        finalCanvas.width = targetWidth;
+        finalCanvas.height = targetHeight;
+        
+        const ctx = finalCanvas.getContext('2d');
+        if (ctx) {
+          // Usar interpolación de alta calidad
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
+        }
+      }
+
+      // Convertir a blob con máxima calidad usando PNG para evitar compresión
       const blob = await new Promise<Blob>((resolve) =>
-        canvas.toBlob((blob) => resolve(blob!), "image/jpeg")
+        finalCanvas.toBlob(
+          (blob) => resolve(blob!), 
+          "image/png", // PNG sin compresión
+          1.0 // Calidad máxima
+        )
       );
+
+      console.log(`📦 Blob generado: ${blob.size} bytes`);
 
       setUploadStatus("🌀 Obteniendo URL prefirmada...");
       const urlResponse = await fetch(
@@ -219,23 +303,25 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
 
       const data = await urlResponse.json();
 
-      setUploadStatus("⬆️ Subiendo certificado a IPFS...");
+      setUploadStatus("⬆️ Subiendo certificado en alta calidad a IPFS...");
       const fileName = `certificado-${nombre
         .toLowerCase()
-        .replace(/\s+/g, "-")}.jpg`;
+        .replace(/\s+/g, "-")}-${targetWidth}x${targetHeight}.png`;
 
-      const file = new File([blob], fileName, { type: "image/jpeg" });
+      const file = new File([blob], fileName, { type: "image/png" });
 
       const upload = await pinata.upload.public
         .file(file, {
-          metadata: { name: fileName },
+          metadata: { 
+            name: fileName,
+          },
         })
         .url(data.url);
 
       if (upload.cid) {
         const ipfsLink = await pinata.gateways.public.convert(upload.cid);
         setLink(ipfsLink);
-        setUploadStatus("✅ Certificado subido exitosamente.");
+        setUploadStatus(`✅ Certificado subido en calidad ${targetWidth}x${targetHeight}px.`);
         setShowJsonForm(true);
       } else {
         setUploadStatus("❌ Falló la subida del archivo.");
@@ -288,16 +374,15 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
         setUploadStatus(`✅ JSON subido exitosamente.`);
         setJsonLink(ipfsJsonLink);
 
-        // 🔥 GUARDAR EN BASE DE DATOS AQUÍ
         try {
           setUploadStatus("💾 Guardando certificado en base de datos...");
           await guardarCertificadoEnBD(
             nombre,
             institucion,
-            walletToMint || "", // Si ya hay wallet, lo usamos, sino lo dejamos vacío por ahora
-            link, // IPFS de la imagen
-            ipfsJsonLink, // IPFS del metadata JSON
-            account // Wallet del creador
+            walletToMint || "",
+            link,
+            ipfsJsonLink,
+            account
           );
           setUploadStatus(
             "✅ Certificado guardado en base de datos y listo para mintear."
@@ -327,39 +412,32 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
       setIsMinting(true);
       setMintStatus("🔄 Conectando a contrato...");
 
-      // Conectar con MetaMask si no está conectado
       if (!(window as any).ethereum) {
         throw new Error("MetaMask no está instalado.");
       }
       await (window as any).ethereum.request({ method: "eth_requestAccounts" });
 
-      // Provider y signer
       const provider = new ethers.BrowserProvider((window as any).ethereum);
       const signer = await provider.getSigner();
 
-      // Instanciar contrato
       const contract = getCertiChainTokenContract(signer);
 
-      // Verificar función
       if (typeof contract.mintPrice !== "function") {
         throw new Error(
           "La función mintPrice no existe en el contrato. Revisa el ABI."
         );
       }
 
-      // Obtener precio
       setMintStatus("💰 Obteniendo precio actual...");
       const currentPrice = await contract.mintPrice();
       console.log("💰 Precio en wei:", currentPrice.toString());
       console.log("💰 Precio en STT:", ethers.formatEther(currentPrice));
 
-      // Verificar wallet
       if (!ethers.isAddress(walletToMint)) {
         throw new Error("Dirección de wallet inválida");
       }
       console.log("✅ Dirección de wallet válida:", walletToMint);
 
-      // Si no hay certificado en BD, crear uno ahora
       if (!certificadoId) {
         setMintStatus("💾 Guardando certificado en base de datos...");
         await guardarCertificadoEnBD(
@@ -371,7 +449,6 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
           account
         );
       } else {
-        // Actualizar con la wallet destinataria si cambió
         const { error } = await supabase
           .from("certificados")
           .update({ wallet_destinatario: walletToMint })
@@ -382,7 +459,6 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
         }
       }
 
-      // Ejecutar mint
       setMintStatus("🚀 Ejecutando mint en blockchain...");
       const tx = await contract.safeMint(walletToMint, ipfsJsonLink, {
         value: currentPrice,
@@ -392,7 +468,6 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
       const receipt = await tx.wait();
       console.log("✅ NFT minteado:", receipt);
 
-      // Actualizar certificado con hash de transacción
       if (certificadoId) {
         setMintStatus("💾 Actualizando registro en base de datos...");
         await actualizarCertificadoConTx(certificadoId, receipt.hash);
@@ -414,15 +489,12 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
     <div
       className={`min-h-screen ${modoOscuro ? "bg-gray-900" : "bg-gray-50"}`}
     >
-      {/* Contenedor principal (95% del ancho en pantallas grandes, con máximo de 1800px) */}
       <div className="mx-auto py-10 w-full lg:w-[95%] xl:max-w-[1800px] 2xl:max-w-[2000px]">
-        {/* Contenedor interno (padding grande + sombra pronunciada) */}
         <div
           className={`p-10 md:p-16 lg:p-20 rounded-2xl ${
             modoOscuro ? "bg-gray-800" : "bg-white shadow-2xl"
           }`}
         >
-          {/* Título principal (texto gigante) */}
           <h1
             className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-12 ${
               modoOscuro ? "text-white" : "text-gray-800"
@@ -431,7 +503,6 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
             Panel de Director/Administrativo
           </h1>
 
-          {/* Pestañas (botones grandes) */}
           <div
             className={`flex border-b-2 mb-12 ${
               modoOscuro ? "border-gray-700" : "border-gray-200"
@@ -456,7 +527,6 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
             ))}
           </div>
 
-          {/* Contenido principal (espaciado amplio) */}
           <div
             className={`p-10 md:p-12 rounded-xl ${
               modoOscuro ? "bg-gray-700" : "bg-gray-50 shadow-lg"
@@ -464,9 +534,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
           >
             {activeTab === "emitir" && (
               <>
-                {/* Grid de 2 columnas (formulario + certificado) */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
-                  {/* Columna izquierda: Formulario */}
                   <div className="space-y-8">
                     <h2
                       className={`text-3xl font-semibold ${
@@ -475,13 +543,6 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                     >
                       Emitir Nuevos Certificados
                     </h2>
-
-                    {/* <p className={`mt-2 text-sm ${modoOscuro ? "text-gray-400" : "text-gray-600"}`}>
-                    ID del certificado: <span className="font-mono">{certificadoId}</span>
-                  </p>
-                  <div style={{ marginTop: '20px' }}>
-                    <QRCodeSVG value={`${"http://localhost:5176"}/${certificadoId}`} size={256}/>
-                  </div> */}
 
                     <input
                       type="text"
@@ -508,115 +569,125 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                     />
                   </div>
 
-                  {/* Columna derecha: Certificado (con tamaño flexible) */}
                   <div className="flex justify-center w-full">
                     <div
                       ref={certRef}
+                      id="certificado-element"
                       className="relative w-full max-w-[900px]"
                       style={{
-                        aspectRatio: "1086 / 768",
-                        backgroundImage: `url(${certificadoImg})`,
-                        backgroundSize: "contain",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                        fontFamily: "serif",
+                        aspectRatio: "1536 / 1024",
                       }}
                     >
-                      {/* QR (gener QR con ID) */}
-                      <div className="absolute top-4 right-4">
-                        <QRCodeSVG
-                          value={`${"https://frontend-certify-chain.vercel.app"}/${certificadoId}`}
-                          size={80}
-                        />
-                      </div>
-                      {/* Nombre (texto dinámico) */}
-                      <div
-                        className="absolute top-[38%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center font-bold text-black whitespace-nowrap overflow-hidden text-ellipsis"
-                        style={{
-                          fontSize: `${Math.max(
-                            1.5,
-                            3 - nombre.length * 0.03
-                          )}vw`,
-                          maxWidth: "95%",
-                          top: "33%",
-                        }}
-                      >
-                        {nombre}
-                      </div>
+                      {/* Imagen de fondo como elemento img para mejor captura */}
+                      <img
+                        src={certificadoImg}
+                        alt="Certificado Background"
+                        className="absolute inset-0 w-full h-full object-contain"
+                        style={{ zIndex: 0 }}
+                        crossOrigin="anonymous"
+                      />
+                      
+                      {/* Contenido superpuesto */}
+                      <div className="absolute inset-0" style={{ zIndex: 1 }}>
+                        <div className="absolute top-4 right-2.5">
+                          <QRCodeSVG
+                            value={`${"https://frontend-certify-chain.vercel.app"}/${certificadoId}`}
+                            size={90}
+                          />
+                        </div>
 
-                      {/* Institución */}
-                      <div
-                        className="absolute top-[48%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-black whitespace-nowrap overflow-hidden text-ellipsis"
-                        style={{
-                          fontSize: `${Math.max(
-                            1.2,
-                            2.5 - institucion.length * 0.03
-                          )}vw`,
-                          maxWidth: "85%",
-                        }}
-                      >
-                        {institucion}
-                      </div>
+                        {/* Nombre dinámico - Ajuste automático */}
+                        <div
+                          className="absolute left-1/2 transform -translate-x-1/2 text-center font-sans text-white whitespace-nowrap"
+                          style={{
+                            fontSize: "clamp(14px, 2vw, 36px)",
+                            maxWidth: "95%",
+                            top: "34%",
+                            transform: "translateX(-50%)",
+                            lineHeight: "1.1",
+                            fontWeight: "600",
+                            overflowWrap: "break-word",
+                            textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+                          }}
+                          title={nombre} // Muestra el nombre completo al pasar el mouse
+                        >
+                          {nombre}
+                        </div>
 
-                      {/* Fecha */}
-                      <div
-                        className="absolute text-black"
-                        style={{
-                          bottom: "22%",
-                          left: "15%",
-                          top: "78%",
-                          fontSize: "1.3vw",
-                        }}
-                      >
-                        {new Date().toLocaleDateString()}
+                        {/* Institución - Texto ajustado para evitar corte */}
+                        <div
+                          className="absolute left-1/2 transform -translate-x-1/2 text-center font-sans text-white"
+                          style={{
+                            fontSize: "clamp(14px, 2vw, 36px)",
+                            maxWidth: "95%",
+                            top: "54%",
+                            transform: "translateX(-50%)",
+                            lineHeight: "1.1",
+                            fontWeight: "600",
+                            wordWrap: "break-word",
+                            overflowWrap: "break-word",
+                            textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+                          }}
+                        >
+                          {institucion}
+                        </div>
+
+                        {/* Fecha */}
+                        <div
+                          className="absolute text-white font-sans"
+                          style={{
+                            left: "15%",
+                            top: "78%",
+                            fontSize: "clamp(12px, 1.3vw, 24px)",
+                            lineHeight: "1",
+                            fontWeight: "500",
+                            textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+                          }}
+                        >
+                          {new Date().toLocaleDateString()}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Botón de acción principal */}
                 <div className="mt-16 flex justify-center">
-  <button
-    onClick={handleUpload}
-    className={`group px-12 py-5 text-xl rounded-xl font-bold transition-all duration-200 relative overflow-hidden ${
-      modoOscuro
-        ? "bg-blue-600 hover:bg-blue-700"
-        : "bg-blue-500 hover:bg-blue-600"
-    }`}
-  >
-    {/* Glow animado detrás */}
-    <span
-      className="absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-      style={{
-        background:
-          "linear-gradient(270deg, #ff0080, #7928ca, #00ffea, #ff0080)",
-        backgroundSize: "600% 600%",
-        animation: "rgbGlow 3s linear infinite",
-        filter: "blur(14px)",
-        zIndex: 0,
-      }}
-    />
-    
-    {/* Texto */}
-    <span className="relative z-10 text-white">
-      Generar y Subir Certificado
-    </span>
+                  <button
+                    onClick={handleUpload}
+                    className={`group px-12 py-5 text-xl rounded-xl font-bold transition-all duration-200 relative overflow-hidden ${
+                      modoOscuro
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    }`}
+                  >
+                    <span
+                      className="absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                      style={{
+                        background:
+                          "linear-gradient(270deg, #ff0080, #7928ca, #00ffea, #ff0080)",
+                        backgroundSize: "600% 600%",
+                        animation: "rgbGlow 3s linear infinite",
+                        filter: "blur(14px)",
+                        zIndex: 0,
+                      }}
+                    />
 
-    {/* Keyframes para la animación */}
-    <style>
-      {`
-        @keyframes rgbGlow {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-      `}
-    </style>
-  </button>
-</div>
+                    <span className="relative z-10 text-white">
+                      Generar y Subir Certificado
+                    </span>
 
+                    <style>
+                      {`
+                        @keyframes rgbGlow {
+                          0% { background-position: 0% 50%; }
+                          50% { background-position: 100% 50%; }
+                          100% { background-position: 0% 50%; }
+                        }
+                      `}
+                    </style>
+                  </button>
+                </div>
 
-                {/* Sección de Metadata JSON */}
                 {showJsonForm && (
                   <div className="mt-16 space-y-6">
                     <h3
@@ -723,7 +794,6 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                   </div>
                 )}
 
-                {/* FORMULARIO DE MINT */}
                 {showMintForm && (
                   <div className="mt-16 space-y-8">
                     <h3
