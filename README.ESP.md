@@ -1,323 +1,385 @@
 <div align="center">
-  <img src="./src/assets/logo_CertifyChain.jpg" alt="CertifyChain Logo" width="300"/>
+  <img src="./src/assets/logo_CertifyChain.jpg" alt="CertifyChain Logo" width="400"/>
   
   [![Estado de Construcción](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://certifi-chain.vercel.app/)
-  [![Licencia](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-  [![Hackathon](https://img.shields.io/badge/Somnia-DeFi%20Hackathon-purple.svg)](https://dorahacks.io/hackathon/defi-mini-hackathon/detail)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
+  [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
   
-  # CertifyChain
+  # CertifyChain Frontend
   
-  **Plataforma Descentralizada de Gestión de Certificados Académicos**
+  **Aplicación Frontend React para la Plataforma CertifyChain**
   
-  🎓 **Transformando la educación a través de certificados NFT basados en blockchain**
+  � **Interfaz Web3 moderna para gestión de certificados basada en blockchain**
   
-  [🚀 Demo en Vivo](https://certifi-chain.vercel.app/) | [📹 Video Demo](#demo) | [📊 Presentación](#pitch)
+  [🚀 Demo en Vivo](https://certifi-chain.vercel.app/) | [� Repositorio Principal](https://github.com/certify-CHAIN/CertifyChain)
 </div>
 
 ---
 
-## 🌟 Problemática
+## 📱 Resumen del Frontend
 
-Los sistemas tradicionales de certificación académica enfrentan desafíos críticos:
-- **Falsificación de Documentos**: Los certificados en papel pueden ser fácilmente falsificados
-- **Demoras en Verificación**: Los procesos manuales de verificación toman semanas
-- **Control Centralizado**: Puntos únicos de falla en sistemas institucionales
-- **Accesibilidad Limitada**: Barreras geográficas para la verificación de credenciales
-- **Altos Costos**: Procedimientos de verificación costosos para empleadores e instituciones
+Este repositorio contiene la **aplicación frontend React** para CertifyChain, una plataforma descentralizada para la gestión de certificados académicos. El frontend proporciona una interfaz Web3 intuitiva que conecta a los usuarios con el sistema de certificados basado en blockchain.
 
-## 💡 Nuestra Solución
+### 🎯 **Características Principales del Frontend**
 
-**CertifyChain** es una plataforma descentralizada revolucionaria que aprovecha la tecnología blockchain para emitir, gestionar y verificar certificados académicos como NFTs (tokens ERC-721). Nuestra solución proporciona:
-
-✅ **Registros Inmutables**: Certificados almacenados permanentemente en blockchain  
-✅ **Verificación Instantánea**: Verificaciones de autenticidad en tiempo real  
-✅ **Accesibilidad Global**: Verificación de credenciales sin fronteras  
-✅ **Costo Efectivo**: Reducción del 90% en costos de verificación  
-✅ **A Prueba de Manipulación**: Documentos asegurados criptográficamente  
+✅ **Interfaz Web3 Responsiva**: UI moderna basada en React para todos los dispositivos  
+✅ **Dashboards Basados en Roles**: Interfaces personalizadas para roles Admin, Director y Estudiante  
+✅ **Integración de Billeteras**: Soporte fluido para MetaMask y WalletConnect  
+✅ **Interacción Blockchain en Tiempo Real**: Actualizaciones en vivo del estado del contrato  
+✅ **Visualización de Contenido IPFS**: Visualización descentralizada de imágenes y metadatos de certificados  
 
 ---
 
-## 🚀 Características Principales
+## 🎨 Arquitectura del Frontend
 
-### 🔐 **Control de Acceso Basado en Roles**
-- **Admin**: Propietario del contrato con control total del sistema
-- **Director**: Emisores de certificados autorizados
-- **Estudiante**: Receptores y propietarios de certificados
+### **Componentes de Interfaz de Usuario**
 
-### 🎯 **Gestión del Ciclo de Vida de Certificados**
-1. **Emisión**: Los directores crean certificados con plantillas personalizadas
-2. **Almacenamiento**: Metadatos e imágenes almacenados en IPFS vía Pinata
-3. **Acuñación**: Certificados acuñados como NFTs ERC-721
-4. **Verificación**: Verificaciones instantáneas de autenticidad basadas en blockchain
-5. **Propiedad**: Los estudiantes pueden importar NFTs a sus billeteras
+#### 🔐 **Componente RoleSelector**
+- Detecta automáticamente el rol de la billetera del usuario
+- Enruta usuarios al dashboard apropiado
+- Maneja estados de conexión de billetera
 
-### 🔄 **Integración Perfecta**
-- Soporte para MetaMask y WalletConnect
-- Compatibilidad multi-cadena (ecosistema Ethereum)
-- Almacenamiento descentralizado IPFS
-- Generación de códigos QR para verificación rápida
+#### 👑 **Componente AdminPanel**
+- Interfaz de gestión de roles
+- Agregar/eliminar Directores y Estudiantes
+- Controles de administración del sistema
 
----
+#### 🎓 **Componente DirectorPanel**
+- Flujo de trabajo de creación de certificados
+- Generación de certificados basada en plantillas
+- Integración de carga IPFS
+- Gestión de formularios de metadatos
+- Manejo de transacciones blockchain
 
-## 🛠 Stack Tecnológico
+#### 👨‍🎓 **Componente StudentPanel**
+- Galería personal de certificados
+- Funcionalidad de importación de NFT
+- Herramientas de verificación
+- Opciones de descarga de certificados
 
-### **Frontend**
-- ⚛️ **React 19** - Framework de UI moderno
-- 🏃‍♂️ **Vite** - Herramienta de construcción ultrarrápida
-- 📝 **TypeScript** - Desarrollo con tipos seguros
-- 🎨 **TailwindCSS** - Estilos utility-first
-- 🌈 **Wagmi** - Hooks de React para Web3
-
-### **Blockchain**
-- 🔗 **Ethereum** - Redes compatibles con EVM
-- 📜 **Solidity** - Desarrollo de contratos inteligentes
-- 🎫 **ERC-721** - Estándar NFT para certificados
-- 🔑 **OpenZeppelin** - Contratos auditados en seguridad
-
-### **Almacenamiento e Infraestructura**
-- 🌐 **IPFS** - Almacenamiento de archivos descentralizado
-- 📌 **Pinata** - Servicio de anclaje IPFS
-- ☁️ **Vercel** - Plataforma de despliegue
-- 🦊 **MetaMask** - Integración de billetera
-
-### **Contratos Inteligentes**
-- **CertifyRoles**: `0xDaC5fd597801Fe86422fE64D714F9F6452424927`
-- **CertiChainToken**: `0x86Ae08076DBD7c1227cBD3d8743062C3bBB91F54`
+#### ✨ **Componente AnimatedBackground**
+- Efectos visuales dinámicos
+- Experiencia de usuario mejorada
+- Estética de diseño moderno
 
 ---
 
-## 🏗 Arquitectura del Proyecto
+## 🛠 Stack Tecnológico del Frontend
+
+### **Framework Principal**
+- ⚛️ **React 19** - Últimas características de React con renderizado concurrente
+- 📝 **TypeScript** - Desarrollo con tipos seguros y soporte IDE mejorado
+- 🏃‍♂️ **Vite** - Herramienta de construcción ultra-rápida con HMR
+
+### **Estilizado e Interfaz**
+- 🎨 **TailwindCSS** - Framework CSS utility-first
+- 📱 **Diseño Responsivo** - Enfoque mobile-first
+- 🌈 **Componentes Personalizados** - Elementos UI reutilizables
+
+### **Integración Web3**
+- 🌐 **Wagmi** - Hooks React para Ethereum
+- 🦊 **MetaMask** - Integración principal de billetera
+- 🔗 **WalletConnect** - Soporte multi-billetera
+- ⚡ **Viem** - Librería Ethereum TypeScript-first
+
+### **Gestión de Estado**
+- 🔄 **TanStack Query** - Gestión de estado del servidor
+- � **React Context** - Gestión de estado global
+- 🎯 **Custom Hooks** - Abstracción de lógica reutilizable
+
+### **Manejo de Archivos**
+- 📁 **HTML2Canvas** - Generación de imágenes de certificados
+- 📷 **Generación de Códigos QR** - Códigos QR de verificación
+- 🌐 **Integración IPFS** - Operaciones de archivos descentralizados
+
+---
+
+## 📂 Estructura del Proyecto Frontend
 
 ```
 Frontend-certify-CHAIN/
 ├── 📁 public/                   # Activos estáticos
-├── 📁 src/
+│   ├── �️ logo2.svg
+│   └── ⚡ vite.svg
+├── �📁 src/
 │   ├── 📁 assets/              # Imágenes y recursos
-│   ├── 📁 chains/              # Configuraciones blockchain
+│   │   ├── 🎓 certificado.jpg
+│   │   ├── � img1.png, img2.png, img3.png
+│   │   ├── 🏷️ logo_CertifyChain.jpg
+│   │   └── 🔖 Varias variantes de logo
+│   ├── �📁 chains/              # Configuraciones blockchain
+│   │   └── ⚙️ chains.ts
 │   ├── 📁 components/          # Componentes React
-│   │   ├── 👑 AdminPanel.tsx   # Gestión de roles admin
-│   │   ├── 🎓 DirectorPanel.tsx # Emisión de certificados
-│   │   ├── 👨‍🎓 StudentPanel.tsx  # Visualización de certificados
-│   │   ├── 🎯 RoleSelector.tsx  # Detección de roles
-│   │   └── ✨ AnimatedBackground.tsx
+│   │   ├── 👑 AdminPanel.tsx
+│   │   ├── ✨ AnimatedBackground.tsx
+│   │   ├── 🎓 DirectorPanel.tsx
+│   │   ├── 🎯 RoleSelector.tsx
+│   │   └── 👨‍🎓 StudentPanel.tsx
 │   ├── 📁 contracts/           # Interfaces de contratos inteligentes
-│   │   ├── 📄 CertifyRoles.ts
 │   │   ├── 📄 CertiChainToken.ts
-│   │   └── 📄 getContract.ts
-│   ├── 📄 App.tsx              # Aplicación principal
-│   └── 📄 main.tsx             # Punto de entrada
-├── 📋 package.json             # Dependencias
-└── ⚙️ vite.config.ts          # Configuración de construcción
+│   │   ├── 📄 CertifyRoles.ts
+│   │   ├── 📄 getContract.ts
+│   │   └── 📁 CertifyRoles/
+│   │       ├── 📋 CertiChainTokenABI.json
+│   │       └── � CertifyRoles.json
+│   ├── 🎨 App.css
+│   ├── ⚛️ App.tsx              # Componente principal de la aplicación
+│   ├── 📄 CertificatePage.tsx   # Página de visualización de certificados
+│   ├── 🎨 index.css
+│   ├── � main.tsx             # Punto de entrada de la aplicación
+│   └── 📝 vite-env.d.ts        # Declaraciones TypeScript
+├── 📋 package.json             # Dependencias y scripts
+├── ⚙️ vite.config.ts          # Configuración de Vite
+├── 🎨 tailwind.config.js      # Configuración de TailwindCSS
+├── 📝 tsconfig.json           # Configuración de TypeScript
+└── 🌐 vercel.json             # Configuración de despliegue
 ```
 
 ---
 
-## ⚙️ Cómo Funciona
+## 🔄 Flujo de Datos del Frontend
 
-### 1. **Autenticación de Usuario**
-```mermaid
-graph TD
-    A[Conectar Billetera] --> B[Detectar Rol de Usuario]
-    B --> C{¿Tipo de Rol?}
-    C -->|Admin| D[Panel de Admin]
-    C -->|Director| E[Panel de Director]
-    C -->|Estudiante| F[Panel de Estudiante]
-    C -->|Usuario Nuevo| G[Registro Requerido]
+### **1. Flujo de Conexión de Billetera**
+```typescript
+Usuario conecta billetera → Wagmi detecta conexión → 
+Detección de rol desde contrato inteligente → Enrutar al panel apropiado
 ```
 
-### 2. **Flujo de Emisión de Certificados**
-1. **Director** crea certificado usando plantilla
-2. Imagen del certificado generada y subida a **IPFS**
-3. Metadatos (JSON) creados y almacenados en **IPFS**
-4. Director paga tarifa de acuñación de `0.0001 ETH`
-5. Función `safeMint` llamada en contrato ERC-721
-6. **Certificado NFT** acuñado a la dirección del estudiante
-7. **Hash de transacción** generado para verificación
+### **2. Flujo de Creación de Certificados (Director)**
+```typescript
+Selección de plantilla → Personalización del certificado → 
+Generación de imagen (HTML2Canvas) → Carga IPFS → 
+Creación de metadatos → Interacción con contrato inteligente → Acuñación NFT
+```
 
-### 3. **Proceso de Verificación**
-- Los estudiantes ven certificados en su dashboard
-- Los códigos QR proporcionan enlaces de verificación instantánea
-- Los certificados pueden verificarse en Etherscan
-- Los NFTs pueden importarse a cualquier billetera compatible
+### **3. Flujo de Visualización de Certificados (Estudiante)**
+```typescript
+Conexión de billetera → Obtener NFTs del usuario → 
+Cargar metadatos IPFS → Mostrar certificados → 
+Opciones de verificación → Funcionalidad de exportación
+```
 
 ---
 
-## 🚀 Inicio Rápido
+## 🚀 Configuración de Desarrollo del Frontend
 
 ### Prerrequisitos
-- Node.js 18+ y npm
-- MetaMask o billetera Web3 compatible
-- Git
+- **Node.js 18+** y npm/yarn
+- **Git** para control de versiones
+- **MetaMask** extensión del navegador para pruebas
 
-### Instalación
+### Instalación y Desarrollo
 
 ```bash
-# Clonar el repositorio
+# Clonar el repositorio frontend
 git clone https://github.com/certify-CHAIN/Frontend-certify-CHAIN.git
 cd Frontend-certify-CHAIN
 
 # Instalar dependencias
 npm install
 
-# Iniciar servidor de desarrollo
+# Iniciar servidor de desarrollo con hot reload
 npm run dev
 ```
 
 ### Configuración del Entorno
-Crear archivo `.env.local`:
+
+Crear archivo `.env.local` en el directorio raíz:
+
 ```env
+# Configuración IPFS Pinata
 VITE_PINATA_JWT=tu_token_jwt_pinata
 VITE_PINATA_GATEWAY=tu_url_gateway_pinata
+
+# Opcional: Endpoints RPC personalizados
+VITE_ETHEREUM_RPC_URL=tu_url_rpc_personalizado
 ```
 
-### Construcción para Producción
+### Scripts Disponibles
+
 ```bash
-# Construir la aplicación
-npm run build
+# Servidor de desarrollo
+npm run dev
+
+# Verificación de tipos
+npm run build      # Compilación TypeScript + construcción Vite
+
+# Linting
+npm run lint       # Verificación de calidad de código ESLint
 
 # Previsualizar construcción de producción
-npm run preview
+npm run preview    # Previsualizar aplicación construida
 ```
 
 ---
 
-## 🎮 Guía de Uso
+## 🎨 Detalles de Características del Frontend
 
-### Para Administradores
-1. Conectar billetera como propietario del contrato
-2. Navegar al Panel de Admin
-3. Asignar roles de Director y Estudiante
-4. Monitorear actividad del sistema
+### **Diseño Responsivo**
+- 📱 **Enfoque mobile-first** con optimización de breakpoints
+- 💻 **Experiencia mejorada para escritorio** con layouts expandidos
+- 🎯 **Interfaces amigables al tacto** para usuarios móviles
 
-### Para Directores
-1. Conectar billetera con rol de Director
-2. Acceder al Panel de Emisión de Certificados
-3. Crear certificado usando plantilla
-4. Llenar detalles del estudiante y metadatos
-5. Pagar tarifa de acuñación y confirmar transacción
-6. Compartir certificado con estudiante
+### **Mejoras UX Web3**
+- 🔄 **Estados de carga** para transacciones blockchain
+- ⚡ **Actualizaciones UI optimistas** para mejor experiencia de usuario
+- 🚨 **Manejo de errores** con mensajes amigables al usuario
+- 💡 **Indicadores de estado de transacción** con actualizaciones en tiempo real
 
-### Para Estudiantes
-1. Conectar billetera para ver certificados
-2. Explorar certificados emitidos
-3. Descargar imágenes de certificados
-4. Verificar autenticidad en blockchain
-5. Importar NFTs a billetera
+### **UI de Gestión de Certificados**
+- 🎨 **Sistema de diseño de certificados** basado en plantillas
+- 🖼️ **Vista previa en tiempo real** de la generación de certificados
+- 📥 **Interfaz de carga de archivos** drag-and-drop
+- 🔍 **Modal de verificación de certificados** con códigos QR
 
----
-
-## 🔒 Seguridad y Confianza
-
-### **Seguridad Blockchain**
-- Registros de certificados inmutables
-- Prueba criptográfica de autenticidad
-- Sistema de verificación descentralizado
-- Sin punto único de falla
-
-### **Seguridad de Contratos Inteligentes**
-- Control de acceso basado en roles
-- Funciones administrativas solo para propietario
-- Mecanismos de acuñación seguros
-- Operaciones optimizadas en gas
-
-### **Integridad de Datos**
-- Direccionamiento de contenido IPFS
-- Metadatos a prueba de manipulación
-- Garantía de almacenamiento permanente
-- Sistema de archivos distribuido
+### **Características del Dashboard**
+- 📊 **Análisis y estadísticas** específicos por rol
+- 🔔 **Notificaciones en tiempo real** para eventos de certificados
+- 📋 **Listas de certificados filtrables** con búsqueda
+- 🌙 **Toggle de tema oscuro/claro** (característica futura)
 
 ---
 
-## 🎯 Submisión del Hackathon
+## 🧪 Testing y Desarrollo
 
-### **Somnia DeFi Mini Hackathon**
-- 🗓 **Fecha de Submisión**: 17 de septiembre, 2025
-- 🔗 **Repositorio**: Público con >2 commits
-- 📝 **Documentación**: README comprensivo
-- 🎥 **Demo**: Despliegue de aplicación en vivo
+### **Desarrollo Local**
+```bash
+# Hot reload de desarrollo
+npm run dev
+# Servidor ejecutándose en http://localhost:5173
 
-### **Puntos Destacados de Innovación**
-- **Integración DeFi**: Los certificados tokenizados habilitan nuevos modelos económicos
-- **Compatibilidad Cross-Chain**: Capacidad de despliegue multi-red
-- **Impacto Educativo**: Revolucionando la verificación de credenciales
-- **Escalabilidad**: Contratos inteligentes eficientes en gas para adopción masiva
+# Conectar MetaMask a localhost o testnet
+# Usar ETH de testnet para transacciones
+```
 
----
+### **Lista de Verificación de Testing Frontend**
+- ✅ Flujos de conexión de billetera
+- ✅ Precisión en detección de roles
+- ✅ UI de generación de certificados
+- ✅ Carga/descarga IPFS
+- ✅ Interacciones con contratos inteligentes
+- ✅ Testing de diseño responsivo
+- ✅ Manejo de estados de error
 
-## 🌐 Demo y Enlaces
-
-- 🚀 **Aplicación en Vivo**: [CertifyChain DApp](https://certifi-chain.vercel.app/)
-- 📹 **Video Demo**: [Ver Video Demo](#)
-- 📊 **Presentación**: [Ver Presentación](#)
-- 🔍 **Contratos Inteligentes**: [Ver en Etherscan](https://etherscan.io/)
-
----
-
-## 🛣 Hoja de Ruta
-
-### **Fase 1: Plataforma Núcleo** ✅
-- Emisión básica de certificados
-- Sistema de gestión de roles
-- Integración IPFS
-
-### **Fase 2: Características Mejoradas** 🚧
-- Procesamiento por lotes de certificados
-- Plantillas avanzadas
-- Despliegue multi-cadena
-
-### **Fase 3: Crecimiento del Ecosistema** 📋
-- Asociaciones institucionales
-- API para integración de terceros
-- Aplicación móvil
-
-### **Fase 4: Integración DeFi** 🎯
-- Préstamos respaldados por certificados
-- Sistema de puntuación de reputación
-- Lanzamiento de token de gobernanza
+### **Compatibilidad de Navegadores**
+- ✅ Chrome/Edge (Recomendado)
+- ✅ Firefox
+- ✅ Safari (Soporte Web3 limitado)
+- ✅ Navegadores móviles (iOS Safari, Chrome Mobile)
 
 ---
 
-## 🤝 Contribuir
+## 🔗 Integración con Contratos Inteligentes
 
-¡Damos la bienvenida a contribuciones a CertifyChain! Por favor lee nuestras pautas de contribución y envía pull requests para cualquier mejora.
+El frontend se conecta a estos contratos inteligentes desplegados:
 
-### **Configuración de Desarrollo**
-1. Fork del repositorio
-2. Crear rama de característica (`git checkout -b feature/caracteristica-increible`)
-3. Commit de cambios (`git commit -m 'Agregar característica increíble'`)
-4. Push a la rama (`git push origin feature/caracteristica-increible`)
-5. Abrir Pull Request
+### **Direcciones de Contratos**
+- **CertifyRoles**: `0xDaC5fd597801Fe86422fE64D714F9F6452424927`
+- **CertiChainToken**: `0x86Ae08076DBD7c1227cBD3d8743062C3bBB91F54`
+
+### **Interacciones Clave Frontend-Contrato**
+```typescript
+// Detección de roles
+const userRole = await certifyRoles.getRole(userAddress)
+
+// Acuñación de certificados (rol Director)
+const tx = await certiChainToken.safeMint(studentAddress, tokenURI)
+
+// Obtención de certificados (rol Estudiante)
+const certificates = await certiChainToken.tokensOfOwner(userAddress)
+```
+
+---
+
+## 📱 Despliegue
+
+### **Construcción de Producción**
+```bash
+# Crear construcción de producción
+npm run build
+
+# Directorio de salida: dist/
+# Listo para despliegue en Vercel, Netlify, etc.
+```
+
+### **Despliegue en Vercel** (Actual)
+- 🌐 **URL en Vivo**: [https://certifi-chain.vercel.app/](https://certifi-chain.vercel.app/)
+- 🚀 **Auto-deploy** desde rama main
+- ⚡ **Despliegue edge** para rendimiento global
+
+### **Variables de Entorno para Producción**
+```env
+VITE_PINATA_JWT=pinata_jwt_produccion
+VITE_PINATA_GATEWAY=url_gateway_produccion
+VITE_CONTRACT_ADDRESSES=direcciones_contratos_produccion
+```
+
+---
+
+## 🤝 Contribución al Frontend
+
+### **Flujo de Trabajo de Desarrollo**
+1. Fork del repositorio frontend
+2. Crear rama de característica (`git checkout -b feature/mejora-ui`)
+3. Implementar cambios con TypeScript
+4. Probar en diferentes navegadores
+5. Asegurar que el diseño responsivo funcione
+6. Enviar pull request con capturas de pantalla
+
+### **Guías de Estilo de Código**
+- 📝 **TypeScript**: Modo estricto habilitado
+- 🎨 **TailwindCSS**: Enfoque utility-first
+- ⚛️ **React**: Componentes funcionales con hooks
+- 📁 **Nomenclatura de archivos**: PascalCase para componentes, camelCase para utilidades
+
+### **Contribuciones Específicas del Frontend**
+- 🎨 Mejoras UI/UX
+- 📱 Mejoras de responsividad móvil
+- ⚡ Optimizaciones de rendimiento
+- 🌐 Mejoras de integración Web3
+- 🧪 Tests unitarios/integración
 
 ---
 
 ## 📄 Licencia
 
-Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+Esta aplicación frontend está licenciada bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
 
 ---
 
-## 👥 Equipo
+## � Repositorios Relacionados
 
-**Equipo de Desarrollo CertifyChain**
-- 🧑‍💻 **Desarrollador Principal**: Desarrollo Blockchain y Frontend
-- 🎨 **Diseñador UI/UX**: Diseño de Experiencia de Usuario
-- 🔐 **Auditor de Contratos Inteligentes**: Seguridad y Optimización
+- 📖 **Proyecto Principal**: [Organización CertifyChain](https://github.com/certify-CHAIN/CertifyChain)
+- ⚙️ **Contratos Inteligentes**: [CertifyChain-Contracts](https://github.com/certify-CHAIN/CertifyChain-Contracts)
+- 📱 **Aplicación Móvil**: [CertifyChain-Mobile](https://github.com/certify-CHAIN/CertifyChain-Mobile) *(Próximamente)*
 
 ---
 
-## 📞 Contacto
+## � Equipo Frontend
 
-- 📧 **Email**: team@certifychain.io
-- 🐦 **Twitter**: [@CertifyChain](#)
-- 💬 **Discord**: [Únete a nuestra comunidad](#)
-- 🌐 **Sitio Web**: [www.certifychain.io](#)
+**Equipo de Desarrollo Frontend**
+- 🧑‍💻 **Líder Frontend**: Desarrollo React y TypeScript
+- 🎨 **Diseñador UI/UX**: Diseño de Interfaz de Usuario y Experiencia de Usuario
+- 🌐 **Desarrollador Web3**: Integración Blockchain y Conectividad de Billeteras
+
+---
+
+## 📞 Soporte Frontend
+
+- 📧 **Problemas Frontend**: frontend@certifychain.io
+- � **Discord**: [#desarrollo-frontend](https://discord.gg/certifychain)
+- � **Reportes de Bugs**: [GitHub Issues](https://github.com/certify-CHAIN/Frontend-certify-CHAIN/issues)
+- 💡 **Solicitudes de Características**: [GitHub Discussions](https://github.com/certify-CHAIN/Frontend-certify-CHAIN/discussions)
 
 ---
 
 <div align="center">
   
-**Construido con ❤️ para el Somnia DeFi Mini Hackathon**
+**CertifyChain Frontend** | Construido con ⚛️ React + ⚡ Vite + 🎨 TailwindCSS
 
-*Revolucionando la educación a través de la tecnología blockchain*
+*Interfaz Web3 moderna para educación descentralizada*
+
+[🌐 Demo en Vivo](https://certifi-chain.vercel.app/) | [📖 Documentación](https://github.com/certify-CHAIN/CertifyChain) | [🔧 Docs API](https://docs.certifychain.io)
 
 </div>
