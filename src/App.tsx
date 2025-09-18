@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
 import { getContract } from "./contracts/CertifyRoles";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -6,9 +6,21 @@ import { useAccount, useWalletClient } from "wagmi";
 import AdminPanel from "./components/AdminPanel";
 import DirectorPanel from "./components/DirectorPanel";
 import StudentPanel from "./components/StudentPanel";
+import { StarsCanvas } from "./components/main/star-background";
+import { Encryption } from "./components/main/encryption";
+import { Hero } from "./components/main/hero";
 import AnimatedBackground from "./components/AnimatedBackground";
+import TypewriterText from "./components/TypewriterText";
+import FeaturesSection from "./components/FeaturesSection";
+import HowItWorksSection from "./components/HowItWorksSection";
+import BenefitsSection from "./components/BenefitsSection";
+import StatsSection from "./components/StatsSection";
+import TestimonialsSection from "./components/TestimonialsSection";
+import CTASection from "./components/CTASection";
+import Footer from "./components/Footer";
 import logo from "./assets/logo.svg";
 import logoDark from "./assets/logo-black.svg";
+import imgperonaje  from "./assets/somnia titulo per.png";
 
 // Tipos para los roles
 type UserRole = "admin" | "director" | "student" | null;
@@ -30,63 +42,77 @@ function walletClientToSigner(walletClient: any) {
 
 const App = () => {
   const [userRole, setUserRole] = useState<UserRole>(null);
-  const [,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [modoOscuro, setModoOscuro] = useState(true);
   
   // Hook de RainbowKit/Wagmi para obtener la cuenta conectada
-  const { address, isConnected, isConnecting } = useAccount();
-  // Hook para obtener el wallet client (equivalente a signer en viem)
+  const { address, isConnected } = useAccount();
+  
+  // Hook para obtener el wallet client
   const { data: walletClient } = useWalletClient();
-  // Hook para desconectar la wallet
-  //const { disconnect } = useDisconnect();
 
-  // Verificar rol basado en la dirección de la wallet
-  const verificarRol = async (
-    address: string,
-    signer: ethers.Signer
-  ): Promise<UserRole> => {
+  // Función para obtener el rol del usuario
+  const obtenerRolUsuario = useCallback(async (userAddress: string) => {
     try {
-      const contract = getContract(signer);
-      const role: string = await contract.checkRole(address);
-      if (role === "admin" || role === "director" || role === "student") {
-        return role as UserRole;
+      setLoading(true);
+
+      // Obtener el contrato
+      const signer = await walletClientToSigner(walletClient);
+      if (!signer) {
+        console.error("No se pudo obtener el signer");
+        return null;
       }
+
+      const contract = getContract(signer);
+      if (!contract) {
+        console.error("No se pudo obtener el contrato");
+        return null;
+      }
+
+      // Verificar si es admin
+      const esAdmin = await contract.esAdmin(userAddress);
+      if (esAdmin) {
+        console.log("Usuario es admin");
+        return "admin";
+      }
+
+      // Verificar si es director
+      const esDirector = await contract.esDirector(userAddress);
+      if (esDirector) {
+        console.log("Usuario es director");
+        return "director";
+      }
+
+      // Verificar si es estudiante
+      const esEstudiante = await contract.esEstudiante(userAddress);
+      if (esEstudiante) {
+        console.log("Usuario es estudiante");
+        return "student";
+      }
+
+      console.log("Usuario no tiene rol asignado");
       return null;
     } catch (error) {
-      console.error("Error verificando rol:", error);
+      console.error("Error al obtener rol:", error);
       return null;
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [walletClient]);
 
-  // Efecto para verificar el rol cuando se conecta una wallet
+  // Efecto para obtener el rol cuando se conecta una cuenta
   useEffect(() => {
-    const checkUserRole = async () => {
-      if (isConnected && address && walletClient) {
-        setLoading(true);
-        try {
-          // Convertir wallet client a ethers signer
-          const signer = await walletClientToSigner(walletClient);
-          if (signer) {
-            const rol = await verificarRol(address, signer);
-            setUserRole(rol);
-          }
-        } catch (error) {
-          console.error("Error verificando rol:", error);
-          setUserRole(null);
-        } finally {
-          setLoading(false);
-        }
+    const checkRole = async () => {
+      if (address && walletClient && isConnected) {
+        const role = await obtenerRolUsuario(address);
+        setUserRole(role);
       } else {
         setUserRole(null);
       }
     };
-
-    checkUserRole();
-  }, [isConnected, address, walletClient]);
-
-  const alternarModo = () => {
-    setModoOscuro(!modoOscuro);
-  };
+    
+    checkRole();
+  }, [address, walletClient, isConnected, obtenerRolUsuario]);
 
   // Aplicar clase de modo oscuro/claro al elemento html
   useEffect(() => {
@@ -97,164 +123,154 @@ const App = () => {
     }
   }, [modoOscuro]);
 
-  // const desconectar = () => {
-  //   disconnect();
-  //   setUserRole(null);
-  // };
-
-  // Modificar el useEffect del widget para que se active/desactive según el estado de la cuenta
-  useEffect(() => {
-    const removeExistingScript = () => {
-      const existingScript = document.getElementById("codeGPTWidgetScript");
-      if (existingScript && existingScript.parentNode) {
-        existingScript.parentNode.removeChild(existingScript);
-        // También remover el widget si existe
-        const widgetFrame = document.querySelector('iframe[title="CodeGPT"]');
-        if (widgetFrame && widgetFrame.parentNode) {
-          widgetFrame.parentNode.removeChild(widgetFrame);
-        }
-      }
-    };
-
-    if (!isConnected) {
-      // Primero remover cualquier instancia existente
-      removeExistingScript();
-
-      // Luego agregar el nuevo script
-      const script = document.createElement("script");
-      script.id = "codeGPTWidgetScript";
-      script.type = "module";
-      script.async = true;
-      script.defer = true;
-      script.src = "https://widget.codegpt.co/chat-widget.js";
-      script.setAttribute(
-        "data-widget-id",
-        "4dcf2feb-cd3d-4334-aae9-cc0f2e928926"
-      );
-
-      document.body.appendChild(script);
-    } else {
-      // Si hay cuenta conectada, remover todo
-      removeExistingScript();
-    }
-
-    // Limpieza cuando el componente se desmonte
-    return () => {
-      removeExistingScript();
-    };
-  }, [isConnected]);
-
   return (
     <div
-      className={`min-h-screen transition-colors duration-300 relative ${
-        modoOscuro ? "dark bg-gray-900" : "bg-gray-50"
-      }`}
+      className="h-screen bg-[#030014] overflow-hidden relative"
+      style={{
+        background: '#030014',
+      }}
     >
-      <AnimatedBackground />
-      {/* Encabezado común para todos los roles */}
+      {/* Fondo condicional basado en el estado de conexión */}
+      {!isConnected ? <StarsCanvas /> : <AnimatedBackground />}
+      
+      {/* Header fijo */}
       <header
-        className={`shadow-sm relative z-10 ${
-          modoOscuro ? "bg-gray-800" : "bg-white"
-        }`}
+        className="fixed top-0 left-0 w-full h-[65px] shadow-lg shadow-[#2A0E61]/50 bg-[#03001427] backdrop-blur-md z-50 px-10"
       >
-        <div className="container mx-auto px-6 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center py-1">
-              <img
-                src={modoOscuro ? logo : logoDark}
-                alt="CertiChain Logo"
-                className="h-12 w-auto max-w-none"
-                style={{
-                  minWidth: "200px",
-                  objectFit: "contain",
-                }}
-              />
-            </div>
-
-            <div className="flex items-center space-x-4">
-              {/* Botón de modo oscuro/claro */}
-              <button
-                onClick={alternarModo}
-                className={`p-2 rounded-full transition-colors ${
-                  modoOscuro
-                    ? "bg-gray-700 text-yellow-300 hover:bg-gray-600"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }`}
-              >
-                {modoOscuro ? "☀️" : "🌙"}
-              </button>
-              
-              {/* Botón de conexión de RainbowKit */}
-              <ConnectButton 
-                showBalance={true}
-                accountStatus={{
-                  smallScreen: 'avatar',
-                  largeScreen: 'full',
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Contenido principal basado en el rol */}
-      <main className="flex flex-1 items-center justify-center min-h-[calc(100vh-80px)] relative z-10">
-        {isConnecting ? (
-          <div className={`text-center p-8 rounded-xl shadow-lg ${modoOscuro ? "bg-gray-800 text-white" : "bg-white text-gray-800"}`}>
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p>Conectando...</p>
-          </div>
-        ) : !isConnected ? (
-          <div
-            className={`text-center max-w-2xl mx-auto flex flex-col justify-center items-center w-full p-8 rounded-xl shadow-lg ${
-              modoOscuro ? "bg-gray-800" : "bg-white"
-            }`}
-          >
-            <h2
-              className={`text-4xl md:text-5xl font-extrabold mb-6 ${
-                modoOscuro ? "text-white" : "text-gray-800"
-              } relative`}
+        <div className="w-full h-full flex items-center justify-between m-auto px-[10px]">
+          <div className="flex items-center">
+            <img
+              src={modoOscuro ? logo : logoDark}
+              alt="CertiChain Logo"
+              className="h-12 w-auto max-w-none"
               style={{
-                background:
-                  "linear-gradient(90deg, #ff0080, #7928ca, #00ffea, #ff0080)",
-                backgroundSize: "400% 400%",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                animation: "rgbTextGlow 3s linear infinite",
+                minWidth: "200px",
+                objectFit: "contain",
+              }}
+            />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <div 
+              className="rounded-xl p-[3px] shadow-lg hover:shadow-2xl transition-all duration-300 animate-pulse"
+              style={{
+                background: 'linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080)',
+                backgroundSize: '400% 400%',
+                animation: 'rainbow 3s linear infinite'
               }}
             >
-              Plataforma de Certificados NFT
+              <div className="bg-[#030014] rounded-xl">
+                <ConnectButton 
+                  showBalance={true}
+                  accountStatus={{
+                    smallScreen: 'avatar',
+                    largeScreen: 'full',
+                  }}
+                />
+              </div>
               <style>
                 {`
-                  @keyframes rgbTextGlow {
+                  @keyframes rainbow {
                     0% { background-position: 0% 50%; }
                     50% { background-position: 100% 50%; }
                     100% { background-position: 0% 50%; }
                   }
                 `}
               </style>
-            </h2>
-            <p
-              className={`text-lg md:text-xl mb-8 ${
-                modoOscuro ? "text-gray-300" : "text-gray-600"
-              }`}
-            >
-              Conecta tu billetera para acceder al panel correspondiente según
-              tu rol en la plataforma.
-            </p>
+            </div>
           </div>
-        ) : userRole === "admin" ? (
-          <AdminPanel account={address || ""} modoOscuro={modoOscuro} />
-        ) : userRole === "director" ? (
-          <DirectorPanel
-            account={address || ""}
-            modoOscuro={modoOscuro}
-            //walletClient={walletClient}
-          />
-        ) : (
-          <StudentPanel account={address || ""} modoOscuro={modoOscuro} />
-        )}
-      </main>
+        </div>
+        
+      </header>
+      
+      {/* Contenedor con scroll único */}
+      <div className="h-full overflow-y-auto overflow-x-hidden pt-[65px]">
+        
+        
+        {/* Contenido principal basado en el rol */}
+        <main>
+          {!isConnected ? (
+            <>
+              {/* Landing Page para usuarios no conectados */}
+              <Hero />
+              
+              <h2
+                className={`flex flex-1 items-center justify-center top-10 text-4xl md:text-5xl -mt-[100px] font-extrabold mb-6 ${
+                  modoOscuro ? "text-white" : "text-gray-800"
+                } relative`}
+                style={{
+                  background:
+                    "linear-gradient(90deg, #ff0080, #7928ca, #00ffea, #ff0080)",
+                  backgroundSize: "400% 400%",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  animation: "rgbTextGlow 3s linear infinite",
+                }}
+              >
+                Plataforma de Certificados NFT
+                <style>
+                  {`
+                    @keyframes rgbTextGlow {
+                      0% { background-position: 0% 50%; }
+                      50% { background-position: 100% 50%; }
+                      100% { background-position: 0% 50%; }
+                    }
+                  `}
+                </style>
+              </h2>
+              <br /><br />
+              <div className="relative z-50">
+                <TypewriterText />
+              </div>
+              <div className="flex justify-center items-center mt-8 relative z-40">
+                <img 
+                  src={imgperonaje} 
+                  alt="Personaje Somnia" 
+                  className="max-w-md w-full h-auto object-contain opacity-90"
+                  style={{ maxHeight: '250px' }}
+                />
+              </div>
+
+              {/* Secciones de la Landing Page */}
+              <FeaturesSection />
+              <HowItWorksSection />
+              <StatsSection />
+              <BenefitsSection />
+              <TestimonialsSection />
+              <CTASection />
+            </>
+          ) : loading ? (
+            <div className="flex items-center justify-center min-h-[50vh]">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-500 mx-auto mb-4"></div>
+                <p className="text-white text-lg">Verificando rol del usuario...</p>
+              </div>
+            </div>
+          ) : userRole === "admin" ? (
+            <AdminPanel account={address || ""} modoOscuro={modoOscuro} />
+          ) : userRole === "director" ? (
+            <DirectorPanel account={address || ""} modoOscuro={modoOscuro} />
+          ) : userRole === "student" ? (
+            <StudentPanel account={address || ""} modoOscuro={modoOscuro} />
+          ) : (
+            <div className="flex items-center justify-center min-h-[50vh]">
+              <div className="text-center bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-gray-700/50 max-w-md">
+                <div className="text-6xl mb-4">❌</div>
+                <h3 className="text-2xl font-bold text-white mb-4">Sin Rol Asignado</h3>
+                <p className="text-gray-400 mb-6">
+                  Tu wallet no tiene un rol asignado en la plataforma CertifyChain.
+                </p>
+                <p className="text-gray-500 text-sm">
+                  Contacta con tu institución educativa para obtener acceso.
+                </p>
+              </div>
+            </div>
+          )}
+        </main>
+        
+        {/* Footer solo se muestra si no está conectado */}
+        {!isConnected && <Footer />}
+      </div>
     </div>
   );
 };

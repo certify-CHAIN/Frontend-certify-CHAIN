@@ -1,0 +1,27 @@
+import Typewriter from "typewriter-effect";
+
+const TypewriterText = () => {
+  return (
+    <div className="text-2xl md:text-4xl font-bold text-white mb-4 text-center flex items-center justify-center" style={{ opacity: 1, color: '#ffffff' }}>
+      <Typewriter
+        options={{
+          strings: [
+            "Certificados NFT Seguros",
+            "Verificación Blockchain",
+            "Autenticidad Garantizada", 
+            "Tecnología Descentralizada",
+            "Certificación Digital"
+          ],
+          autoStart: true,
+          loop: true,
+          delay: 75,
+          deleteSpeed: 50,
+          cursor: "|",
+          cursorClassName: "text-purple-900",
+        }}
+      />
+    </div>
+  );
+};
+
+export default TypewriterText;
