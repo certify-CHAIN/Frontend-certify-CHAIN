@@ -1,0 +1,59 @@
+<svg width="300" height="250" viewBox="0 0 300 250" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff0080;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#7928ca;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#00ffea;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#ff0080;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7928ca;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00ffea;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#7928ca;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#ff0080;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="300" height="250" fill="none" stroke="url(#gradient1)" stroke-width="2" rx="15"/>
+  
+  <!-- Character silhouette -->
+  <ellipse cx="150" cy="180" rx="80" ry="60" fill="url(#gradient2)" opacity="0.3"/>
+  
+  <!-- Head -->
+  <circle cx="150" cy="80" r="35" fill="url(#gradient1)" opacity="0.8"/>
+  
+  <!-- Body -->
+  <rect x="130" y="110" width="40" height="70" fill="url(#gradient1)" opacity="0.7" rx="5"/>
+  
+  <!-- Arms -->
+  <rect x="100" y="120" width="25" height="8" fill="url(#gradient2)" opacity="0.6" rx="4"/>
+  <rect x="175" y="120" width="25" height="8" fill="url(#gradient2)" opacity="0.6" rx="4"/>
+  
+  <!-- Certificate symbol -->
+  <rect x="135" y="130" width="30" height="20" fill="#00ffea" opacity="0.8" rx="3"/>
+  <text x="150" y="143" text-anchor="middle" fill="#030014" font-size="12" font-weight="bold">📜</text>
+  
+  <!-- Blockchain connection lines -->
+  <path d="M80 200 Q150 160 220 200" stroke="url(#gradient1)" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M70 210 Q150 170 230 210" stroke="url(#gradient2)" stroke-width="2" fill="none" opacity="0.4"/>
+  
+  <!-- Floating elements -->
+  <circle cx="50" cy="50" r="3" fill="#00ffea" opacity="0.8">
+    <animate attributeName="cy" values="50;40;50" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="250" cy="70" r="4" fill="#ff0080" opacity="0.8">
+    <animate attributeName="cy" values="70;60;70" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="70" cy="170" r="2" fill="#7928ca" opacity="0.8">
+    <animate attributeName="cy" values="170;160;170" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Title -->
+  <text x="150" y="30" text-anchor="middle" fill="url(#gradient1)" font-size="18" font-weight="bold">
+    SOMNIA
+  </text>
+  <text x="150" y="220" text-anchor="middle" fill="url(#gradient2)" font-size="14" font-weight="600">
+    Certificación Blockchain
+  </text>
+</svg>

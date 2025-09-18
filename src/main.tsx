@@ -5,6 +5,8 @@ import "@rainbow-me/rainbowkit/styles.css";
 import {
   getDefaultConfig,
   RainbowKitProvider,
+  darkTheme,
+  
 } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -30,7 +32,15 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
+        <RainbowKitProvider
+          theme={darkTheme({
+    accentColor: '#585BE8', // Puedes personalizar el color principal
+    accentColorForeground: 'white',
+    borderRadius: 'medium',
+    fontStack: 'system',
+    overlayBlur: 'small',
+  })}
+        >
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<App />} />
