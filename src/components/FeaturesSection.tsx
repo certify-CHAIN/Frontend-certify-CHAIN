@@ -1,25 +1,29 @@
+import qr from "../assets/qr.jpg";
+import logoSomnia from "../assets/logo somnia.png";
+import seguridad from "../assets/seguridad-icon.png";
+import nft from "../assets/nft.png";
 const FeaturesSection = () => {
   const features = [
     {
-      icon: "🎓",
+      icon: "nft",
       title: "Certificados NFT",
       description: "Diplomas y certificados inmutables en blockchain que garantizan autenticidad permanente",
       gradient: "from-blue-500 to-purple-600"
     },
     {
-      icon: "📱",
+      icon: "qr-image",
       title: "Verificación QR",
       description: "Escaneado instantáneo para verificar la validez del certificado en segundos",
       gradient: "from-green-500 to-blue-500"
     },
     {
-      icon: "🔐",
+      icon: "seguridad",
       title: "Seguridad Blockchain",
       description: "Tecnología descentralizada que previene falsificaciones y fraudes académicos",
       gradient: "from-purple-500 to-pink-500"
     },
     {
-      icon: "⚡",
+      icon: "somnia-image",
       title: "Red Somnia",
       description: "Powered by Somnia Network para transacciones rápidas y costos mínimos",
       gradient: "from-orange-500 to-red-500"
@@ -61,7 +65,41 @@ const FeaturesSection = () => {
                 <div 
                   className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300`}
                 ></div>
-                <span className="relative z-10">{feature.icon}</span>
+                {feature.icon === "qr-image" ? (
+                  <div className="relative z-10 w-16 h-16 mx-auto">
+                    <img 
+                      src={qr} 
+                      alt="QR Code Icon" 
+                      className="w-full h-full object-contain rounded-sm border-2 border-gray-600 shadow-lg group-hover:scale-110 group-hover:border-green-400 transition-all duration-300"
+                    />
+                  </div>
+                ) : feature.icon === "somnia-image" ? (
+                  <div className="relative z-10 w-16 h-16 mx-auto">
+                    <img 
+                      src={logoSomnia} 
+                      alt="Somnia Network Icon" 
+                      className="w-full h-full object-contain rounded-sm shadow-lg group-hover:scale-110 transition-all duration-300"
+                    />
+                  </div>
+                ):feature.icon === "seguridad" ? (
+                  <div className="relative z-10 w-16 h-16 mx-auto">
+                    <img 
+                      src={seguridad} 
+                      alt="Seguridad Icon" 
+                      className="w-full h-full object-contain rounded-sm shadow-lg group-hover:scale-110 transition-all duration-300"
+                    />
+                  </div>
+                ) : feature.icon === "nft" ? (
+                  <div className="relative z-10 w-16 h-16 mx-auto">
+                    <img 
+                      src={nft} 
+                      alt="NFT Icon" 
+                      className="w-full h-full object-contain rounded-sm shadow-lg group-hover:scale-110 transition-all duration-300"
+                    />
+                  </div>
+                ) : (
+                  <span className="relative z-10">{feature.icon}</span>
+                )}
               </div>
 
               {/* Contenido */}

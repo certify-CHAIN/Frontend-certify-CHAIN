@@ -1,3 +1,4 @@
+import qr from "../assets/qr.jpg";
 const HowItWorksSection = () => {
   const steps = [
     {
@@ -11,7 +12,7 @@ const HowItWorksSection = () => {
       number: "02", 
       title: "Generación de QR",
       description: "Cada certificado genera automáticamente un código QR único que contiene toda la información verificable.",
-      icon: "🔲",
+      icon: "qr-image",
       color: "from-purple-500 to-pink-500"
     },
     {
@@ -66,9 +67,20 @@ const HowItWorksSection = () => {
 
                 {/* Icono */}
                 <div className="text-center mb-6">
-                  <span className="text-6xl group-hover:scale-110 transition-transform duration-300 inline-block">
+                  {step.icon === "qr-image" ? (
+                                    <div className="relative z-10 w-16 h-16 mx-auto">
+                                      <img 
+                                        src={qr} 
+                                        alt="QR Code Icon" 
+                                        className="w-full h-full object-contain rounded-sm border-2 border-gray-600 shadow-lg group-hover:scale-110 group-hover:border-green-400 transition-all duration-300"
+                                      />
+                                    </div>
+                                  ) : ( 
+                                    <span className="text-6xl group-hover:scale-110 transition-transform duration-300 inline-block">
                     {step.icon}
                   </span>
+                                  )}
+                  
                 </div>
 
                 {/* Contenido */}
@@ -93,7 +105,7 @@ const HowItWorksSection = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-16">
+        {/* <div className="text-center mt-16">
           <div className="inline-flex items-center space-x-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-md rounded-2xl p-8 border border-purple-500/30">
             <div className="text-4xl">🚀</div>
             <div className="text-left">
@@ -104,7 +116,7 @@ const HowItWorksSection = () => {
               Comenzar Ahora
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

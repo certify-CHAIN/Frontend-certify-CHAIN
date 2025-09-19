@@ -102,14 +102,47 @@ const CTASection = () => {
               </ul>
 
               {/* Botón */}
-              <button className={`w-full bg-gradient-to-r ${cta.color} hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg group-hover:shadow-2xl`}>
+              {/* <button className={`w-full bg-gradient-to-r ${cta.color} hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg group-hover:shadow-2xl`}>
                 {cta.buttonText}
-              </button>
+              </button> */}
 
               {/* Efecto de brillo */}
               <div className={`absolute inset-0 bg-gradient-to-r ${cta.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-3xl`}></div>
             </div>
           ))}
+        </div>
+        <div>
+          <div className="flex flex-row relative items-center justify-center min-h-screen w-full h-full -z-20">
+      <div className="absolute w-auto h-auto top-0 z-[5]">
+      </div>
+
+      <div className="flex flex-col items-center justify-center translate-y-[-50px] absolute z-[20] w-auto h-auto">
+
+        <div className="Welcome-box px-[15px] py-[4px] z-[20] border my-[20px] border-[#7042F88B] opacity-[0.9]">
+          <h1 className="Welcome-text text-[12px]">Encryption</h1>
+        </div>
+      </div>
+
+      <div className="absolute z-[20] bottom-[10px] px-[5px]">
+        <div className="cursive text-[20px] font-medium text-center text-gray-300">
+          Secure your data with end-to-end encryption.
+        </div>
+      </div>
+
+      <div className="w-full flex items-start justify-center absolute">
+        <video
+          loop
+          muted
+          autoPlay
+          playsInline
+          preload="false"
+          className="w-full h-auto"
+        >
+          <source src="/public/Videos/encryption-bg.webm" type="video/webm" />
+        </video>
+      </div>
+    </div>
+
         </div>
 
         {/* Sección adicional de urgencia */}
@@ -145,9 +178,6 @@ const CTASection = () => {
               <button className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold py-4 px-12 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg text-lg">
                 🔥 Aprovechar Oferta
               </button>
-              <div className="text-gray-400 text-sm">
-                ⏰ Oferta válida hasta fin de mes
-              </div>
             </div>
           </div>
         </div>

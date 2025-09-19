@@ -5,7 +5,7 @@ const TestimonialsSection = () => {
       role: "Estudiante de Ingeniería",
       university: "Universidad Tecnológica",
       content: "CertifyChain me dio la confianza de que mis certificados estarán seguros para siempre. Poder verificarlos con un simple QR es increíble.",
-      avatar: "👩‍🎓",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maria-Gonzalez&backgroundColor=b6e3f4,c0aede,d1d4f9",
       rating: 5,
       color: "from-blue-500 to-cyan-500"
     },
@@ -14,7 +14,7 @@ const TestimonialsSection = () => {
       role: "Director Académico",
       university: "Instituto Superior de Educación",
       content: "Implementar CertifyChain redujo nuestros costos operativos en un 70% y eliminó completamente los casos de falsificación.",
-      avatar: "👨‍🏫",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos-Mendez&backgroundColor=ffd5dc,ffeaa7,ddd6fe&glasses=default",
       rating: 5,
       color: "from-purple-500 to-pink-500"
     },
@@ -23,36 +23,9 @@ const TestimonialsSection = () => {
       role: "HR Manager",
       university: "TechCorp International",
       content: "La verificación instantánea de certificados nos ahorra semanas en el proceso de contratación. Es revolucionario.",
-      avatar: "👩‍💼",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ana-Rodriguez&backgroundColor=c7ecee,d4e6f1,fdeaa7&hair=long01",
       rating: 5,
       color: "from-green-500 to-emerald-500"
-    },
-    {
-      name: "Luis Fernández",
-      role: "Graduado en Medicina",
-      university: "Facultad de Medicina UNAM",
-      content: "Mis certificados médicos están protegidos en blockchain. Los hospitales pueden verificar mi formación inmediatamente.",
-      avatar: "👨‍⚕️",
-      rating: 5,
-      color: "from-orange-500 to-red-500"
-    },
-    {
-      name: "Prof. Elena Morales",
-      role: "Decana de Tecnología",
-      university: "Universidad Digital del Futuro",
-      content: "CertifyChain nos posicionó como pioneros en innovación educativa. Nuestros estudiantes lo valoran enormemente.",
-      avatar: "👩‍💻",
-      rating: 5,
-      color: "from-indigo-500 to-purple-500"
-    },
-    {
-      name: "Roberto Silva",
-      role: "Especialista en Blockchain",
-      university: "Freelancer Certificado",
-      content: "Como experto en blockchain, puedo confirmar que CertifyChain utiliza la mejor tecnología disponible. Es impresionante.",
-      avatar: "👨‍💻",
-      rating: 5,
-      color: "from-teal-500 to-blue-500"
     }
   ];
 
@@ -96,8 +69,12 @@ const TestimonialsSection = () => {
               {/* Header con avatar y rating */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-4">
-                  <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${testimonial.color} flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300`}>
-                    {testimonial.avatar}
+                  <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${testimonial.color} p-0.5 group-hover:scale-110 transition-transform duration-300`}>
+                    <img 
+                      src={testimonial.avatar} 
+                      alt={`Avatar de ${testimonial.name}`}
+                      className="w-full h-full rounded-full object-cover bg-white"
+                    />
                   </div>
                   <div>
                     <h4 className="text-lg font-semibold text-white group-hover:text-purple-300 transition-colors duration-300">
@@ -156,12 +133,12 @@ const TestimonialsSection = () => {
         </div>
 
         {/* CTA para agregar testimonial */}
-        <div className="mt-12 text-center">
+        {/* <div className="mt-12 text-center">
           <p className="text-gray-400 mb-6">¿Quieres compartir tu experiencia con CertifyChain?</p>
           <button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg">
             Enviar Testimonial
           </button>
-        </div>
+        </div> */}
       </div>
     </section>
   );

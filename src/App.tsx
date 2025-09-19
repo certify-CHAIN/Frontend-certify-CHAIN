@@ -11,8 +11,9 @@ import AnimatedBackground from "./components/AnimatedBackground";
 import TypewriterText from "./components/TypewriterText";
 import FeaturesSection from "./components/FeaturesSection";
 import HowItWorksSection from "./components/HowItWorksSection";
-import BenefitsSection from "./components/BenefitsSection";
-import StatsSection from "./components/StatsSection";
+//import BenefitsSection from "./components/BenefitsSection";
+//import StatsSection from "./components/StatsSection";
+
 import TestimonialsSection from "./components/TestimonialsSection";
 import CTASection from "./components/CTASection";
 import Footer from "./components/Footer";
@@ -21,6 +22,7 @@ import type { UserData } from "./utils/userDatabase";
 import logo from "./assets/logo.svg";
 import logoDark from "./assets/logo-black.svg";
 import imgperonaje  from "./assets/somnia titulo per.png";
+import UniverityParners from "./components/UniverityParners";
 
 // Tipos para los roles simplificados
 type UserRole = "director" | "estudiante" | null;
@@ -163,8 +165,9 @@ const App = () => {
             {/* Secciones de la Landing Page */}
             <FeaturesSection />
             <HowItWorksSection />
-            <StatsSection />
-            <BenefitsSection />
+            {/* <StatsSection /> */}
+            {/* <BenefitsSection /> */}
+            <UniverityParners />
             <TestimonialsSection />
             <CTASection />
           </>
