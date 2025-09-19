@@ -3,7 +3,8 @@ const CTASection = () => {
     {
       title: "Para Estudiantes",
       subtitle: "Protege tus logros académicos",
-      description: "Obtén certificados NFT verificables que durarán para siempre en blockchain",
+      description:
+        "Obtén certificados NFT verificables que durarán para siempre en blockchain",
       icon: "🎓",
       color: "from-blue-500 to-cyan-500",
       buttonText: "Verificar Certificado",
@@ -11,13 +12,14 @@ const CTASection = () => {
         "✅ Verificación instantánea",
         "✅ Acceso móvil 24/7",
         "✅ Reconocimiento global",
-        "✅ Seguridad blockchain"
-      ]
+        "✅ Seguridad blockchain",
+      ],
     },
     {
       title: "Para Instituciones",
       subtitle: "Revoluciona tu sistema de certificación",
-      description: "Reduce costos, elimina fraudes y posiciona tu institución como pionera en tecnología",
+      description:
+        "Reduce costos, elimina fraudes y posiciona tu institución como pionera en tecnología",
       icon: "🏛️",
       color: "from-purple-500 to-pink-500",
       buttonText: "Solicitar Demo",
@@ -25,13 +27,14 @@ const CTASection = () => {
         "✅ Reducción de costos 70%",
         "✅ Cero falsificaciones",
         "✅ Analytics avanzados",
-        "✅ Integración API simple"
-      ]
+        "✅ Integración API simple",
+      ],
     },
     {
       title: "Para Empleadores",
       subtitle: "Verifica credenciales al instante",
-      description: "Acelera tu proceso de contratación con verificación automática de certificados",
+      description:
+        "Acelera tu proceso de contratación con verificación automática de certificados",
       icon: "💼",
       color: "from-green-500 to-emerald-500",
       buttonText: "Comenzar Verificación",
@@ -39,9 +42,9 @@ const CTASection = () => {
         "✅ Verificación en segundos",
         "✅ Base de datos global",
         "✅ Proceso automatizado",
-        "✅ Confianza absoluta"
-      ]
-    }
+        "✅ Confianza absoluta",
+      ],
+    },
   ];
 
   return (
@@ -49,10 +52,11 @@ const CTASection = () => {
       <div className="max-w-7xl mx-auto">
         {/* Título principal */}
         <div className="text-center mb-16">
-          <h2 
+          <h2
             className="text-5xl font-bold mb-6"
             style={{
-              background: "linear-gradient(90deg, #7928ca, #ff0080, #00ffea, #7928ca)",
+              background:
+                "linear-gradient(90deg, #7928ca, #ff0080, #00ffea, #7928ca)",
               backgroundSize: "400% 400%",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -62,21 +66,26 @@ const CTASection = () => {
             Únete a la Revolución Digital
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Independientemente de tu rol, CertifyChain tiene la solución perfecta para ti
+            Independientemente de tu rol, CertifyChain tiene la solución
+            perfecta para ti
           </p>
         </div>
 
         {/* Grid de CTAs */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
           {ctaOptions.map((cta, index) => (
-            <div 
+            <div
               key={index}
               className="group relative bg-gray-900/50 backdrop-blur-md rounded-3xl p-8 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:transform hover:scale-105 text-center"
             >
               {/* Icono con glow */}
               <div className="relative mb-6">
-                <div className={`absolute inset-0 bg-gradient-to-r ${cta.color} rounded-full blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-300`}></div>
-                <div className={`relative w-20 h-20 mx-auto bg-gradient-to-r ${cta.color} rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300`}>
+                <div
+                  className={`absolute inset-0 bg-gradient-to-r ${cta.color} rounded-full blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-300`}
+                ></div>
+                <div
+                  className={`relative w-20 h-20 mx-auto bg-gradient-to-r ${cta.color} rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300`}
+                >
                   {cta.icon}
                 </div>
               </div>
@@ -95,7 +104,10 @@ const CTASection = () => {
               {/* Lista de características */}
               <ul className="text-left mb-8 space-y-2">
                 {cta.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="text-gray-300 text-sm group-hover:text-gray-200 transition-colors duration-300">
+                  <li
+                    key={featureIndex}
+                    className="text-gray-300 text-sm group-hover:text-gray-200 transition-colors duration-300"
+                  >
                     {feature}
                   </li>
                 ))}
@@ -107,42 +119,62 @@ const CTASection = () => {
               </button> */}
 
               {/* Efecto de brillo */}
-              <div className={`absolute inset-0 bg-gradient-to-r ${cta.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-3xl`}></div>
+              <div
+                className={`absolute inset-0 bg-gradient-to-r ${cta.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-3xl`}
+              ></div>
             </div>
           ))}
         </div>
         <div>
-          <div className="flex flex-row relative items-center justify-center min-h-screen w-full h-full -z-20">
-      <div className="absolute w-auto h-auto top-0 z-[5]">
-      </div>
-
-      <div className="flex flex-col items-center justify-center translate-y-[-50px] absolute z-[20] w-auto h-auto">
-
-        <div className="Welcome-box px-[15px] py-[4px] z-[20] border my-[20px] border-[#7042F88B] opacity-[0.9]">
-          <h1 className="Welcome-text text-[12px]">Encryption</h1>
+          <div className="text-center mb-16">
+          <h2
+            className="text-5xl font-bold mb-6"
+            style={{
+              background:
+                "linear-gradient(90deg, #7928ca, #ff0080, #00ffea, #7928ca)",
+              backgroundSize: "400% 400%",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              animation: "rgbTextGlow 3s linear infinite",
+            }}
+          >
+            Seguridad Garantizada con Somnia
+          </h2>
         </div>
-      </div>
+          <div className="flex flex-row relative items-center justify-center min-h-screen w-full h-full -z-20 -top-40">
+            
+            {/* <div className="flex flex-col items-center justify-center translate-y-[-50px] absolute z-[20] w-auto h-auto">
+              <div className="Welcome-box px-[15px] py-[4px] z-[20] border my-[20px] border-[#7042F88B] opacity-[0.9]">
+                <h1 className="Welcome-text text-[12px]">Seguridad</h1>
+              </div>
+            </div> */}
+            
 
-      <div className="absolute z-[20] bottom-[10px] px-[5px]">
-        <div className="cursive text-[20px] font-medium text-center text-gray-300">
-          Secure your data with end-to-end encryption.
-        </div>
-      </div>
+            {/* Logo de Somnia en el centro */}
+            <div className="absolute z-[25] flex items-center justify-center">
+              <img 
+                src="/src/assets/logo somnia.png" 
+                alt="Logo Somnia"
+                className="w-32 h-32 object-contain opacity-90 animate-pulse"
+              />
+            </div>
 
-      <div className="w-full flex items-start justify-center absolute">
-        <video
-          loop
-          muted
-          autoPlay
-          playsInline
-          preload="false"
-          className="w-full h-auto"
-        >
-          <source src="/public/Videos/encryption-bg.webm" type="video/webm" />
-        </video>
-      </div>
-    </div>
-
+            
+              <video
+                loop
+                muted
+                autoPlay
+                playsInline
+                preload="false"
+                className="w-full h-auto opacity-50"
+              >
+                <source
+                  src="/public/Videos/encryption-bg.webm"
+                  type="video/webm"
+                />
+              </video>
+            
+          </div>
         </div>
 
         {/* Sección adicional de urgencia */}
@@ -158,18 +190,30 @@ const CTASection = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div className="bg-gray-800/30 rounded-xl p-6">
                   <div className="text-3xl mb-2">💰</div>
-                  <h4 className="text-lg font-semibold text-white mb-2">50% Descuento</h4>
-                  <p className="text-gray-400 text-sm">En el primer año de suscripción</p>
+                  <h4 className="text-lg font-semibold text-white mb-2">
+                    50% Descuento
+                  </h4>
+                  <p className="text-gray-400 text-sm">
+                    En el primer año de suscripción
+                  </p>
                 </div>
                 <div className="bg-gray-800/30 rounded-xl p-6">
                   <div className="text-3xl mb-2">🎯</div>
-                  <h4 className="text-lg font-semibold text-white mb-2">Setup Gratuito</h4>
-                  <p className="text-gray-400 text-sm">Configuración e integración sin costo</p>
+                  <h4 className="text-lg font-semibold text-white mb-2">
+                    Setup Gratuito
+                  </h4>
+                  <p className="text-gray-400 text-sm">
+                    Configuración e integración sin costo
+                  </p>
                 </div>
                 <div className="bg-gray-800/30 rounded-xl p-6">
                   <div className="text-3xl mb-2">📞</div>
-                  <h4 className="text-lg font-semibold text-white mb-2">Soporte Premium</h4>
-                  <p className="text-gray-400 text-sm">6 meses de soporte dedicado</p>
+                  <h4 className="text-lg font-semibold text-white mb-2">
+                    Soporte Premium
+                  </h4>
+                  <p className="text-gray-400 text-sm">
+                    6 meses de soporte dedicado
+                  </p>
                 </div>
               </div>
             </div>
