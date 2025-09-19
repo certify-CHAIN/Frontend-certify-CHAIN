@@ -27,7 +27,7 @@ const Footer = () => {
     {
       title: "Resources",
       links: [
-        { name: "Documentation", href: "#docs" },
+        { name: "Documentation", href: "https://www.notion.so/asd-273d31057557804a9b47ccbad650991a" },
         { name: "Blog", href: "#blog" },
         { name: "Help Center", href: "#help" },
         { name: "Webinars", href: "#webinars" },

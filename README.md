@@ -3,7 +3,17 @@
   
   [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://certifi-chain.vercel.app/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
+  [![React](https://img.shields## 📚## 📚 Documentation & Translation
+
+- 📖 **English Documentation**: This README.md (Primary)
+- 🇪🇸 **Spanish Documentation**: [README.ESP.md](./README.ESP.md)
+- 🌐 **Live Application**: [https://certifi-chain.vercel.app/](https://certifi-chain.vercel.app/)
+- 📚 **Complete Documentation**: [CertifyChain Docs (Notion)](https://www.notion.so/asd-273d31057557804a9b47ccbad650991a)entation & Translation
+
+- 📖 **English Documentation**: This README.md (Primary)
+- 🇪🇸 **Spanish Documentation**: [README.ESP.md](./README.ESP.md)
+- 🌐 **Live Application**: [https://certifi-chain.vercel.app/](https://certifi-chain.vercel.app/)
+- 📚 **Complete Documentation**: [CertifyChain Docs (Notion)](https://www.notion.so/asd-273d31057557804a9b47ccbad650991a)dge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
   [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
   
   # CertifyChain Frontend
@@ -443,6 +453,6 @@ This frontend application is licensed under the MIT License - see the [LICENSE](
 
 *Modern Web3 interface for decentralized education*
 
-[🌐 Live Demo](https://certifi-chain.vercel.app/) | [📖 Documentation](https://github.com/certify-CHAIN/CertifyChain) | [🔧 API Docs](https://docs.certifychain.io)
+[🌐 Live Demo](https://certifi-chain.vercel.app/) | [📖 Documentation](https://github.com/certify-CHAIN/CertifyChain) | [📄 Complete Docs](https://www.notion.so/asd-273d31057557804a9b47ccbad650991a)
 
 </div>  
