@@ -1,7 +1,29 @@
 <div align="center">
   <img src="./src/assets/logo_CertifyChain.jpg" alt="CertifyChain Logo" width="400"/>
   
-  [![Estado de Construcción](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://certifi-chain.vercel.app/)
+  [![Estado de Cons├── 📁 src/
+│   ├── 📁 assets/              # Imágenes y recursos
+│   │   ├── 🎓 certificado.jpg
+│   │   ├── 🖼️ img1.png, img2.png, img3.png
+│   │   ├── 🏷️ logo_CertifyChain.jpg
+│   │   └── 🔖 Varias variantes de logo
+│   ├── 📁 chains/              # Configuraciones blockchain
+│   │   └── ⚙️ chains.ts
+│   ├── 📁 components/          # Componentes React
+│   │   ├── 👑 AdminPanel.tsx
+│   │   ├── ✨ AnimatedBackground.tsx
+│   │   ├── 🎨 BenefitsSection.tsx
+│   │   ├── 📞 CTASection.tsx
+│   │   ├── 🎓 DirectorPanel.tsx
+│   │   ├── 🌟 FeaturesSection.tsx
+│   │   ├── 🦶 Footer.tsx
+│   │   ├── 🔄 HowItWorksSection.tsx
+│   │   ├── 🎯 RoleSelector.tsx
+│   │   ├── 📊 StatsSection.tsx
+│   │   ├── 👨‍🎓 StudentPanel.tsx
+│   │   ├── 💬 TestimonialsSection.tsx
+│   │   ├── ⌨️ TypewriterText.tsx
+│   │   └── 🏛️ UniverityParners.tsxs://img.shields.io/badge/build-passing-brightgreen.svg)](https://certifi-chain.vercel.app/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
   [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
   [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -28,6 +50,34 @@ Este repositorio contiene la **aplicación frontend React** para CertifyChain, u
 ✅ **Integración de Billeteras**: Soporte fluido para MetaMask y WalletConnect  
 ✅ **Interacción Blockchain en Tiempo Real**: Actualizaciones en vivo del estado del contrato  
 ✅ **Visualización de Contenido IPFS**: Visualización descentralizada de imágenes y metadatos de certificados  
+✅ **Soporte Multi-idioma**: Interfaz completamente traducida (Inglés principal, Español disponible)  
+✅ **Página de Inicio Moderna**: Landing page profesional con componentes animados  
+✅ **Verificación de Certificados**: Sistema de verificación pública de certificados mediante URLs únicas  
+
+---
+
+## 🌐 Internacionalización
+
+### **Soporte de Idiomas**
+- 🇺🇸 **Inglés**: Idioma principal con traducción completa de la interfaz
+- 🇪🇸 **Español**: Documentación completa en español (README.ESP.md)
+- 🔄 **Estado de Traducción**: 100% de la UI traducida al inglés
+
+Toda la interfaz de usuario ha sido traducida profesionalmente del español al inglés, incluyendo:
+- Todo el texto y etiquetas de componentes
+- Textos de botones y llamadas a la acción
+- Mensajes de error y estados de carga
+- Contenido y animaciones de la página de inicio
+- Páginas de verificación de certificados
+- Interfaces del dashboard
+
+### **Componentes Traducidos**
+- ✅ Secciones de la página de inicio (Hero, Características, Beneficios, Estadísticas, Testimonios, CTA)
+- ✅ Navegación y pie de página
+- ✅ Selector de roles y dashboards
+- ✅ Interfaces de gestión de certificados
+- ✅ Páginas de verificación
+- ✅ Todo el texto visible para el usuario y comentarios
 
 ---
 
@@ -188,9 +238,13 @@ npm run dev
 Crear archivo `.env.local` en el directorio raíz:
 
 ```env
-# Configuración IPFS Pinata
+# Configuración IPFS Pinata (Requerido)
 VITE_PINATA_JWT=tu_token_jwt_pinata
 VITE_PINATA_GATEWAY=tu_url_gateway_pinata
+
+# Configuración Supabase (Requerido)
+VITE_SUPABASE_URL=tu_url_proyecto_supabase
+VITE_SUPABASE_ANON_KEY=tu_clave_anon_supabase
 
 # Opcional: Endpoints RPC personalizados
 VITE_ETHEREUM_RPC_URL=tu_url_rpc_personalizado
@@ -274,16 +328,37 @@ npm run dev
 
 El frontend se conecta a estos contratos inteligentes desplegados:
 
-### **Direcciones de Contratos**
-- **CertifyRoles**: `0xDaC5fd597801Fe86422fE64D714F9F6452424927`
-- **CertiChainToken**: `0x86Ae08076DBD7c1227cBD3d8743062C3bBB91F54`
+### **Direcciones de Contratos (Somnia Testnet)**
+
+#### 🔐 **Contrato de Roles**
+- **Dirección**: `0x786E41e7a24C8B9031b91749F8f1A649457CC1BF`
+- **Propósito**: Gestión de control de acceso basado en roles
+- **Funciones**: Asignaciones de roles Admin, Director y Estudiante
+- **Verificación**: ✅ Verificado y desplegado en Somnia Testnet
+
+#### 🎫 **Contrato ERC721 de Certificados**
+- **Dirección**: `0x3942A2e611Cd2C8272Ae9C05A40001aF1903d1aD`
+- **Propósito**: Acuñación y gestión de certificados NFT
+- **Estándar**: Token compatible con ERC-721
+- **Verificación**: ✅ Verificado y desplegado en Somnia Testnet
+
+- **Red**: Somnia Testnet (Chain ID: 50311)
 
 ### **Interacciones Clave Frontend-Contrato**
 ```typescript
 // Detección de roles
-const userRole = await certifyRoles.getRole(userAddress)
+const userRole = await rolesContract.getRole(userAddress)
 
 // Acuñación de certificados (rol Director)
+const tx = await certificateContract.safeMint(studentAddress, tokenURI)
+
+// Obtención de certificados (rol Estudiante)
+const certificates = await certificateContract.tokensOfOwner(userAddress)
+```
+
+### **Integración de Contratos**
+- **Contrato de Roles**: `0x786E41e7a24C8B9031b91749F8f1A649457CC1BF`
+- **Contrato de Certificados**: `0x3942A2e611Cd2C8272Ae9C05A40001aF1903d1aD`
 const tx = await certiChainToken.safeMint(studentAddress, tokenURI)
 
 // Obtención de certificados (rol Estudiante)
@@ -342,7 +417,22 @@ VITE_CONTRACT_ADDRESSES=direcciones_contratos_produccion
 
 ---
 
-## 📄 Licencia
+## � Documentación y Traducción
+
+- 🇪🇸 **Documentación en Español**: Este README.ESP.md
+- 📖 **English Documentation**: [README.md](./README.md) (Principal)
+- 🌐 **Aplicación en Vivo**: [https://certifi-chain.vercel.app/](https://certifi-chain.vercel.app/)
+- 📚 **Documentación API**: [docs.certifychain.io](https://docs.certifychain.io) *(Próximamente)*
+
+### Estado de Traducción
+- ✅ **Interfaz de Usuario**: 100% traducida al inglés
+- ✅ **Documentación**: Disponible en inglés y español
+- ✅ **Comentarios de Código**: Actualizados al inglés
+- ✅ **Nombres de Componentes**: Mantenidos en inglés
+
+---
+
+## �📄 Licencia
 
 Esta aplicación frontend está licenciada bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
 

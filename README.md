@@ -1,7 +1,29 @@
 <div align="center">
   <img src="./src/assets/logo_CertifyChain.jpg" alt="CertifyChain Logo" width="400"/>
   
-  [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://certifi-chain.vercel.app/)
+  [![Build Status](├── 📁 src/
+│   ├── 📁 assets/              # Images and resources
+│   │   ├── 🎓 certificado.jpg
+│   │   ├── 🖼️ img1.png, img2.png, img3.png
+│   │   ├── 🏷️ logo_CertifyChain.jpg
+│   │   └── 🔖 Various logo variants
+│   ├── 📁 chains/              # Blockchain configurations
+│   │   └── ⚙️ chains.ts
+│   ├── 📁 components/          # React components
+│   │   ├── 👑 AdminPanel.tsx
+│   │   ├── ✨ AnimatedBackground.tsx
+│   │   ├── 🎨 BenefitsSection.tsx
+│   │   ├── 📞 CTASection.tsx
+│   │   ├── 🎓 DirectorPanel.tsx
+│   │   ├── 🌟 FeaturesSection.tsx
+│   │   ├── 🦶 Footer.tsx
+│   │   ├── 🔄 HowItWorksSection.tsx
+│   │   ├── 🎯 RoleSelector.tsx
+│   │   ├── 📊 StatsSection.tsx
+│   │   ├── 👨‍🎓 StudentPanel.tsx
+│   │   ├── 💬 TestimonialsSection.tsx
+│   │   ├── ⌨️ TypewriterText.tsx
+│   │   └── 🏛️ UniverityParners.tsxields.io/badge/build-passing-brightgreen.svg)](https://certifi-chain.vercel.app/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
   [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
   [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -28,6 +50,34 @@ This repository contains the **React frontend application** for CertifyChain, a 
 ✅ **Wallet Integration**: Seamless MetaMask and WalletConnect support  
 ✅ **Real-time Blockchain Interaction**: Live contract state updates  
 ✅ **IPFS Content Display**: Decentralized certificate image and metadata viewing  
+✅ **Multi-language Support**: Fully translated interface (English primary, Spanish available)  
+✅ **Modern Landing Page**: Professional landing page with animated components  
+✅ **Certificate Verification**: Public certificate verification system via unique URLs  
+
+---
+
+## 🌐 Internationalization
+
+### **Language Support**
+- 🇺🇸 **English**: Primary language with complete interface translation
+- 🇪🇸 **Spanish**: Complete Spanish documentation (README.ESP.md)
+- 🔄 **Translation Status**: 100% UI translated to English
+
+The entire user interface has been professionally translated from Spanish to English, including:
+- All component text and labels
+- Button texts and calls-to-action
+- Error messages and loading states
+- Landing page content and animations
+- Certificate verification pages
+- Dashboard interfaces
+
+### **Translated Components**
+- ✅ Landing page sections (Hero, Features, Benefits, Stats, Testimonials, CTA)
+- ✅ Navigation and footer
+- ✅ Role selector and dashboards
+- ✅ Certificate management interfaces
+- ✅ Verification pages
+- ✅ All user-facing text and comments
 
 ---
 
@@ -188,9 +238,13 @@ npm run dev
 Create a `.env.local` file in the root directory:
 
 ```env
-# Pinata IPFS Configuration
+# Pinata IPFS Configuration (Required)
 VITE_PINATA_JWT=your_pinata_jwt_token
 VITE_PINATA_GATEWAY=your_pinata_gateway_url
+
+# Supabase Configuration (Required)
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 # Optional: Custom RPC endpoints
 VITE_ETHEREUM_RPC_URL=your_custom_rpc_url
@@ -274,21 +328,37 @@ npm run dev
 
 The frontend connects to these deployed smart contracts:
 
-### **Contract Addresses**
-- **CertifyRoles**: `0xDaC5fd597801Fe86422fE64D714F9F6452424927`
-- **CertiChainToken**: `0x86Ae08076DBD7c1227cBD3d8743062C3bBB91F54`
+### **Contract Addresses (Somnia Testnet)**
+
+#### 🔐 **Roles Contract**
+- **Address**: `0x786E41e7a24C8B9031b91749F8f1A649457CC1BF`
+- **Purpose**: Role-based access control management
+- **Functions**: Admin, Director, and Student role assignments
+- **Verification**: ✅ Verified and deployed on Somnia Testnet
+
+#### 🎫 **ERC721 Certificate Contract**
+- **Address**: `0x3942A2e611Cd2C8272Ae9C05A40001aF1903d1aD`
+- **Purpose**: NFT certificate minting and management
+- **Standard**: ERC-721 compliant token
+- **Verification**: ✅ Verified and deployed on Somnia Testnet
+
+- **Network**: Somnia Testnet (Chain ID: 50311)
 
 ### **Key Frontend-Contract Interactions**
 ```typescript
 // Role detection
-const userRole = await certifyRoles.getRole(userAddress)
+const userRole = await rolesContract.getRole(userAddress)
 
 // Certificate minting (Director role)
-const tx = await certiChainToken.safeMint(studentAddress, tokenURI)
+const tx = await certificateContract.safeMint(studentAddress, tokenURI)
 
 // Certificate fetching (Student role)
-const certificates = await certiChainToken.tokensOfOwner(userAddress)
+const certificates = await certificateContract.tokensOfOwner(userAddress)
 ```
+
+### **Contract Integration**
+- **Roles Contract**: `0x786E41e7a24C8B9031b91749F8f1A649457CC1BF`
+- **Certificate Contract**: `0x3942A2e611Cd2C8272Ae9C05A40001aF1903d1aD`
 
 ---
 
@@ -342,7 +412,22 @@ VITE_CONTRACT_ADDRESSES=production_contract_addresses
 
 ---
 
-## 📄 License
+## � Documentation & Translation
+
+- 📖 **English Documentation**: This README.md (Primary)
+- 🇪🇸 **Spanish Documentation**: [README.ESP.md](./README.ESP.md)
+- 🌐 **Live Application**: [https://certifi-chain.vercel.app/](https://certifi-chain.vercel.app/)
+- 📚 **API Documentation**: [docs.certifychain.io](https://docs.certifychain.io) *(Coming Soon)*
+
+### Translation Status
+- ✅ **User Interface**: 100% translated to English
+- ✅ **Documentation**: Available in both English and Spanish
+- ✅ **Code Comments**: Updated to English
+- ✅ **Component Names**: Maintained in English
+
+---
+
+## �📄 License
 
 This frontend application is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
