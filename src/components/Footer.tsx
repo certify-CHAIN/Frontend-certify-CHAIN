@@ -5,43 +5,43 @@ const Footer = () => {
 
   const footerSections = [
     {
-      title: "Producto",
+      title: "Product",
       links: [
-        { name: "Características", href: "#features" },
-        { name: "Cómo Funciona", href: "#how-it-works" },
-        { name: "Beneficios", href: "#benefits" },
-        { name: "Precios", href: "#pricing" },
+        { name: "Features", href: "#features" },
+        { name: "How It Works", href: "#how-it-works" },
+        { name: "Benefits", href: "#benefits" },
+        { name: "Pricing", href: "#pricing" },
         { name: "Demo", href: "#demo" }
       ]
     },
     {
-      title: "Para Instituciones",
+      title: "For Institutions",
       links: [
-        { name: "Universidades", href: "#universities" },
-        { name: "Colegios", href: "#schools" },
-        { name: "Centros de Formación", href: "#training" },
-        { name: "Integración API", href: "#api" },
-        { name: "Soporte Técnico", href: "#support" }
+        { name: "Universities", href: "#universities" },
+        { name: "Schools", href: "#schools" },
+        { name: "Training Centers", href: "#training" },
+        { name: "API Integration", href: "#api" },
+        { name: "Technical Support", href: "#support" }
       ]
     },
     {
-      title: "Recursos",
+      title: "Resources",
       links: [
-        { name: "Documentación", href: "#docs" },
+        { name: "Documentation", href: "#docs" },
         { name: "Blog", href: "#blog" },
-        { name: "Centro de Ayuda", href: "#help" },
+        { name: "Help Center", href: "#help" },
         { name: "Webinars", href: "#webinars" },
-        { name: "Tutoriales", href: "#tutorials" }
+        { name: "Tutorials", href: "#tutorials" }
       ]
     },
     {
-      title: "Empresa",
+      title: "Company",
       links: [
-        { name: "Sobre Nosotros", href: "#about" },
-        { name: "Equipo", href: "#team" },
-        { name: "Carreras", href: "#careers" },
-        { name: "Prensa", href: "#press" },
-        { name: "Contacto", href: "#contact" }
+        { name: "About Us", href: "#about" },
+        { name: "Team", href: "#team" },
+        { name: "Careers", href: "#careers" },
+        { name: "Press", href: "#press" },
+        { name: "Contact", href: "#contact" }
       ]
     }
   ];
@@ -49,9 +49,9 @@ const Footer = () => {
 
   const stats = [
     { label: "Uptime", value: "99.9%" },
-    { label: "Países", value: "32+" },
-    { label: "Certificados", value: "15K+" },
-    { label: "Instituciones", value: "247+" }
+    { label: "Countries", value: "32+" },
+    { label: "Certificates", value: "15K+" },
+    { label: "Institutions", value: "247+" }
   ];
 
   return (
@@ -74,9 +74,9 @@ const Footer = () => {
               <h3 className="text-2xl font-bold text-white">CertifyChain</h3>
             </div>
             <p className="text-gray-400 leading-relaxed mb-6">
-              Revolucionando la certificación académica con tecnología blockchain, 
-              garantizando seguridad, transparencia y verificación instantánea para 
-              el futuro de la educación.
+              Revolutionizing academic certification with blockchain technology, 
+              ensuring security, transparency and instant verification for 
+              the future of education.
             </p>
             
             {/* Stats */}
@@ -131,14 +131,14 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
               <p className="text-gray-400">
-                © {currentYear} CertifyChain. Todos los derechos reservados.
+                © {currentYear} CertifyChain. All rights reserved.
               </p>
               <div className="flex space-x-6 text-sm">
                 <a href="#privacy" className="text-gray-400 hover:text-purple-400 transition-colors duration-300">
-                  Política de Privacidad
+                  Privacy Policy
                 </a>
                 <a href="#terms" className="text-gray-400 hover:text-purple-400 transition-colors duration-300">
-                  Términos de Servicio
+                  Terms of Service
                 </a>
                 <a href="#cookies" className="text-gray-400 hover:text-purple-400 transition-colors duration-300">
                   Cookies

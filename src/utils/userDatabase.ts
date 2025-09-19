@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 export interface UserData {
   id?: string;
   wallet_address: string;
-  rol: 'director' | 'estudiante';
+  rol: 'director' | 'student';
   nombre: string;
   created_at?: string;
 }
@@ -18,12 +18,12 @@ class UserDatabase {
     return UserDatabase.instance;
   }
 
-  // Método para verificar si el usuario ya está registrado
+  // Method to check if user is already registered
   async getUserByWallet(walletAddress: string): Promise<UserData | null> {
     try {
-      console.log('🔍 Buscando usuario en Supabase:', walletAddress);
+      console.log('🔍 Searching for user in Supabase:', walletAddress);
       
-      // Intentar con Supabase primero (como en CertificatePage.tsx)
+      // Try Supabase first (as in CertificatePage.tsx)
       const { data, error } = await supabase
         .from('roles')
         .select('*')
@@ -32,25 +32,25 @@ class UserDatabase {
 
       if (error) {
         if (error.code === 'PGRST116') {
-          // No se encontró el usuario en Supabase
-          console.log('👤 Usuario no encontrado en Supabase');
+          // User not found in Supabase
+          console.log('👤 User not found in Supabase');
           return null;
         }
         console.error('❌ Error de Supabase:', error);
         throw error;
       }
 
-      console.log('✅ Usuario encontrado en Supabase:', data);
+      console.log('✅ User found in Supabase:', data);
       
-      // También guardar en localStorage como backup
+      // Also save in localStorage as backup
       localStorage.setItem('certifychain_current_user', JSON.stringify(data));
       
       return data;
     } catch (error) {
-      console.error('❌ Error al obtener usuario desde Supabase:', error);
+      console.error('❌ Error getting user from Supabase:', error);
       
-      // Fallback con localStorage solo si Supabase falla completamente
-      console.log('📋 Usando localStorage como fallback');
+      // Fallback with localStorage only if Supabase fails completely
+      console.log('📋 Using localStorage as fallback');
       const storedUsers = localStorage.getItem('certifychain_users');
       if (storedUsers) {
         const users: UserData[] = JSON.parse(storedUsers);
@@ -61,12 +61,12 @@ class UserDatabase {
     }
   }
 
-  // Método para registrar un nuevo usuario
+  // Method to register a new user
   async registerUser(userData: Omit<UserData, 'id' | 'created_at'>): Promise<UserData | null> {
     try {
-      console.log('💾 Registrando usuario en Supabase:', userData);
+      console.log('💾 Registering user in Supabase:', userData);
       
-      // Intentar registrar en Supabase primero (como en CertificatePage.tsx)
+      // Try registering in Supabase first (as in CertificatePage.tsx)
       const { data, error } = await supabase
         .from('roles')
         .insert([{
@@ -78,13 +78,13 @@ class UserDatabase {
         .single();
 
       if (error) {
-        console.error('❌ Error al insertar en Supabase:', error);
+        console.error('❌ Error inserting in Supabase:', error);
         throw error;
       }
 
-      console.log('✅ Usuario registrado exitosamente en Supabase:', data);
+      console.log('✅ User successfully registered in Supabase:', data);
 
-      // También guardar en localStorage como backup
+      // Also save in localStorage as backup
       const storedUsers = localStorage.getItem('certifychain_users');
       const users: UserData[] = storedUsers ? JSON.parse(storedUsers) : [];
       users.push(data);
@@ -93,10 +93,10 @@ class UserDatabase {
 
       return data;
     } catch (error) {
-      console.error('❌ Error al registrar usuario en Supabase:', error);
+      console.error('❌ Error registering user in Supabase:', error);
       
-      // Fallback con localStorage solo si Supabase falla completamente
-      console.log('📋 Usando localStorage como fallback para registro');
+      // Fallback with localStorage only if Supabase fails completely
+      console.log('📋 Using localStorage as fallback for registration');
       const newUser: UserData = {
         ...userData,
         id: crypto.randomUUID(),
@@ -106,10 +106,10 @@ class UserDatabase {
       const storedUsers = localStorage.getItem('certifychain_users');
       const users: UserData[] = storedUsers ? JSON.parse(storedUsers) : [];
       
-      // Verificar si ya existe
+      // Check if already exists
       const existingUser = users.find(user => user.wallet_address === userData.wallet_address);
       if (existingUser) {
-        throw new Error('Usuario ya registrado');
+        throw new Error('User already registered');
       }
       
       users.push(newUser);
@@ -120,12 +120,12 @@ class UserDatabase {
     }
   }
 
-  // Método para actualizar datos del usuario
+  // Method to update user data
   async updateUser(walletAddress: string, updates: Partial<UserData>): Promise<UserData | null> {
     try {
-      console.log('🔄 Actualizando usuario en Supabase:', walletAddress, updates);
+      console.log('🔄 Updating user in Supabase:', walletAddress, updates);
       
-      // Intentar actualizar en Supabase primero
+      // Try updating in Supabase first
       const { data, error } = await supabase
         .from('roles')
         .update(updates)
@@ -163,10 +163,10 @@ class UserDatabase {
 
       return data;
     } catch (error) {
-      console.error('❌ Error al actualizar usuario en Supabase:', error);
+      console.error('❌ Error updating user in Supabase:', error);
       
-      // Fallback con localStorage
-      console.log('📋 Usando localStorage como fallback para actualización');
+      // Fallback with localStorage
+      console.log('📋 Using localStorage as fallback for update');
       const storedUsers = localStorage.getItem('certifychain_users');
       if (storedUsers) {
         const users: UserData[] = JSON.parse(storedUsers);
@@ -193,18 +193,18 @@ class UserDatabase {
     }
   }
 
-  // Método para obtener el usuario actual desde localStorage
+  // Method to get current user from localStorage
   getCurrentUser(): UserData | null {
     try {
       const currentUser = localStorage.getItem('certifychain_current_user');
       return currentUser ? JSON.parse(currentUser) : null;
     } catch (error) {
-      console.error('Error al obtener usuario actual:', error);
+      console.error('Error getting current user:', error);
       return null;
     }
   }
 
-  // Método para limpiar datos locales (logout)
+  // Method to clear local data (logout)
   clearCurrentUser(): void {
     localStorage.removeItem('certifychain_current_user');
   }

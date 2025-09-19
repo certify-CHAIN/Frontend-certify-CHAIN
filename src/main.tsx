@@ -17,7 +17,7 @@ import CertificatePage from "./CertificatePage";
 import "./index.css";
 import { somniaTestnet } from "./chains/chains";
 
-// 🚀 Configuración de wagmi + rainbowkit
+// 🚀 wagmi + rainbowkit configuration
 const config = getDefaultConfig({
   appName: "Mi App RainbowKit",
   projectId: "4764cb0b8852760547f5a36b9d826354",
@@ -27,14 +27,14 @@ const config = getDefaultConfig({
 
 const queryClient = new QueryClient();
 
-// 🚀 Render con Router y Providers
+// 🚀 Render with Router and Providers
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
           theme={darkTheme({
-    accentColor: '#585BE8', // Puedes personalizar el color principal
+    accentColor: '#585BE8', // You can customize the main color
     accentColorForeground: 'white',
     borderRadius: 'medium',
     fontStack: 'system',

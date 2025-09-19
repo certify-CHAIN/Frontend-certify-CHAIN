@@ -8,7 +8,7 @@ const StatsSection = () => {
     countries: 0
   });
 
-  // Animación de contadores
+  // Counter animation
   useEffect(() => {
     const finalStatsLocal = {
       certificates: 15420,
@@ -17,7 +17,7 @@ const StatsSection = () => {
       countries: 32
     };
 
-    const duration = 2000; // 2 segundos
+    const duration = 2000; // 2 seconds
     const steps = 60;
     const increment = duration / steps;
 
@@ -41,28 +41,28 @@ const StatsSection = () => {
   const stats = [
     {
       number: Math.floor(counters.certificates).toLocaleString(),
-      label: "Certificados Emitidos",
+      label: "Certificates Issued",
       icon: "📜",
       suffix: "+",
       color: "from-blue-500 to-cyan-500"
     },
     {
       number: Math.floor(counters.verifications).toLocaleString(),
-      label: "Verificaciones Realizadas",
+      label: "Verifications Performed",
       icon: "✅",
       suffix: "+",
       color: "from-green-500 to-emerald-500"
     },
     {
       number: Math.floor(counters.institutions),
-      label: "Instituciones Afiliadas",
+      label: "Affiliated Institutions",
       icon: "🏛️",
       suffix: "+",
       color: "from-purple-500 to-pink-500"
     },
     {
       number: Math.floor(counters.countries),
-      label: "Países Alcanzados",
+      label: "Countries Reached",
       icon: "🌍",
       suffix: "+",
       color: "from-orange-500 to-red-500"
@@ -84,10 +84,10 @@ const StatsSection = () => {
               animation: "rgbTextGlow 3s linear infinite",
             }}
           >
-            Números que Hablan por Sí Solos
+            Numbers That Speak for Themselves
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            La confianza de miles de estudiantes e instituciones nos respalda
+            Thousands of students and institutions trust and support us
           </p>
         </div>
 
@@ -98,7 +98,7 @@ const StatsSection = () => {
               key={index}
               className="group relative bg-gray-900/50 backdrop-blur-md rounded-2xl p-8 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:transform hover:scale-105 text-center"
             >
-              {/* Icono con efecto glow */}
+              {/* Icon with glow effect */}
               <div className="relative mb-6">
                 <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300`}></div>
                 <div className="relative text-5xl">
@@ -106,7 +106,7 @@ const StatsSection = () => {
                 </div>
               </div>
 
-              {/* Número principal */}
+              {/* Main number */}
               <div className={`text-4xl lg:text-5xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2`}>
                 {stat.number}{stat.suffix}
               </div>
@@ -128,15 +128,15 @@ const StatsSection = () => {
             <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-gray-300">Sistema 100% Operativo</span>
+                <span className="text-gray-300">System 100% Operational</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-                <span className="text-gray-300">Verificaciones en Tiempo Real</span>
+                <span className="text-gray-300">Real-Time Verifications</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse"></div>
-                <span className="text-gray-300">Red Somnia Activa</span>
+                <span className="text-gray-300">Somnia Network Active</span>
               </div>
             </div>
           </div>

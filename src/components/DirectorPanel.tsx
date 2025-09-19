@@ -14,7 +14,7 @@ interface DirectorPanelProps {
   signer?: ethers.Signer;
 }
 
-// Configuración de Supabase
+// Supabase configuration
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
@@ -26,9 +26,9 @@ const pinata = new PinataSDK({
 });
 
 const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
-  const [activeTab, setActiveTab] = useState("emitir");
-  const [nombre, setNombre] = useState("");
-  const [institucion, setInstitucion] = useState("");
+  const [activeTab, setActiveTab] = useState("issue");
+  const [studentName, setStudentName] = useState("");
+  const [institution, setInstitution] = useState("");
   const [uploadStatus, setUploadStatus] = useState("");
   const [link, setLink] = useState("");
   const [showJsonForm, setShowJsonForm] = useState(false);
@@ -39,7 +39,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
   const [mintPrice, setMintPrice] = useState("0");
   const [isLoadingPrice, setIsLoadingPrice] = useState(false);
   const [isMinting, setIsMinting] = useState(false);
-  const [certificadoId, setCertificadoId] = useState<string>(uuidv4());
+  const [certificateId, setCertificateId] = useState<string>(uuidv4());
 
   const [jsonData, setJsonData] = useState({
     description: "",
@@ -50,78 +50,78 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
 
   const certRef = useRef<HTMLDivElement>(null);
 
-  // Función para guardar certificado en Supabase
-  const guardarCertificadoEnBD = async (
-    nombreEstudiante: string,
-    institucionNombre: string,
-    walletDestinatario: string,
-    ipfsCertificado?: string,
+  // Function to save certificate in Supabase
+  const saveCertificateInDB = async (
+    studentName: string,
+    institutionName: string,
+    walletDestination: string,
+    ipfsCertificate?: string,
     ipfsMetadata?: string,
-    creadorWallet?: string
+    creatorWallet?: string
   ) => {
     try {
       const { data, error } = await supabase
-        .from("certificados")
+        .from("certificates")
         .insert([
           {
-            id: certificadoId,
-            nombre_estudiante: nombreEstudiante,
-            institucion: institucionNombre,
-            wallet_destinatario: walletDestinatario,
-            ipfs_certificado: ipfsCertificado || null,
+            id: certificateId,
+            student_name: studentName,
+            institution: institutionName,
+            wallet_destination: walletDestination,
+            ipfs_certificate: ipfsCertificate || null,
             ipfs_metadata: ipfsMetadata || null,
-            estado: "emitido",
-            creado_por: creadorWallet || account || null,
-            fecha_emision: new Date().toISOString(),
+            status: "issued",
+            created_by: creatorWallet || account || null,
+            emission_date: new Date().toISOString(),
           },
         ])
         .select()
         .single();
 
       if (error) {
-        console.error("Error guardando en BD:", error);
+        console.error("Error saving to DB:", error);
         throw error;
       }
 
-      console.log("✅ Certificado guardado en BD:", data);
-      setCertificadoId(data.id);
+      console.log("✅ Certificate saved in DB:", data);
+      setCertificateId(data.id);
       return data;
     } catch (error) {
-      console.error("❌ Error al guardar en base de datos:", error);
+      console.error("❌ Error saving to database:", error);
       throw error;
     }
   };
 
-  // Función para actualizar certificado con hash de transacción
-  const actualizarCertificadoConTx = async (
-    certificadoId: string,
+  // Function to update certificate with transaction hash
+  const updateCertificateWithTx = async (
+    certificateId: string,
     txHash: string
   ) => {
     try {
       const { data, error } = await supabase
-        .from("certificados")
+        .from("certificates")
         .update({
           tx_hash: txHash,
-          estado: "minted",
+          status: "minted",
         })
-        .eq("id", certificadoId)
+        .eq("id", certificateId)
         .select()
         .single();
 
       if (error) {
-        console.error("Error actualizando certificado:", error);
+        console.error("Error updating certificate:", error);
         throw error;
       }
 
-      console.log("✅ Certificado actualizado con TX:", data);
+      console.log("✅ Certificate updated with TX:", data);
       return data;
     } catch (error) {
-      console.error("❌ Error al actualizar certificado:", error);
+      console.error("❌ Error updating certificate:", error);
       throw error;
     }
   };
 
-  // Función para obtener el precio actual del mint
+  // Function to get current mint price
   const getMintPrice = async () => {
     try {
       setIsLoadingPrice(true);
@@ -131,7 +131,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
         providerOrSigner = signer;
       } else {
         if (!(window as any).ethereum) {
-          throw new Error("MetaMask no está instalado");
+          throw new Error("MetaMask is not installed");
         }
         const provider = new ethers.BrowserProvider((window as any).ethereum);
         providerOrSigner = provider;
@@ -142,7 +142,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
       const priceInEth = ethers.formatEther(price);
       setMintPrice(priceInEth);
     } catch (error) {
-      console.error("Error obteniendo precio:", error);
+      console.error("Error getting price:", error);
       setMintPrice("0.001");
     } finally {
       setIsLoadingPrice(false);
@@ -179,25 +179,25 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
     };
   }, []);
 
-  // SUBIR IMAGEN - Función optimizada para calidad 1536x1024px
+  // UPLOAD IMAGE - Function optimized for 1536x1024px quality
   const handleUpload = async () => {
-    if (!nombre || !institucion) {
-      setUploadStatus("⚠️ Por favor completa todos los campos.");
+    if (!studentName || !institution) {
+      setUploadStatus("⚠️ Please complete all fields.");
       return;
     }
 
     try {
-      setUploadStatus("🖼️ Generando imagen en alta calidad...");
+      setUploadStatus("🖼️ Generating high quality image...");
 
-      // Asegurar que el componente esté renderizado completamente
+      // Ensure component is fully rendered
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       const certElement = certRef.current;
       if (!certElement) {
-        throw new Error("Elemento de certificado no encontrado");
+        throw new Error("Certificate element not found");
       }
 
-      // Esperar a que todas las imágenes se carguen
+      // Wait for all images to load
       const images = certElement.querySelectorAll('img');
       await Promise.all(
         Array.from(images).map((img) => {
@@ -205,43 +205,43 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
           return new Promise((resolve, reject) => {
             img.onload = resolve;
             img.onerror = reject;
-            // Timeout de seguridad
+            // Safety timeout
             setTimeout(reject, 10000);
           });
         })
       );
 
-      console.log("✅ Todas las imágenes están cargadas");
+      console.log("✅ All images are loaded");
 
-      // Obtener las dimensiones reales del elemento
+      // Get real element dimensions
       const rect = certElement.getBoundingClientRect();
       
-      // Calcular las dimensiones para mantener la calidad original
+      // Calculate dimensions to maintain original quality
       const targetWidth = 1536;
       const targetHeight = 1024;
       const scale = Math.max(targetWidth / rect.width, targetHeight / rect.height);
 
-      console.log(`📏 Dimensiones originales: ${rect.width}x${rect.height}`);
-      console.log(`🎯 Dimensiones objetivo: ${targetWidth}x${targetHeight}`);
-      console.log(`⚡ Escala calculada: ${scale}`);
+      console.log(`📏 Original dimensions: ${rect.width}x${rect.height}`);
+      console.log(`🎯 Target dimensions: ${targetWidth}x${targetHeight}`);
+      console.log(`⚡ Calculated scale: ${scale}`);
 
-      // Configuración optimizada para html2canvas con resolución exacta
+      // Optimized configuration for html2canvas with exact resolution
       const canvas = await html2canvas(certElement, {
         useCORS: true,
-        scale: scale, // Escala calculada para alcanzar 1536x1024
+        scale: scale, // Calculated scale to reach 1536x1024
         allowTaint: false,
         backgroundColor: "#ffffff",
-        logging: true, // Activar logging para debug
-        width: targetWidth / scale, // Ancho ajustado
-        height: targetHeight / scale, // Alto ajustado
+        logging: true, // Enable logging for debug
+        width: targetWidth / scale, // Adjusted width
+        height: targetHeight / scale, // Adjusted height
         scrollX: 0,
         scrollY: 0,
-        foreignObjectRendering: false, // Desactivar para mejor compatibilidad con img
+        foreignObjectRendering: false, // Disable for better img compatibility
         removeContainer: true,
-        imageTimeout: 15000, // Timeout más largo para cargar imágenes
+        imageTimeout: 15000, // Longer timeout to load images
         onclone: (clonedDoc) => {
-          // Asegurar que las imágenes se carguen en el clon
-          const clonedElement = clonedDoc.getElementById("certificado-element");
+          // Ensure images load in the clone
+          const clonedElement = clonedDoc.getElementById("certificate-element");
           if (clonedElement) {
             const img = clonedElement.querySelector('img');
             if (img) {
@@ -254,57 +254,57 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
         },
       });
 
-      console.log(`✅ Canvas generado: ${canvas.width}x${canvas.height}`);
+      console.log(`✅ Canvas generated: ${canvas.width}x${canvas.height}`);
 
-      // Si el canvas no tiene las dimensiones exactas, redimensionarlo
+      // If canvas doesn't have exact dimensions, resize it
       let finalCanvas = canvas;
       if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
-        console.log("🔄 Redimensionando canvas a resolución exacta...");
+        console.log("🔄 Resizing canvas to exact resolution...");
         finalCanvas = document.createElement('canvas');
         finalCanvas.width = targetWidth;
         finalCanvas.height = targetHeight;
         
         const ctx = finalCanvas.getContext('2d');
         if (ctx) {
-          // Usar interpolación de alta calidad
+          // Use high quality interpolation
           ctx.imageSmoothingEnabled = true;
           ctx.imageSmoothingQuality = 'high';
           ctx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
         }
       }
 
-      // Convertir a blob con máxima calidad usando PNG para evitar compresión
+      // Convert to blob with maximum quality using PNG to avoid compression
       const blob = await new Promise<Blob>((resolve) =>
         finalCanvas.toBlob(
           (blob) => resolve(blob!), 
-          "image/png", // PNG sin compresión
-          1.0 // Calidad máxima
+          "image/png", // PNG without compression
+          1.0 // Maximum quality
         )
       );
 
-      console.log(`📦 Blob generado: ${blob.size} bytes`);
+      console.log(`📦 Blob generated: ${blob.size} bytes`);
 
-      setUploadStatus("🌀 Obteniendo URL prefirmada...");
+      setUploadStatus("🌀 Getting presigned URL...");
       const urlResponse = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/presigned_url`
       );
 
       if (!urlResponse.ok) {
         throw new Error(
-          `Error al obtener URL prefirmada: ${urlResponse.statusText}`
+          `Error getting presigned URL: ${urlResponse.statusText}`
         );
       }
 
       const contentType = urlResponse.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         const text = await urlResponse.text();
-        throw new Error(`Respuesta inesperada del servidor: ${text}`);
+        throw new Error(`Unexpected server response: ${text}`);
       }
 
       const data = await urlResponse.json();
 
-      setUploadStatus("⬆️ Subiendo certificado en alta calidad a IPFS...");
-      const fileName = `certificado-${nombre
+      setUploadStatus("⬆️ Uploading high quality certificate to IPFS...");
+      const fileName = `certificate-${studentName
         .toLowerCase()
         .replace(/\s+/g, "-")}-${targetWidth}x${targetHeight}.png`;
 
@@ -321,10 +321,10 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
       if (upload.cid) {
         const ipfsLink = await pinata.gateways.public.convert(upload.cid);
         setLink(ipfsLink);
-        setUploadStatus(`✅ Certificado subido en calidad ${targetWidth}x${targetHeight}px.`);
+        setUploadStatus(`✅ Certificate uploaded in ${targetWidth}x${targetHeight}px quality.`);
         setShowJsonForm(true);
       } else {
-        setUploadStatus("❌ Falló la subida del archivo.");
+        setUploadStatus("❌ File upload failed.");
       }
     } catch (error) {
       console.error(error);
@@ -334,7 +334,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
     }
   };
 
-  // SUBIR JSON
+  // UPLOAD JSON
   const handleJsonUpload = async () => {
     const metadata = {
       description: jsonData.description,
@@ -348,7 +348,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
     };
 
     try {
-      setUploadStatus("📦 Subiendo metadata JSON...");
+      setUploadStatus("📦 Uploading JSON metadata...");
 
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/pinata/json`,
@@ -371,49 +371,49 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
         const ipfsJsonLink = `https://${
           import.meta.env.VITE_GATEWAY_URL
         }/ipfs/${cid}`;
-        setUploadStatus(`✅ JSON subido exitosamente.`);
+        setUploadStatus(`✅ JSON uploaded successfully.`);
         setJsonLink(ipfsJsonLink);
 
         try {
-          setUploadStatus("💾 Guardando certificado en base de datos...");
-          await guardarCertificadoEnBD(
-            nombre,
-            institucion,
+          setUploadStatus("💾 Saving certificate to database...");
+          await saveCertificateInDB(
+            studentName,
+            institution,
             walletToMint || "",
             link,
             ipfsJsonLink,
             account
           );
           setUploadStatus(
-            "✅ Certificado guardado en base de datos y listo para mintear."
+            "✅ Certificate saved to database and ready to mint."
           );
         } catch (dbError) {
-          console.error("Error guardando en BD:", dbError);
+          console.error("Error saving to DB:", dbError);
           setUploadStatus(
-            "⚠️ JSON subido pero error al guardar en BD. Puedes continuar con el mint."
+            "⚠️ JSON uploaded but error saving to DB. You can continue with mint."
           );
         }
 
         setShowMintForm(true);
       } else {
-        throw new Error("No se recibió el CID");
+        throw new Error("CID not received");
       }
     } catch (error: any) {
-      console.error("Error al subir JSON:", error);
+      console.error("Error uploading JSON:", error);
       setUploadStatus(
-        "❌ Error al subir JSON: " + (error?.message || "ver consola")
+        "❌ Error uploading JSON: " + (error?.message || "see console")
       );
     }
   };
 
-  // MINTEAR NFT
+  // MINT NFT
   async function mintNFT(ipfsJsonLink: string) {
     try {
       setIsMinting(true);
-      setMintStatus("🔄 Conectando a contrato...");
+      setMintStatus("🔄 Connecting to contract...");
 
       if (!(window as any).ethereum) {
-        throw new Error("MetaMask no está instalado.");
+        throw new Error("MetaMask is not installed.");
       }
       await (window as any).ethereum.request({ method: "eth_requestAccounts" });
 
@@ -424,25 +424,25 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
 
       if (typeof contract.mintPrice !== "function") {
         throw new Error(
-          "La función mintPrice no existe en el contrato. Revisa el ABI."
+          "The mintPrice function does not exist in the contract. Check the ABI."
         );
       }
 
-      setMintStatus("💰 Obteniendo precio actual...");
+      setMintStatus("💰 Getting current price...");
       const currentPrice = await contract.mintPrice();
-      console.log("💰 Precio en wei:", currentPrice.toString());
-      console.log("💰 Precio en STT:", ethers.formatEther(currentPrice));
+      console.log("💰 Price in wei:", currentPrice.toString());
+      console.log("💰 Price in STT:", ethers.formatEther(currentPrice));
 
       if (!ethers.isAddress(walletToMint)) {
-        throw new Error("Dirección de wallet inválida");
+        throw new Error("Invalid wallet address");
       }
-      console.log("✅ Dirección de wallet válida:", walletToMint);
+      console.log("✅ Valid wallet address:", walletToMint);
 
-      if (!certificadoId) {
-        setMintStatus("💾 Guardando certificado en base de datos...");
-        await guardarCertificadoEnBD(
-          nombre,
-          institucion,
+      if (!certificateId) {
+        setMintStatus("💾 Saving certificate to database...");
+        await saveCertificateInDB(
+          studentName,
+          institution,
           walletToMint,
           link,
           ipfsJsonLink,
@@ -450,36 +450,36 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
         );
       } else {
         const { error } = await supabase
-          .from("certificados")
-          .update({ wallet_destinatario: walletToMint })
-          .eq("id", certificadoId);
+          .from("certificates")
+          .update({ wallet_destination: walletToMint })
+          .eq("id", certificateId);
 
         if (error) {
-          console.error("Error actualizando wallet destinataria:", error);
+          console.error("Error updating destination wallet:", error);
         }
       }
 
-      setMintStatus("🚀 Ejecutando mint en blockchain...");
+      setMintStatus("🚀 Executing mint on blockchain...");
       const tx = await contract.safeMint(walletToMint, ipfsJsonLink, {
         value: currentPrice,
       });
 
-      setMintStatus("⏳ Esperando confirmación de blockchain...");
+      setMintStatus("⏳ Waiting for blockchain confirmation...");
       const receipt = await tx.wait();
-      console.log("✅ NFT minteado:", receipt);
+      console.log("✅ NFT minted:", receipt);
 
-      if (certificadoId) {
-        setMintStatus("💾 Actualizando registro en base de datos...");
-        await actualizarCertificadoConTx(certificadoId, receipt.hash);
+      if (certificateId) {
+        setMintStatus("💾 Updating database record...");
+        await updateCertificateWithTx(certificateId, receipt.hash);
       }
 
-      setMintStatus(`✅ ¡NFT Certificate minteado exitosamente! 
-🔗 Hash de transacción: ${receipt.hash}
-💎 Token enviado a: ${walletToMint}
-📋 Metadata IPFS: ${ipfsJsonLink}`);
+      setMintStatus(`✅ NFT Certificate minted successfully! 
+🔗 Transaction hash: ${receipt.hash}
+💎 Token sent to: ${walletToMint}
+📋 IPFS Metadata: ${ipfsJsonLink}`);
     } catch (error: any) {
-      console.error("❌ Error en mintNFT:", error.message || error);
-      setMintStatus(`❌ Error en el mint: ${error.message || error}`);
+      console.error("❌ Error in mintNFT:", error.message || error);
+      setMintStatus(`❌ Minting error: ${error.message || error}`);
     } finally {
       setIsMinting(false);
     }
@@ -500,7 +500,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
               modoOscuro ? "text-white" : "text-gray-800"
             }`}
           >
-            Panel de Director/Administrativo
+            Director/Administrator Panel
           </h1>
 
           <div
@@ -508,7 +508,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
               modoOscuro ? "border-gray-700" : "border-gray-200"
             }`}
           >
-            {["emitir", "verificar", "historial", "reportes"].map((tab) => (
+            {["issue", "verify", "history", "reports"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -532,7 +532,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
               modoOscuro ? "bg-gray-700" : "bg-gray-50 shadow-lg"
             }`}
           >
-            {activeTab === "emitir" && (
+            {activeTab === "issue" && (
               <>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
                   <div className="space-y-8">
@@ -541,14 +541,14 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                         modoOscuro ? "text-white" : "text-gray-800"
                       }`}
                     >
-                      Emitir Nuevos Certificados
+                      Issue New Certificates
                     </h2>
 
                     <input
                       type="text"
-                      placeholder="Nombre del estudiante"
-                      value={nombre}
-                      onChange={(e) => setNombre(e.target.value)}
+                      placeholder="Student name"
+                      value={studentName}
+                      onChange={(e) => setStudentName(e.target.value)}
                       className={`w-full p-4 text-xl rounded-xl border-2 ${
                         modoOscuro
                           ? "bg-gray-600 border-gray-500 text-white placeholder-gray-400"
@@ -558,9 +558,9 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
 
                     <input
                       type="text"
-                      placeholder="Institución"
-                      value={institucion}
-                      onChange={(e) => setInstitucion(e.target.value)}
+                      placeholder="Institution name"
+                      value={institution}
+                      onChange={(e) => setInstitution(e.target.value)}
                       className={`w-full p-4 text-xl rounded-xl border-2 ${
                         modoOscuro
                           ? "bg-gray-600 border-gray-500 text-white placeholder-gray-400"
@@ -572,31 +572,31 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                   <div className="flex justify-center w-full">
                     <div
                       ref={certRef}
-                      id="certificado-element"
+                      id="certificate-element"
                       className="relative w-full max-w-[900px]"
                       style={{
                         aspectRatio: "1536 / 1024",
                       }}
                     >
-                      {/* Imagen de fondo como elemento img para mejor captura */}
+                      {/* Background image as img element for better capture */}
                       <img
                         src={certificadoImg}
-                        alt="Certificado Background"
+                        alt="Certificate Background"
                         className="absolute inset-0 w-full h-full object-contain"
                         style={{ zIndex: 0 }}
                         crossOrigin="anonymous"
                       />
                       
-                      {/* Contenido superpuesto */}
+                      {/* Overlaid content */}
                       <div className="absolute inset-0" style={{ zIndex: 1 }}>
                         <div className="absolute top-4 right-2.5">
                           <QRCodeSVG
-                            value={`${"https://frontend-certify-chain.vercel.app"}/${certificadoId}`}
+                            value={`${"https://frontend-certify-chain.vercel.app"}/${certificateId}`}
                             size={90}
                           />
                         </div>
 
-                        {/* Nombre dinámico - Ajuste automático */}
+                        {/* Dynamic name - Auto adjustment */}
                         <div
                           className="absolute left-1/2 transform -translate-x-1/2 text-center font-sans text-white whitespace-nowrap"
                           style={{
@@ -609,12 +609,12 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                             overflowWrap: "break-word",
                             textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
                           }}
-                          title={nombre} // Muestra el nombre completo al pasar el mouse
+                          title={studentName} // Shows complete name on hover
                         >
-                          {nombre}
+                          {studentName}
                         </div>
 
-                        {/* Institución - Texto ajustado para evitar corte */}
+                        {/* Institution - Text adjusted to avoid clipping */}
                         <div
                           className="absolute left-1/2 transform -translate-x-1/2 text-center font-sans text-white"
                           style={{
@@ -629,10 +629,10 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                             textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
                           }}
                         >
-                          {institucion}
+                          {institution}
                         </div>
 
-                        {/* Fecha */}
+                        {/* Date */}
                         <div
                           className="absolute text-white font-sans"
                           style={{
@@ -673,7 +673,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                     />
 
                     <span className="relative z-10 text-white">
-                      Generar y Subir Certificado
+                      Generate and Upload Certificate
                     </span>
 
                     <style>
@@ -695,11 +695,11 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                         modoOscuro ? "text-white" : "text-gray-800"
                       }`}
                     >
-                      Subir Metadata JSON
+                      Upload JSON Metadata
                     </h3>
                     <input
                       type="text"
-                      placeholder="Descripción del certificado"
+                      placeholder="Certificate description"
                       value={jsonData.description}
                       onChange={(e) =>
                         setJsonData({
@@ -715,7 +715,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                     />
                     <input
                       type="text"
-                      placeholder="Nombre del certificado"
+                      placeholder="Certificate name"
                       value={jsonData.name}
                       onChange={(e) =>
                         setJsonData({ ...jsonData, name: e.target.value })
@@ -728,7 +728,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                     />
                     <input
                       type="text"
-                      placeholder="Base/Curso"
+                      placeholder="Base/Course"
                       value={jsonData.base}
                       onChange={(e) =>
                         setJsonData({ ...jsonData, base: e.target.value })
@@ -741,7 +741,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                     />
                     <input
                       type="text"
-                      placeholder="Contenido/Especialidad"
+                      placeholder="Content/Specialty"
                       value={jsonData.content}
                       onChange={(e) =>
                         setJsonData({ ...jsonData, content: e.target.value })
@@ -756,7 +756,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                       onClick={handleJsonUpload}
                       className="px-8 py-4 rounded-xl bg-green-500 text-white font-bold hover:bg-green-600 transition-colors text-lg"
                     >
-                      Subir JSON a IPFS
+                      Upload JSON to IPFS
                     </button>
                   </div>
                 )}
@@ -789,7 +789,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                       rel="noopener noreferrer"
                       className="text-blue-400 hover:text-blue-300 text-xl underline"
                     >
-                      🔗 Ver Certificado en IPFS
+                      🔗 View Certificate on IPFS
                     </a>
                   </div>
                 )}
@@ -801,10 +801,10 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                         modoOscuro ? "text-white" : "text-gray-800"
                       }`}
                     >
-                      🎯 Mint NFT Certificate - Cualquier persona puede mintear
+                      🎯 Mint NFT Certificate - Anyone can mint
                     </h3>
 
-                    {certificadoId && (
+                    {certificateId && (
                       <div
                         className={`p-5 rounded-xl ${
                           modoOscuro
@@ -817,8 +817,8 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                             modoOscuro ? "text-green-200" : "text-green-800"
                           }`}
                         >
-                          💾 Certificado guardado en BD con ID:{" "}
-                          <code className="font-mono">{certificadoId}</code>
+                          💾 Certificate saved in DB with ID:{" "}
+                          <code className="font-mono">{certificateId}</code>
                         </p>
                       </div>
                     )}
@@ -836,7 +836,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                             modoOscuro ? "text-blue-200" : "text-blue-800"
                           }`}
                         >
-                          💰 Costo del certificado NFT:
+                          💰 NFT certificate cost:
                         </span>
                         <span
                           className={`font-bold text-2xl ${
@@ -844,7 +844,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                           }`}
                         >
                           {isLoadingPrice
-                            ? "⏳ Cargando..."
+                            ? "⏳ Loading..."
                             : `${mintPrice} STT`}
                         </span>
                       </div>
@@ -853,8 +853,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                           modoOscuro ? "text-blue-300" : "text-blue-600"
                         }`}
                       >
-                        🌍 Cualquier persona con MetaMask puede pagar y mintear
-                        este certificado
+                        🌍 Anyone with MetaMask can pay and mint this certificate
                       </p>
                     </div>
 
@@ -878,7 +877,7 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
 
                     <input
                       type="text"
-                      placeholder="Dirección wallet destinataria (0x...)"
+                      placeholder="Destination wallet address (0x...)"
                       value={walletToMint}
                       onChange={(e) => setWalletToMint(e.target.value)}
                       className={`w-full p-4 text-xl rounded-xl border-2 ${
@@ -909,9 +908,9 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                     >
                       <span className="relative z-10 text-white">
                         {isLoadingPrice
-                          ? "⏳ Cargando precio..."
+                          ? "⏳ Loading price..."
                           : isMinting
-                          ? "⏳ Minteando..."
+                          ? "⏳ Minting..."
                           : `💎 Mint Certificate NFT (${mintPrice} ETH)`}
                       </span>
                     </button>
@@ -943,8 +942,8 @@ const DirectorPanel = ({ modoOscuro, signer, account }: DirectorPanelProps) => {
                         } disabled:opacity-50`}
                       >
                         {isLoadingPrice
-                          ? "⏳ Actualizando..."
-                          : "🔄 Actualizar precio"}
+                          ? "⏳ Updating..."
+                          : "🔄 Update price"}
                       </button>
                     </div>
                   </div>

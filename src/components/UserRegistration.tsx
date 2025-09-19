@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 interface UserRegistrationProps {
-  selectedRole: 'director' | 'estudiante';
+  selectedRole: 'director' | 'student';
   walletAddress: string;
-  onSubmit: (userData: { nombre: string; rol: 'director' | 'estudiante'; wallet_address: string }) => void;
+  onSubmit: (userData: { nombre: string; rol: 'director' | 'student'; wallet_address: string }) => void;
   onBack: () => void;
 }
 
@@ -18,16 +18,16 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
 
   const roleInfo = {
     director: {
-      title: 'Director de Institución',
+      title: 'Institution Director',
       icon: '🏛️',
       color: 'from-purple-500 to-indigo-600',
-      subtitle: 'Configura tu perfil de director'
+      subtitle: 'Set up your director profile'
     },
-    estudiante: {
-      title: 'Estudiante',
+    student: {
+      title: 'Student',
       icon: '🎓',
       color: 'from-blue-500 to-cyan-600',
-      subtitle: 'Configura tu perfil de estudiante'
+      subtitle: 'Set up your student profile'
     }
   };
 
@@ -40,7 +40,7 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
     setIsSubmitting(true);
     
     try {
-      // Simular un pequeño delay para mostrar el loading
+      // Simulate a small delay to show loading
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       onSubmit({
@@ -49,7 +49,7 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
         wallet_address: walletAddress
       });
     } catch (error) {
-      console.error('Error al registrar usuario:', error);
+      console.error('Error registering user:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -62,7 +62,7 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
         <button
           onClick={onBack}
           className="absolute top-4 right-4 z-10 text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-700/50"
-          aria-label="Volver"
+          aria-label="Back"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -100,7 +100,7 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
           {/* Wallet Address Display */}
           <div className="mb-5">
             <label className="block text-sm font-semibold text-gray-300 mb-2">
-              Dirección de Wallet
+              Wallet Address
             </label>
             <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700/50">
               <div className="flex items-center space-x-2">
@@ -117,7 +117,7 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
           {/* Role Display */}
           <div className="mb-5">
             <label className="block text-sm font-semibold text-gray-300 mb-2">
-              Rol Seleccionado
+              Selected Role
             </label>
             <div className={`bg-gradient-to-r ${currentRole.color} bg-opacity-10 rounded-lg p-3 border border-gray-700/50`}>
               <div className="flex items-center space-x-2">
@@ -132,20 +132,20 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
           {/* Name Input */}
           <div className="mb-6">
             <label htmlFor="nombre" className="block text-sm font-semibold text-gray-300 mb-2">
-              Tu Nombre Completo *
+              Your Full Name *
             </label>
             <input
               type="text"
               id="nombre"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              placeholder="Ingresa tu nombre completo"
+              placeholder="Enter your full name"
               className="w-full px-3 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
               required
               disabled={isSubmitting}
             />
             <p className="text-gray-500 text-xs mt-1">
-              Este nombre aparecerá en tus certificados y perfil
+              This name will appear on your certificates and profile
             </p>
           </div>
 
@@ -157,7 +157,7 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
               disabled={isSubmitting}
               className="flex-1 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 text-sm"
             >
-              Volver
+              Back
             </button>
             <button
               type="submit"
@@ -171,10 +171,10 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
               {isSubmitting ? (
                 <div className="flex items-center justify-center space-x-2">
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  <span>Registrando...</span>
+                  <span>Registering...</span>
                 </div>
               ) : (
-                'Completar Registro'
+                'Complete Registration'
               )}
             </button>
           </div>

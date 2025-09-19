@@ -1,83 +1,83 @@
 const BenefitsSection = () => {
   const benefitGroups = [
     {
-      title: "Para Estudiantes",
+      title: "For Students",
       icon: "🎓",
       color: "from-blue-500 to-cyan-500",
       benefits: [
         {
           icon: "🔒",
-          title: "Seguridad Total",
-          description: "Tus certificados son inmutables y no pueden ser falsificados"
+          title: "Total Security",
+          description: "Your certificates are immutable and cannot be falsified"
         },
         {
           icon: "📱",
-          title: "Acceso Móvil",
-          description: "Lleva todos tus certificados en tu dispositivo móvil"
+          title: "Mobile Access",
+          description: "Carry all your certificates on your mobile device"
         },
         {
           icon: "🌍",
-          title: "Reconocimiento Global",
-          description: "Verificación internacional instantánea de tus logros"
+          title: "Global Recognition",
+          description: "Instant international verification of your achievements"
         },
         {
           icon: "⚡",
-          title: "Verificación Instantánea",
-          description: "Los empleadores pueden verificar tus credenciales en segundos"
+          title: "Instant Verification",
+          description: "Employers can verify your credentials in seconds"
         }
       ]
     },
     {
-      title: "Para Instituciones",
+      title: "For Institutions",
       icon: "🏛️",
       color: "from-purple-500 to-pink-500",
       benefits: [
         {
           icon: "💰",
-          title: "Reducción de Costos",
-          description: "Elimina los costos de impresión y procesamiento físico"
+          title: "Cost Reduction",
+          description: "Eliminates printing and physical processing costs"
         },
         {
           icon: "🔐",
-          title: "Prevención de Fraudes",
-          description: "Tecnología blockchain previene la falsificación de diplomas"
+          title: "Fraud Prevention",
+          description: "Blockchain technology prevents diploma falsification"
         },
         {
           icon: "📊",
-          title: "Analytics Avanzados",
-          description: "Seguimiento detallado de emisión y verificación de certificados"
+          title: "Advanced Analytics",
+          description: "Detailed tracking of certificate issuance and verification"
         },
         {
           icon: "🌱",
-          title: "Sustentabilidad",
-          description: "Proceso 100% digital, amigable con el medio ambiente"
+          title: "Sustainability",
+          description: "100% digital process, environmentally friendly"
         }
       ]
     },
     {
-      title: "Para Empleadores",
+      title: "For Employers",
       icon: "💼",
       color: "from-green-500 to-emerald-500",
       benefits: [
         {
           icon: "✅",
-          title: "Verificación Confiable",
-          description: "Confirma la autenticidad de credenciales en tiempo real"
+          title: "Reliable Verification",
+          description: "Confirms credential authenticity in real time"
         },
         {
           icon: "⏱️",
-          title: "Proceso Rápido",
-          description: "Reduce el tiempo de verificación de días a segundos"
+          title: "Fast Process",
+          description: "Reduces verification time from days to seconds"
         },
         {
           icon: "📋",
-          title: "Base de Datos Global",
-          description: "Acceso a una red mundial de instituciones certificadas"
+          title: "Global Database",
+          description: "Access to a worldwide network of certified institutions"
         },
         {
           icon: "🛡️",
-          title: "Confianza Absoluta",
-          description: "Tecnología blockchain garantiza la veracidad de la información"
+          title: "Absolute Trust",
+          description: "Blockchain technology guarantees information veracity"
         }
       ]
     }
@@ -86,7 +86,7 @@ const BenefitsSection = () => {
   return (
     <section className="py-20 px-4 relative z-10">
       <div className="max-w-7xl mx-auto">
-        {/* Título principal */}
+        {/* Main title */}
         <div className="text-center mb-20">
           <h2 
             className="text-5xl font-bold mb-6"
@@ -98,11 +98,11 @@ const BenefitsSection = () => {
               animation: "rgbTextGlow 3s linear infinite",
             }}
           >
-            Beneficios Para Todos
+            Benefits For Everyone
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            CertifyChain transforma el ecosistema educativo beneficiando a estudiantes, 
-            instituciones y empleadores por igual
+            CertifyChain transforms the educational ecosystem benefiting students, 
+            institutions and employers alike
           </p>
         </div>
 
@@ -152,20 +152,20 @@ const BenefitsSection = () => {
         <div className="mt-20 text-center">
           <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 backdrop-blur-md rounded-3xl p-12 border border-purple-500/30">
             <h3 className="text-3xl font-bold text-white mb-6">
-              ¿Listo para experimentar estos beneficios?
+              Ready to experience these benefits?
             </h3>
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-              Únete a la revolución de la certificación digital y descubre un futuro más seguro y eficiente
+              Join the digital certification revolution and discover a safer and more efficient future
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg">
-                Soy Estudiante
+                I'm a Student
               </button>
               <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg">
-                Soy Institución
+                I'm an Institution
               </button>
               <button className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg">
-                Soy Empleador
+                I'm an Employer
               </button>
             </div>
           </div>

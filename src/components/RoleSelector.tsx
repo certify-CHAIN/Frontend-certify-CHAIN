@@ -1,40 +1,40 @@
 import React, { useState } from 'react';
 
 interface RoleSelectorProps {
-  onRoleSelect: (role: 'director' | 'estudiante') => void;
+  onRoleSelect: (role: 'director' | 'student') => void;
   onCancel: () => void;
 }
 
 const RoleSelector: React.FC<RoleSelectorProps> = ({ onRoleSelect, onCancel }) => {
-  const [selectedRole, setSelectedRole] = useState<'director' | 'estudiante' | null>(null);
+  const [selectedRole, setSelectedRole] = useState<'director' | 'student' | null>(null);
 
   const roles = [
     {
       id: 'director',
       title: 'Director',
-      subtitle: 'Institución Educativa',
-      description: 'Administra certificados y gestiona estudiantes de tu institución',
+      subtitle: 'Educational Institution',
+      description: 'Manage certificates and students for your institution',
       icon: '🏛️',
       color: 'from-purple-500 to-indigo-600',
       features: [
-        '✅ Crear y emitir certificados NFT',
-        '✅ Gestionar estudiantes',
-        '✅ Verificar logros académicos',
-        '✅ Panel de analytics avanzado'
+        '✅ Create and issue NFT certificates',
+        '✅ Manage students',
+        '✅ Verify academic achievements',
+        '✅ Advanced analytics panel'
       ]
     },
     {
-      id: 'estudiante',
-      title: 'Estudiante',
-      subtitle: 'Receptor de Certificados',
-      description: 'Recibe, visualiza y comparte tus certificados académicos verificables',
+      id: 'student',
+      title: 'Student',
+      subtitle: 'Certificate Recipient',
+      description: 'Receive, view and share your verifiable academic certificates',
       icon: '🎓',
       color: 'from-blue-500 to-cyan-600',
       features: [
-        '✅ Recibir certificados NFT',
-        '✅ Ver historial académico',
-        '✅ Compartir logros verificables',
-        '✅ Acceso móvil 24/7'
+        '✅ Receive NFT certificates',
+        '✅ View academic history',
+        '✅ Share verifiable achievements',
+        '✅ 24/7 mobile access'
       ]
     }
   ];
@@ -52,7 +52,7 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ onRoleSelect, onCancel }) =
         <button
           onClick={onCancel}
           className="absolute top-4 right-4 z-10 text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-700/50"
-          aria-label="Cerrar modal"
+          aria-label="Close modal"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -72,10 +72,10 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ onRoleSelect, onCancel }) =
               animation: "rgbTextGlow 3s linear infinite",
             }}
           >
-            ¡Bienvenido a CertifyChain!
+            Welcome to CertifyChain!
           </h2>
           <p className="text-base text-gray-300">
-            Selecciona tu rol en el ecosistema educativo
+            Select your role in the educational ecosystem
           </p>
         </div>
 
@@ -85,7 +85,7 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ onRoleSelect, onCancel }) =
             {roles.map((role) => (
               <div
                 key={role.id}
-                onClick={() => setSelectedRole(role.id as 'director' | 'estudiante')}
+                onClick={() => setSelectedRole(role.id as 'director' | 'student')}
                 className={`relative group cursor-pointer transition-all duration-300 hover:scale-[1.02] ${
                   selectedRole === role.id 
                     ? 'ring-2 ring-purple-500 ring-offset-2 ring-offset-gray-900' 
@@ -143,7 +143,7 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ onRoleSelect, onCancel }) =
               onClick={onCancel}
               className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-5 rounded-lg transition-all duration-300 text-sm"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               onClick={handleContinue}
@@ -154,7 +154,7 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ onRoleSelect, onCancel }) =
                   : 'bg-gray-600 text-gray-400 cursor-not-allowed'
               }`}
             >
-              Continuar
+              Continue
             </button>
           </div>
         </div>

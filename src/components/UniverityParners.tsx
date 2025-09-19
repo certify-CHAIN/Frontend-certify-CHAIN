@@ -7,15 +7,15 @@ const UniverityParnes = () => {
       fullName: "Universidad Mayor de San Andrés",
       logo: img1,
       description:
-        "Universidad pública líder en Bolivia, pionera en la adopción de tecnología blockchain para certificación académica",
+        "Leading public university in Bolivia, pioneer in adopting blockchain technology for academic certification",
       establishedYear: "1830",
       students: "180,000+",
       programs: "150+",
       achievements: [
-        "Primera universidad boliviana en blockchain",
-        "Certificados NFT implementados",
-        "Sistema de verificación automática",
-        "Reducción del 80% en tiempo de verificación",
+        "First Bolivian university on blockchain",
+        "NFT certificates implemented",
+        "Automatic verification system",
+        "80% reduction in verification time",
       ],
       color: "from-blue-600 to-indigo-700",
       website: "www.umsa.bo",
@@ -25,15 +25,15 @@ const UniverityParnes = () => {
       fullName: "CryptoCoders Academy",
       logo: img2,
       description:
-        "Academia especializada en tecnología blockchain y desarrollo de criptomonedas, formando a los profesionales del futuro digital",
+        "Academy specialized in blockchain technology and cryptocurrency development, training professionals for the digital future",
       establishedYear: "2019",
       students: "5,000+",
       programs: "25+",
       achievements: [
-        "Especialistas en tecnología blockchain",
-        "Certificaciones en criptomonedas",
-        "Cursos de desarrollo DeFi",
-        "Graduados trabajando en Web3",
+        "Blockchain technology specialists",
+        "Cryptocurrency certifications",
+        "DeFi development courses",
+        "Graduates working in Web3",
       ],
       color: "from-purple-600 to-pink-600",
       website: "www.cryptocoders.academy",
@@ -43,7 +43,7 @@ const UniverityParnes = () => {
   return (
     <section className="py-20 px-4 relative z-10 bg-gradient-to-b from-transparent ">
       <div className="max-w-7xl mx-auto">
-        {/* Título principal */}
+        {/* Main title */}
         <div className="text-center mb-16">
           <h2
             className="text-5xl font-bold mb-6"
@@ -56,27 +56,27 @@ const UniverityParnes = () => {
               animation: "rgbTextGlow 3s linear infinite",
             }}
           >
-            Nuestros Aliados Educativos
+            Our Educational Partners
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Instituciones pioneras que confían en CertifyChain para revolucionar
-            la certificación académica
+            Pioneer institutions that trust CertifyChain to revolutionize
+            academic certification
           </p>
         </div>
 
-        {/* Grid de Aliados */}
+        {/* Partners Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           {partners.map((partner, index) => (
             <div
               key={index}
               className="group relative bg-gray-900/50 backdrop-blur-md rounded-3xl p-8 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:transform hover:scale-105"
             >
-              {/* Header con logo e información básica */}
+              {/* Header with logo and basic information */}
               <div className="flex items-center mb-6">
                 <div className="relative w-16 h-16 mr-4 group-hover:scale-110 transition-transform duration-300">
                   <img
                     src={partner.logo}
-                    alt={`Logo de ${partner.name}`}
+                    alt={`${partner.name} Logo`}
                     className="w-full h-full object-contain rounded-lg"
                   />
                 </div>
@@ -90,37 +90,37 @@ const UniverityParnes = () => {
                 </div>
               </div>
 
-              {/* Descripción */}
+              {/* Description */}
               <p className="text-gray-400 mb-6 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
                 {partner.description}
               </p>
 
-              {/* Estadísticas */}
+              {/* Statistics */}
               <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="text-center bg-gray-800/30 rounded-xl p-3">
                   <div className="text-lg font-bold text-white">
                     {partner.establishedYear}
                   </div>
-                  <div className="text-sm text-gray-400">Fundada</div>
+                  <div className="text-sm text-gray-400">Founded</div>
                 </div>
                 <div className="text-center bg-gray-800/30 rounded-xl p-3">
                   <div className="text-lg font-bold text-white">
                     {partner.students}
                   </div>
-                  <div className="text-sm text-gray-400">Estudiantes</div>
+                  <div className="text-sm text-gray-400">Students</div>
                 </div>
                 <div className="text-center bg-gray-800/30 rounded-xl p-3">
                   <div className="text-lg font-bold text-white">
                     {partner.programs}
                   </div>
-                  <div className="text-sm text-gray-400">Programas</div>
+                  <div className="text-sm text-gray-400">Programs</div>
                 </div>
               </div>
 
-              {/* Logros */}
+              {/* Achievements */}
               <div className="mb-6">
                 <h4 className="text-lg font-semibold text-white mb-3">
-                  Logros con CertifyChain:
+                  Achievements with CertifyChain:
                 </h4>
                 <ul className="space-y-2">
                   {partner.achievements.map((achievement, achievementIndex) => (
@@ -141,7 +141,7 @@ const UniverityParnes = () => {
               
               </div>
 
-              {/* Efecto de brillo */}
+              {/* Glow effect */}
               <div
                 className={`absolute inset-0 bg-gradient-to-r ${partner.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-3xl`}
               ></div>
@@ -149,20 +149,20 @@ const UniverityParnes = () => {
           ))}
         </div>
 
-        {/* Sección de impacto conjunto */}
+        {/* Joint impact section */}
         <div className="text-center">
           <div className="">
             <div className="mb-8">
               <h3 className="text-4xl font-bold text-white mb-4">
-                🚀 Impacto Conjunto de Nuestros Aliados
+                🚀 Joint Impact of Our Partners
               </h3>
               <p className="text-xl text-gray-300 mb-8">
-                Juntos estamos transformando la educación en el Mundo
+                Together we are transforming education in the World
               </p>
               
-              {/* Layout de dos columnas: contenido a la izquierda, video a la derecha */}
+              {/* Two-column layout: content on left, video on right */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                {/* Columna izquierda: Estadísticas */}
+                {/* Left column: Statistics */}
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 gap-6">
                     <div className="bg-gray-800/40 rounded-xl p-6 text-left">
@@ -171,7 +171,7 @@ const UniverityParnes = () => {
                         <h4 className="text-2xl font-bold text-white">185,000+</h4>
                       </div>
                       <p className="text-gray-300">
-                        Estudiantes beneficiados con certificación blockchain
+                        Students benefited with blockchain certification
                       </p>
                     </div>
                     
@@ -181,7 +181,7 @@ const UniverityParnes = () => {
                         <h4 className="text-2xl font-bold text-white">100%</h4>
                       </div>
                       <p className="text-gray-300">
-                        Reducción en fraudes de certificados
+                        Reduction in certificate fraud
                       </p>
                     </div>
                     
@@ -191,13 +191,13 @@ const UniverityParnes = () => {
                         <h4 className="text-2xl font-bold text-white">80%</h4>
                       </div>
                       <p className="text-gray-300">
-                        Reducción en tiempo de verificación
+                        Reduction in verification time
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Columna derecha: Video */}
+                {/* Right column: Video */}
                 <div className="relative">
                   <div className="relative rounded-2xl overflow-hidden aspect-video">
                     <video
@@ -210,17 +210,17 @@ const UniverityParnes = () => {
                     >
                       <source src="/Videos/mundo.webm" type="video/webm" />
                       <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
-                        <p className="text-gray-400">Video no disponible</p>
+                        <p className="text-gray-400">Video not available</p>
                       </div>
                     </video>
                     
-                    {/* Overlay con efecto de gradiente */}
+                    {/* Overlay with gradient effect */}
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent"></div>
                     
-                    {/* Texto overlay */}
+                    {/* Overlay text */}
                     <div className="absolute bottom-4 left-4 right-4">
                       <p className="text-white text-sm font-medium bg-black/50 rounded-lg px-3 py-2 backdrop-blur-sm">
-                        Transformando la educación global con blockchain
+                        Transforming global education with blockchain
                       </p>
                     </div>
                   </div>

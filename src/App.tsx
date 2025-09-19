@@ -24,45 +24,45 @@ import logoDark from "./assets/logo-black.svg";
 import imgperonaje  from "./assets/somnia titulo per.png";
 import UniverityParners from "./components/UniverityParners";
 
-// Tipos para los roles simplificados
-type UserRole = "director" | "estudiante" | null;
+// Types for simplified roles
+type UserRole = "director" | "student" | null;
 
-// Estados de la aplicación
+// Application states
 type AppState = "landing" | "role-selection" | "registration" | "dashboard";
 
 const App = () => {
   const [userRole, setUserRole] = useState<UserRole>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [appState, setAppState] = useState<AppState>("landing");
-  const [selectedRole, setSelectedRole] = useState<'director' | 'estudiante' | null>(null);
+  const [selectedRole, setSelectedRole] = useState<'director' | 'student' | null>(null);
   const [modoOscuro] = useState(true);
   
-  // Hook de RainbowKit/Wagmi para obtener la cuenta conectada
+  // RainbowKit/Wagmi hook to get connected account
   const { address, isConnected } = useAccount();
 
-  // Verificar si el usuario ya está registrado cuando conecta la wallet
+  // Check if user is already registered when connecting wallet
   useEffect(() => {
     const checkUserRegistration = async () => {
       if (isConnected && address) {
         try {
-          // Verificar si el usuario ya está en la base de datos
+          // Check if user is already in database
           const existingUser = await userDatabase.getUserByWallet(address);
           
           if (existingUser) {
-            // Usuario ya registrado, ir directo al dashboard
+            // User already registered, go directly to dashboard
             setUserData(existingUser);
             setUserRole(existingUser.rol);
             setAppState("dashboard");
           } else {
-            // Usuario nuevo, mostrar selector de rol
+            // New user, show role selector
             setAppState("role-selection");
           }
         } catch (error) {
-          console.error('Error verificando registro de usuario:', error);
+          console.error('Error checking user registration:', error);
           setAppState("role-selection");
         }
       } else {
-        // No conectado, mostrar landing page
+        // Not connected, show landing page
         setAppState("landing");
         setUserRole(null);
         setUserData(null);
@@ -73,7 +73,7 @@ const App = () => {
     checkUserRegistration();
   }, [isConnected, address]);
 
-  // Aplicar clase de modo oscuro al elemento html
+  // Apply dark mode class to html element
   useEffect(() => {
     if (modoOscuro) {
       document.documentElement.classList.add("dark");
@@ -82,14 +82,14 @@ const App = () => {
     }
   }, [modoOscuro]);
 
-  // Manejar selección de rol
-  const handleRoleSelection = (role: 'director' | 'estudiante') => {
+  // Handle role selection
+  const handleRoleSelection = (role: 'director' | 'student') => {
     setSelectedRole(role);
     setAppState("registration");
   };
 
-  // Manejar registro de usuario
-  const handleUserRegistration = async (newUserData: { nombre: string; rol: 'director' | 'estudiante'; wallet_address: string }) => {
+  // Handle user registration
+  const handleUserRegistration = async (newUserData: { nombre: string; rol: 'director' | 'student'; wallet_address: string }) => {
     try {
       const registeredUser = await userDatabase.registerUser(newUserData);
       if (registeredUser) {
@@ -98,31 +98,31 @@ const App = () => {
         setAppState("dashboard");
       }
     } catch (error) {
-      console.error('Error registrando usuario:', error);
-      alert('Error al registrar usuario. Por favor, intenta de nuevo.');
+      console.error('Error registering user:', error);
+      alert('Error registering user. Please try again.');
     }
   };
 
-  // Función para volver al selector de rol desde el formulario
+  // Function to return to role selector from form
   const handleBackToRoleSelection = () => {
     setSelectedRole(null);
     setAppState("role-selection");
   };
 
-  // Función para cancelar el proceso de registro
+  // Function to cancel registration process
   const handleCancelRegistration = () => {
     setSelectedRole(null);
     setAppState("landing");
     // Optionally disconnect wallet here if desired
   };
 
-  // Renderizar componente basado en el estado de la app
+  // Render component based on app state
   const renderContent = () => {
     switch (appState) {
       case "landing":
         return (
           <>
-            {/* Landing Page para usuarios no conectados */}
+            {/* Landing Page for non-connected users */}
             <Hero />
             
             <h2
@@ -138,7 +138,7 @@ const App = () => {
                 animation: "rgbTextGlow 3s linear infinite",
               }}
             >
-              Plataforma de Certificados NFT
+              NFT Certificate Platform
               <style>
                 {`
                   @keyframes rgbTextGlow {
@@ -162,7 +162,7 @@ const App = () => {
               />
             </div>
 
-            {/* Secciones de la Landing Page */}
+            {/* Landing Page sections */}
             <FeaturesSection />
             <HowItWorksSection />
             {/* <StatsSection /> */}
@@ -183,7 +183,7 @@ const App = () => {
 
       case "registration":
         if (!selectedRole || !address) {
-          return <div>Error: Datos faltantes para el registro</div>;
+          return <div>Error: Missing data for registration</div>;
         }
         return (
           <UserRegistration
@@ -196,7 +196,7 @@ const App = () => {
 
       case "dashboard":
         if (!userData || !address) {
-          return <div>Error: Datos de usuario no disponibles</div>;
+          return <div>Error: User data not available</div>;
         }
         
         return userRole === "director" ? (
@@ -206,7 +206,7 @@ const App = () => {
         );
 
       default:
-        return <div>Estado desconocido</div>;
+        return <div>Unknown state</div>;
     }
   };
 
@@ -217,10 +217,10 @@ const App = () => {
         background: '#030014',
       }}
     >
-      {/* Fondo condicional basado en el estado de conexión */}
+      {/* Conditional background based on connection state */}
       {appState === "landing" ? <StarsCanvas /> : <AnimatedBackground />}
       
-      {/* Header fijo */}
+      {/* Fixed header */}
       <header
         className="fixed top-0 left-0 w-full h-[65px] shadow-lg shadow-[#2A0E61]/50 bg-[#03001427] backdrop-blur-md z-50 px-10"
       >
@@ -269,17 +269,17 @@ const App = () => {
         </div>
       </header>
       
-      {/* Contenedor con scroll único */}
+      {/* Container with single scroll */}
       <div className="h-full overflow-y-auto overflow-x-hidden pt-[65px]">
-        {/* Contenido principal basado en el estado de la app */}
+        {/* Main content based on app state */}
         <main>
           {renderContent()}
         </main>
         
-        {/* Footer solo se muestra en landing page */}
+        {/* Footer only shown on landing page */}
         {appState === "landing" && <Footer />}
         
-        {/* Componente de prueba de Supabase - remover en producción */}
+        {/* Test Supabase component - remove in production */}
       </div>
     </div>
   );

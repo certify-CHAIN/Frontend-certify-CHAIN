@@ -4,9 +4,9 @@ import { createClient } from '@supabase/supabase-js';
 import AnimatedBackground from './components/AnimatedBackground';
 import img1 from './assets/logo.svg';
 
-interface Certificado {
+interface Certificate {
   id: string;
-  nombre_estudiante: string;
+  student_name: string;
   institucion: string;
   wallet_destinatario: string;
   fecha_emision: string;
@@ -26,18 +26,18 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const CertificatePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [certificado, setCertificado] = useState<Certificado | null>(null);
+  const [certificate, setCertificate] = useState<Certificate | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Función para obtener el certificado por ID
-  const obtenerCertificado = async () => {
+  // Function to get certificate by ID
+  const getCertificate = async () => {
     try {
       setLoading(true);
       setError(null);
 
       if (!id) {
-        setError('ID de certificado no proporcionado');
+        setError('Certificate ID not provided');
         return;
       }
 
@@ -49,26 +49,26 @@ const CertificatePage: React.FC = () => {
 
       if (error) {
         if (error.code === 'PGRST116') {
-          setError('Certificado no encontrado');
+          setError('Certificate not found');
         } else {
-          setError('Error al verificar el certificado');
+          setError('Error verifying certificate');
         }
         return;
       }
 
-      setCertificado(data);
+      setCertificate(data);
     } catch (error) {
-      console.error('Error inesperado:', error);
-      setError('Error inesperado al verificar certificado');
+      console.error('Unexpected error:', error);
+      setError('Unexpected error verifying certificate');
     } finally {
       setLoading(false);
     }
   };
 
-  // Formatear fecha
-  const formatearFecha = (fechaISO: string) => {
+  // Format date function
+  const formatDate = (fechaISO: string) => {
     const fecha = new Date(fechaISO);
-    return fecha.toLocaleDateString('es-ES', {
+    return fecha.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -77,53 +77,53 @@ const CertificatePage: React.FC = () => {
     });
   };
 
-  // Obtener estado con color
-  const obtenerEstadoInfo = (estado: string) => {
+  // Get status information function
+  const getStatusInfo = (estado: string) => {
     switch (estado.toLowerCase()) {
       case 'emitido':
         return {
-          texto: 'Emitido',
+          texto: 'Issued',
           color: 'bg-yellow-100 text-yellow-800 border-yellow-300',
           icono: '📋',
-          descripcion: 'El certificado ha sido generado y está listo'
+          descripcion: 'The certificate has been generated and is ready'
         };
       case 'minted':
         return {
-          texto: 'NFT Certificado',
+          texto: 'NFT Certificate',
           color: 'bg-green-100 text-green-800 border-green-300',
           icono: '💎',
-          descripcion: 'Certificado registrado permanentemente en blockchain'
+          descripcion: 'Certificate permanently registered on blockchain'
         };
       case 'revocado':
         return {
-          texto: 'Revocado',
+          texto: 'Revoked',
           color: 'bg-red-100 text-red-800 border-red-300',
           icono: '❌',
-          descripcion: 'Este certificado ha sido revocado'
+          descripcion: 'This certificate has been revoked'
         };
       default:
         return {
           texto: estado,
           color: 'bg-gray-100 text-gray-800 border-gray-300',
           icono: '📄',
-          descripcion: 'Estado del certificado'
+          descripcion: 'Certificate status'
         };
     }
   };
 
-  // Función para copiar al portapapeles
-  const copiarTexto = (texto: string, mensaje: string) => {
+  // Function to copy text to clipboard
+  const copyText = (texto: string, mensaje: string) => {
     navigator.clipboard.writeText(texto);
     alert(mensaje);
   };
 
-  // Función para abrir enlaces
-  const abrirEnlace = (url: string) => {
+  // Function to open links
+  const openLink = (url: string) => {
     window.open(url, '_blank');
   };
 
   useEffect(() => {
-    obtenerCertificado();
+    getCertificate();
   }, [id]);
 
   return (
@@ -145,7 +145,7 @@ const CertificatePage: React.FC = () => {
         textAlign: "center"
       }}
     >
-      Verificación de Certificado Digital
+      Digital Certificate Verification
       <style>
         {`
           @keyframes rgbTextGlow {
@@ -172,17 +172,17 @@ const CertificatePage: React.FC = () => {
 </div>
 
 
-    {/* Contenido principal */}
+    {/* Main content */}
     <div className="max-w-4xl mx-auto px-4 py-8 relative z-10">
       {loading ? (
-        // Estado de carga
+        // Loading state
         <div className="bg-gray-900 rounded-2xl shadow-lg p-12 text-center border border-gray-800">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
           <h2 className="text-2xl font-semibold text-white mb-2">
-            Verificando certificado...
+            Verifying certificate...
           </h2>
           <p className="text-gray-400">
-            Consultando información en la base de datos
+            Querying database information
           </p>
         </div>
       ) : error ? (
@@ -193,7 +193,7 @@ const CertificatePage: React.FC = () => {
             {error}
           </h2>
           <p className="text-gray-400 mb-8">
-            No se pudo verificar la autenticidad de este certificado.
+            Could not verify the authenticity of this certificate.
           </p>
           <div className="bg-red-950 border border-red-700 rounded-xl p-6">
             <h3 className="font-semibold text-red-300 mb-2">
@@ -205,7 +205,7 @@ const CertificatePage: React.FC = () => {
           </div>
 
           <button
-  onClick={obtenerCertificado}
+  onClick={getCertificate}
   className="group relative mt-6 px-6 py-3 rounded-xl font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors overflow-hidden"
 >
   {/* Glow animado detrás */}
@@ -222,7 +222,7 @@ const CertificatePage: React.FC = () => {
   />
 
   {/* Texto visible por encima */}
-  <span className="relative z-10">Intentar Nuevamente</span>
+  <span className="relative z-10">Try Again</span>
 
   {/* Animación keyframes */}
   <style>
@@ -238,56 +238,56 @@ const CertificatePage: React.FC = () => {
 
 
         </div>
-      ) : certificado ? (
-        // Certificado encontrado
+      ) : certificate ? (
+        // Certificate found
         <div className="space-y-8">
           {/* Status Badge */}
           <div className="text-center">
-            <div className={`inline-flex items-center px-6 py-3 rounded-full border ${obtenerEstadoInfo(certificado.estado).color} font-semibold text-lg`}>
-              <span className="text-2xl mr-2">{obtenerEstadoInfo(certificado.estado).icono}</span>
-              {obtenerEstadoInfo(certificado.estado).texto}
+            <div className={`inline-flex items-center px-6 py-3 rounded-full border ${getStatusInfo(certificate.estado).color} font-semibold text-lg`}>
+              <span className="text-2xl mr-2">{getStatusInfo(certificate.estado).icono}</span>
+              {getStatusInfo(certificate.estado).texto}
             </div>
             <p className="text-gray-400 mt-2">
-              {obtenerEstadoInfo(certificado.estado).descripcion}
+              {getStatusInfo(certificate.estado).descripcion}
             </p>
           </div>
 
-          {/* Información principal del certificado */}
+          {/* Main certificate information */}
           <div className="bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-800">
             <div className="bg-gradient-to-r from-blue-700 to-indigo-700 p-8 text-white text-center">
               <div className="text-5xl mb-4">🎓</div>
               <h2 className="text-4xl font-bold mb-2">
-                {certificado.nombre_estudiante}
+                {certificate.student_name}
               </h2>
               <p className="text-blue-200 text-xl">
-                {certificado.institucion}
+                {certificate.institucion}
               </p>
             </div>
 
             <div className="p-8">
               <div className="grid md:grid-cols-2 gap-8">
-                {/* Información básica */}
+                {/* Basic information */}
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
                       <span className="text-2xl mr-2">📋</span>
-                      Información del Certificado
+                      Certificate Information
                     </h3>
                     <div className="space-y-4">
                       <div className="flex justify-between items-start p-4 bg-gray-800 rounded-xl">
                         <div>
-                          <p className="text-sm font-medium text-gray-400">Estudiante</p>
+                          <p className="text-sm font-medium text-gray-400">Student</p>
                           <p className="text-lg font-semibold text-white">
-                            {certificado.nombre_estudiante}
+                            {certificate.student_name}
                           </p>
                         </div>
                       </div>
                       
                       <div className="flex justify-between items-start p-4 bg-gray-800 rounded-xl">
                         <div>
-                          <p className="text-sm font-medium text-gray-400">Institución</p>
+                          <p className="text-sm font-medium text-gray-400">Institution</p>
                           <p className="text-lg font-semibold text-white">
-                            {certificado.institucion}
+                            {certificate.institucion}
                           </p>
                         </div>
                       </div>
@@ -296,7 +296,7 @@ const CertificatePage: React.FC = () => {
                         <div>
                           <p className="text-sm font-medium text-gray-400">Fecha de emisión</p>
                           <p className="text-lg font-semibold text-white">
-                            {formatearFecha(certificado.fecha_emision)}
+                            {formatDate(certificate.fecha_emision)}
                           </p>
                         </div>
                       </div>
@@ -304,51 +304,51 @@ const CertificatePage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Información técnica */}
+                {/* Technical information */}
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
                       <span className="text-2xl mr-2">🔧</span>
-                      Información Técnica
+                      Technical Information
                     </h3>
                     <div className="space-y-4">
                       <div className="p-4 bg-gray-800 rounded-xl">
-                        <p className="text-sm font-medium text-gray-400 mb-2">ID del Certificado</p>
+                        <p className="text-sm font-medium text-gray-400 mb-2">Certificate ID</p>
                         <div className="flex items-center justify-between">
                           <code className="bg-gray-700 px-3 py-1 rounded text-sm font-mono text-gray-200">
-                            {certificado.id}
+                            {certificate.id}
                           </code>
                           <button
-                            onClick={() => copiarTexto(certificado.id, 'ID copiado al portapapeles')}
+                            onClick={() => copyText(certificate.id, 'ID copied to clipboard')}
                             className="text-blue-400 hover:text-blue-600 text-sm font-medium"
                           >
-                            Copiar
+                            Copy
                           </button>
                         </div>
                       </div>
 
-                      {certificado.wallet_destinatario && (
+                      {certificate.wallet_destinatario && (
                         <div className="p-4 bg-gray-800 rounded-xl">
-                          <p className="text-sm font-medium text-gray-400 mb-2">Wallet del Estudiante</p>
+                          <p className="text-sm font-medium text-gray-400 mb-2">Student Wallet</p>
                           <div className="flex items-center justify-between">
                             <code className="bg-gray-700 px-3 py-1 rounded text-sm font-mono truncate mr-2 text-gray-200">
-                              {certificado.wallet_destinatario}
+                              {certificate.wallet_destinatario}
                             </code>
                             <button
-                              onClick={() => copiarTexto(certificado.wallet_destinatario, 'Wallet copiada al portapapeles')}
+                              onClick={() => copyText(certificate.wallet_destinatario, 'Wallet copied to clipboard')}
                               className="text-blue-400 hover:text-blue-600 text-sm font-medium whitespace-nowrap"
                             >
-                              Copiar
+                              Copy
                             </button>
                           </div>
                         </div>
                       )}
 
-                      {certificado.creado_por && (
+                      {certificate.creado_por && (
                         <div className="p-4 bg-gray-800 rounded-xl">
-                          <p className="text-sm font-medium text-gray-400 mb-2">Emisor</p>
+                          <p className="text-sm font-medium text-gray-400 mb-2">Issuer</p>
                           <code className="bg-gray-700 px-3 py-1 rounded text-sm font-mono truncate text-gray-200">
-                            {certificado.creado_por}
+                            {certificate.creado_por}
                           </code>
                         </div>
                       )}
@@ -359,17 +359,17 @@ const CertificatePage: React.FC = () => {
             </div>
           </div>
 
-          {/* Imagen del certificado */}
-          {certificado.ipfs_certificado && (
+          {/* Certificate image */}
+          {certificate.ipfs_certificado && (
             <div className="bg-gray-900 rounded-2xl shadow-lg p-8 border border-gray-800">
               <h3 className="text-2xl font-bold text-white mb-6 text-center flex items-center justify-center">
                 <span className="text-3xl mr-3">🖼️</span>
-                Certificado Digital
+                Digital Certificate
               </h3>
               <div className="flex justify-center">
                 <img
-                  src={certificado.ipfs_certificado}
-                  alt={`Certificado de ${certificado.nombre_estudiante}`}
+                  src={certificate.ipfs_certificado}
+                  alt={`Certificate of ${certificate.student_name}`}
                   className="max-w-full h-auto rounded-xl shadow-md border border-gray-700"
                   style={{ maxHeight: '600px' }}
                 />
@@ -381,39 +381,39 @@ const CertificatePage: React.FC = () => {
           <div className="bg-gray-900 rounded-2xl shadow-lg p-8 border border-gray-800">
             <h3 className="text-2xl font-bold text-white mb-6 text-center flex items-center justify-center">
               <span className="text-3xl mr-3">🔗</span>
-              Enlaces y Verificación
+              Links and Verification
             </h3>
             
             <div className="grid md:grid-cols-3 gap-4">
-              {certificado.ipfs_certificado && (
+              {certificate.ipfs_certificado && (
                 <button
-                  onClick={() => abrirEnlace(certificado.ipfs_certificado!)}
+                  onClick={() => openLink(certificate.ipfs_certificado!)}
                   className="w-full p-4 bg-blue-950 hover:bg-blue-900 border border-blue-700 rounded-xl transition-colors text-center"
                 >
                   <div className="text-2xl mb-2">📜</div>
-                  <div className="font-semibold text-blue-300">Ver Certificado</div>
+                  <div className="font-semibold text-blue-300">View Certificate</div>
                   <div className="text-sm text-blue-400">Abrir imagen IPFS</div>
                 </button>
               )}
 
-              {certificado.ipfs_metadata && (
+              {certificate.ipfs_metadata && (
                 <button
-                  onClick={() => abrirEnlace(certificado.ipfs_metadata!)}
+                  onClick={() => openLink(certificate.ipfs_metadata!)}
                   className="w-full p-4 bg-green-950 hover:bg-green-900 border border-green-700 rounded-xl transition-colors text-center"
                 >
                   <div className="text-2xl mb-2">📋</div>
                   <div className="font-semibold text-green-300">Metadata JSON</div>
-                  <div className="text-sm text-green-400">Ver información técnica</div>
+                  <div className="text-sm text-green-400">View technical information</div>
                 </button>
               )}
 
-              {certificado.tx_hash && (
+              {certificate.tx_hash && (
                 <button
-                  onClick={() => abrirEnlace(`https://shannon-explorer.somnia.network/tx/${certificado.tx_hash}`)}
+                  onClick={() => openLink(`https://shannon-explorer.somnia.network/tx/${certificate.tx_hash}`)}
                   className="w-full p-4 bg-purple-950 hover:bg-purple-900 border border-purple-700 rounded-xl transition-colors text-center"
                 >
                   <div className="text-2xl mb-2">⛓️</div>
-                  <div className="font-semibold text-purple-300">Ver en Blockchain</div>
+                  <div className="font-semibold text-purple-300">View on Blockchain</div>
                   <div className="text-sm text-purple-400">Etherscan Sepolia</div>
                 </button>
               )}
@@ -424,28 +424,28 @@ const CertificatePage: React.FC = () => {
               <div className="flex items-center justify-center mb-4">
                 <div className="text-4xl mr-3">✅</div>
                 <h4 className="text-xl font-bold text-green-300">
-                  Certificado Verificado
+                  Verified Certificate
                 </h4>
               </div>
               <p className="text-green-400 text-center mb-4">
-                Este certificado ha sido verificado exitosamente y está registrado en nuestro sistema.
+                This certificate has been successfully verified and is registered in our system.
               </p>
               <div className="text-center text-sm text-green-500">
-                <p>Última actualización: {formatearFecha(certificado.updated_at)}</p>
-                <p className="mt-1">Sistema CertiChain - Certificados Blockchain</p>
+                <p>Last updated: {formatDate(certificate.updated_at)}</p>
+                <p className="mt-1">CertiChain System - Blockchain Certificates</p>
               </div>
             </div>
           </div>
 
-          {/* Footer con información adicional */}
+          {/* Footer with additional information */}
           <div className="text-center p-6 bg-gray-900 rounded-xl border border-gray-800">
             <h4 className="font-semibold text-white mb-2">
-              ¿Cómo verificar la autenticidad?
+              How to verify authenticity?
             </h4>
             <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-300">
               <div className="p-4 bg-gray-800 rounded-lg">
                 <div className="text-2xl mb-2">🔍</div>
-                <p><strong>ID único:</strong> Cada certificado tiene un identificador único e irrepetible</p>
+                <p><strong>Unique ID:</strong> Each certificate has a unique and unrepeatable identifier</p>
               </div>
               <div className="p-4 bg-gray-800 rounded-lg">
                 <div className="text-2xl mb-2">🌐</div>

@@ -11,7 +11,7 @@ console.log('🔌 Supabase configurado:', {
   hasKey: !!supabaseAnonKey
 });
 
-// Tipos para la base de datos
+// Types for the database
 export interface Database {
   public: {
     Tables: {
@@ -19,21 +19,21 @@ export interface Database {
         Row: {
           id: string;
           wallet_address: string;
-          rol: 'director' | 'estudiante';
+          rol: 'director' | 'student';
           nombre: string;
           created_at: string;
         };
         Insert: {
           id?: string;
           wallet_address: string;
-          rol: 'director' | 'estudiante';
+          rol: 'director' | 'student';
           nombre: string;
           created_at?: string;
         };
         Update: {
           id?: string;
           wallet_address?: string;
-          rol?: 'director' | 'estudiante';
+          rol?: 'director' | 'student';
           nombre?: string;
           created_at?: string;
         };

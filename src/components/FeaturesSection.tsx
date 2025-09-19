@@ -6,26 +6,26 @@ const FeaturesSection = () => {
   const features = [
     {
       icon: "nft",
-      title: "Certificados NFT",
-      description: "Diplomas y certificados inmutables en blockchain que garantizan autenticidad permanente",
+      title: "NFT Certificates",
+      description: "Immutable diplomas and certificates on blockchain that guarantee permanent authenticity",
       gradient: "from-blue-500 to-purple-600"
     },
     {
       icon: "qr-image",
-      title: "Verificación QR",
-      description: "Escaneado instantáneo para verificar la validez del certificado en segundos",
+      title: "QR Verification",
+      description: "Instant scanning to verify certificate validity in seconds",
       gradient: "from-green-500 to-blue-500"
     },
     {
       icon: "seguridad",
-      title: "Seguridad Blockchain",
-      description: "Tecnología descentralizada que previene falsificaciones y fraudes académicos",
+      title: "Blockchain Security",
+      description: "Decentralized technology that prevents academic falsifications and fraud",
       gradient: "from-purple-500 to-pink-500"
     },
     {
       icon: "somnia-image",
-      title: "Red Somnia",
-      description: "Powered by Somnia Network para transacciones rápidas y costos mínimos",
+      title: "Somnia Network",
+      description: "Powered by Somnia Network for fast transactions and minimal costs",
       gradient: "from-orange-500 to-red-500"
     }
   ];
@@ -33,7 +33,7 @@ const FeaturesSection = () => {
   return (
     <section className="py-20 px-4 relative z-10">
       <div className="max-w-7xl mx-auto">
-        {/* Título de la sección */}
+        {/* Section title */}
         <div className="text-center mb-16">
           <h2 
             className="text-5xl font-bold mb-6"
@@ -45,22 +45,22 @@ const FeaturesSection = () => {
               animation: "rgbTextGlow 3s linear infinite",
             }}
           >
-            Características Revolucionarias
+            Revolutionary Features
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            CertifyChain utiliza tecnología blockchain de vanguardia para crear un ecosistema 
-            educativo seguro, transparente y verificable.
+            CertifyChain uses cutting-edge blockchain technology to create a secure,
+            transparent and verifiable educational ecosystem.
           </p>
         </div>
 
-        {/* Grid de características */}
+        {/* Features grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
             <div
               key={index}
               className="group relative bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:transform hover:scale-105"
             >
-              {/* Icono con gradiente */}
+              {/* Icon with gradient */}
               <div className={`text-6xl mb-6 relative`}>
                 <div 
                   className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300`}
@@ -85,7 +85,7 @@ const FeaturesSection = () => {
                   <div className="relative z-10 w-16 h-16 mx-auto">
                     <img 
                       src={seguridad} 
-                      alt="Seguridad Icon" 
+                      alt="Security Icon" 
                       className="w-full h-full object-contain rounded-sm shadow-lg group-hover:scale-110 transition-all duration-300"
                     />
                   </div>
@@ -102,7 +102,7 @@ const FeaturesSection = () => {
                 )}
               </div>
 
-              {/* Contenido */}
+              {/* Content */}
               <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300">
                 {feature.title}
               </h3>
@@ -110,13 +110,13 @@ const FeaturesSection = () => {
                 {feature.description}
               </p>
 
-              {/* Efecto de brillo en hover */}
+              {/* Glow effect on hover */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
             </div>
           ))}
         </div>
 
-        {/* Líneas decorativas */}
+        {/* Decorative lines */}
         <div className="absolute top-1/2 left-1/4 w-32 h-px bg-gradient-to-r from-transparent to-purple-500/30"></div>
         <div className="absolute top-1/3 right-1/4 w-24 h-px bg-gradient-to-l from-transparent to-blue-500/30"></div>
       </div>

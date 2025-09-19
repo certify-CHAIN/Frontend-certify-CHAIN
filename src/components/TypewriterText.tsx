@@ -6,11 +6,11 @@ const TypewriterText = () => {
       <Typewriter
         options={{
           strings: [
-            "Certificados NFT Seguros",
-            "Verificación Blockchain",
-            "Autenticidad Garantizada", 
-            "Tecnología Descentralizada",
-            "Certificación Digital"
+            "Secure NFT Certificates",
+            "Blockchain Verification",
+            "Guaranteed Authenticity", 
+            "Decentralized Technology",
+            "Digital Certification"
           ],
           autoStart: true,
           loop: true,

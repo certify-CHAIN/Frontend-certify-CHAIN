@@ -18,7 +18,7 @@ const AnimatedBackground = () => {
     canvas.width = width;
     canvas.height = height;
 
-    // Cubos con posición, tamaño, velocidad y color
+    // Cubes with position, size, speed and color
     const cubes = Array.from({ length: CUBES }, () => ({
       x: random(0, width),
       y: random(0, height),
@@ -37,7 +37,7 @@ const AnimatedBackground = () => {
         cube.x += cube.dx;
         cube.y += cube.dy;
 
-        // Rebote en los bordes
+        // Bounce on edges
         if (cube.x < 0 || cube.x + cube.size > width) cube.dx *= -1;
         if (cube.y < 0 || cube.y + cube.size > height) cube.dy *= -1;
       });
@@ -46,7 +46,7 @@ const AnimatedBackground = () => {
 
     animate();
 
-    // Ajustar tamaño al redimensionar
+    // Adjust size on resize
     const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;

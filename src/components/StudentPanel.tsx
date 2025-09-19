@@ -9,68 +9,68 @@ interface StudentPanelProps {
   modoOscuro: boolean;
 }
 
-interface Certificado {
+interface Certificate {
   id: string;
-  nombre_estudiante: string;
-  institucion: string;
-  wallet_destinatario: string;
-  fecha_emision: string;
-  ipfs_certificado: string | null;
+  student_name: string;
+  institution: string;
+  wallet_destination: string;
+  issue_date: string;
+  ipfs_certificate: string | null;
   ipfs_metadata: string | null;
   tx_hash: string | null;
-  estado: string;
-  creado_por: string | null;
+  status: string;
+  created_by: string | null;
   created_at: string;
   updated_at: string;
 }
 
-// Configuración de Supabase (usar las mismas credenciales)
+// Supabase configuration (use same credentials)
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
-  const [certificados, setCertificados] = useState<Certificado[]>([]);
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [mostrarImportar, setMostrarImportar] = useState(false);
-  const [mensajeCompartir, setMensajeCompartir] = useState<string | null>(null);
+  const [showImport, setShowImport] = useState(false);
+  const [shareMessage, setShareMessage] = useState<string | null>(null);
 
-  // Función para obtener los certificados del estudiante
-  const obtenerCertificadosEstudiante = async () => {
+  // Function to get student certificates
+  const getStudentCertificates = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      console.log("🔍 Buscando certificados para wallet:", account);
+      console.log("🔍 Searching certificates for wallet:", account);
 
       const { data, error } = await supabase
-        .from("certificados")
+        .from("certificates")
         .select("*")
-        .ilike("wallet_destinatario", account) // Búsqueda case-insensitive
+        .ilike("wallet_destination", account) // Case-insensitive search
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error consultando certificados:", error);
-        setError("Error al cargar los certificados");
+        console.error("Error querying certificates:", error);
+        setError("Error loading certificates");
         return;
       }
 
-      console.log("📋 Certificados encontrados:", data);
-      setCertificados(data || []);
+      console.log("📋 Certificates found:", data);
+      setCertificates(data || []);
     } catch (error) {
-      console.error("Error inesperado:", error);
-      setError("Error inesperado al cargar certificados");
+      console.error("Unexpected error:", error);
+      setError("Unexpected error loading certificates");
     } finally {
       setLoading(false);
     }
   };
 
-  // Formatear fecha para mostrar
-  const formatearFecha = (fechaISO: string) => {
-    const fecha = new Date(fechaISO);
-    return fecha.toLocaleDateString("es-ES", {
+  // Format date for display
+  const formatDate = (isoDate: string) => {
+    const date = new Date(isoDate);
+    return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -79,54 +79,54 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
     });
   };
 
-  // Obtener estado con emoji
-  const obtenerEstadoConEmoji = (estado: string) => {
-    switch (estado.toLowerCase()) {
-      case "emitido":
-        return "📋 Emitido";
+  // Get status with emoji
+  const getStatusWithEmoji = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "issued":
+        return "📋 Issued";
       case "minted":
-        return "💎 NFT Minteado";
-      case "revocado":
-        return "❌ Revocado";
+        return "💎 NFT Minted";
+      case "revoked":
+        return "❌ Revoked";
       default:
-        return `📄 ${estado}`;
+        return `📄 ${status}`;
     }
   };
 
-  // Función para ver certificado en IPFS
-  const verCertificadoIPFS = (ipfsUrl: string) => {
+  // Function to view certificate on IPFS
+  const viewCertificateIPFS = (ipfsUrl: string) => {
     window.open(ipfsUrl, "_blank");
   };
 
-  // Función para ver metadata JSON
-  const verMetadataJSON = (metadataUrl: string) => {
+  // Function to view JSON metadata
+  const viewMetadataJSON = (metadataUrl: string) => {
     window.open(metadataUrl, "_blank");
   };
 
-  // Función para ver transacción en blockchain (Sepolia Etherscan)
-  const verTransaccionBlockchain = (txHash: string) => {
+  // Function to view transaction on blockchain (Sepolia Etherscan)
+  const viewBlockchainTransaction = (txHash: string) => {
     const blockchainExplorer = "https://shannon-explorer.somnia.network/tx/";
     window.open(`${blockchainExplorer}${txHash}`, "_blank");
   };
 
-  // Función para copiar wallet al portapapeles
-  const copiarWallet = (wallet: string) => {
+  // Function to copy wallet to clipboard
+  const copyWallet = (wallet: string) => {
     navigator.clipboard.writeText(wallet);
-    alert("Wallet copiada al portapapeles");
+    alert("Wallet copied to clipboard");
   };
 
-  // Función para compartir certificado
-  const compartirCertificado = (certificado: Certificado) => {
-    const enlace = `https://frontend-certify-chain.vercel.app/${certificado.id}`;
-    navigator.clipboard.writeText(enlace);
-    setMensajeCompartir("✅ Enlace copiado al portapapeles");
-    setTimeout(() => setMensajeCompartir(null), 3000);
+  // Function to share certificate
+  const shareCertificate = (certificate: Certificate) => {
+    const link = `https://frontend-certify-chain.vercel.app/${certificate.id}`;
+    navigator.clipboard.writeText(link);
+    setShareMessage("✅ Link copied to clipboard");
+    setTimeout(() => setShareMessage(null), 3000);
   };
 
-  // useEffect para cargar certificados cuando cambie la wallet
+  // useEffect to load certificates when wallet changes
   useEffect(() => {
     if (account) {
-      obtenerCertificadosEstudiante();
+      getStudentCertificates();
     }
   }, [account]);
 
@@ -135,10 +135,10 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
       className={`min-h-screen ${modoOscuro ? "bg-gray-900" : "bg-gray-50"}`}
     >
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Mensaje de compartir */}
-        {mensajeCompartir && (
+        {/* Share message */}
+        {shareMessage && (
           <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg">
-            {mensajeCompartir}
+            {shareMessage}
           </div>
         )}
 
@@ -153,10 +153,10 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                 modoOscuro ? "text-white" : "text-gray-800"
               }`}
             >
-              📜 Mis Certificados
+              📜 My Certificates
             </h1>
             <button
-              onClick={obtenerCertificadosEstudiante}
+              onClick={getStudentCertificates}
               disabled={loading}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 loading
@@ -166,11 +166,11 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                   : "bg-blue-500 hover:bg-blue-600 text-white"
               }`}
             >
-              {loading ? "⏳ Cargando..." : "🔄 Actualizar"}
+              {loading ? "⏳ Loading..." : "🔄 Refresh"}
             </button>
           </div>
 
-          {/* Información de la wallet conectada */}
+          {/* Connected wallet information */}
           <div
             className={`mb-6 p-4 rounded-lg ${
               modoOscuro
@@ -183,11 +183,11 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                 modoOscuro ? "text-gray-300" : "text-blue-800"
               }`}
             >
-              🔗 <strong>Wallet conectada:</strong>
+              🔗 <strong>Connected wallet:</strong>
               <span
                 className="font-mono ml-2 cursor-pointer hover:underline"
-                onClick={() => copiarWallet(account)}
-                title="Clic para copiar"
+                onClick={() => copyWallet(account)}
+                title="Click to copy"
               >
                 {account}
               </span>
@@ -197,11 +197,11 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                 modoOscuro ? "text-gray-400" : "text-blue-600"
               }`}
             >
-              Solo se muestran los certificados emitidos para esta wallet
+              Only certificates issued to this wallet are shown
             </p>
           </div>
 
-          {/* Contenido principal */}
+          {/* Main content */}
           {loading ? (
             <div className="text-center py-12">
               <div
@@ -209,82 +209,82 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                   modoOscuro ? "text-gray-300" : "text-gray-600"
                 }`}
               >
-                ⏳ Cargando certificados...
+                ⏳ Loading certificates...
               </div>
             </div>
           ) : error ? (
             <div className="text-center py-12">
               <div className={`text-xl mb-4 text-red-500`}>❌ {error}</div>
               <button
-                onClick={obtenerCertificadosEstudiante}
+                onClick={getStudentCertificates}
                 className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
               >
-                🔄 Reintentar
+                🔄 Retry
               </button>
             </div>
-          ) : certificados.length > 0 ? (
+          ) : certificates.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {certificados.map((certificado) => (
+              {certificates.map((certificate) => (
                 <div
-                  key={certificado.id}
+                  key={certificate.id}
                   className={`p-6 rounded-lg border transition-all hover:shadow-lg ${
                     modoOscuro
                       ? "border-gray-700 bg-gray-700 hover:bg-gray-650"
                       : "border-gray-200 bg-white hover:shadow-xl"
                   }`}
                 >
-                  {/* Header del certificado */}
+                  {/* Certificate header */}
                   <div className="mb-4">
                     <h3
                       className={`font-semibold text-lg mb-2 ${
                         modoOscuro ? "text-white" : "text-gray-800"
                       }`}
                     >
-                      👨‍🎓 {certificado.nombre_estudiante}
+                      👨‍🎓 {certificate.student_name}
                     </h3>
                     <p
                       className={`text-sm mb-2 ${
                         modoOscuro ? "text-blue-300" : "text-blue-600"
                       }`}
                     >
-                      🏫 {certificado.institucion}
+                      🏫 {certificate.institution}
                     </p>
                     <div
                       className={`text-sm mb-2 ${
                         modoOscuro ? "text-gray-300" : "text-gray-600"
                       }`}
                     >
-                      📅 <strong>Emitido:</strong>{" "}
-                      {formatearFecha(certificado.fecha_emision)}
+                      📅 <strong>Issued:</strong>{" "}
+                      {formatDate(certificate.issue_date)}
                     </div>
                     <div
                       className={`text-sm font-medium ${
-                        certificado.estado === "minted"
+                        certificate.status === "minted"
                           ? "text-green-500"
-                          : certificado.estado === "revocado"
+                          : certificate.status === "revoked"
                           ? "text-red-500"
                           : modoOscuro
                           ? "text-yellow-400"
                           : "text-yellow-600"
                       }`}
                     >
-                      {obtenerEstadoConEmoji(certificado.estado)}
+                      {getStatusWithEmoji(certificate.status)}
                     </div>
                   </div>
 
-                  {/* Mostrar imagen del certificado si existe */}
-                  {certificado.ipfs_certificado && (
+                  {/* Show certificate image if exists */}
+                  {certificate.ipfs_certificate && (
                     <div className="mb-4">
                       <img
-                        src={certificado.ipfs_certificado}
-                        alt={`Certificado de ${certificado.nombre_estudiante}`}
+                        src={certificate.ipfs_certificate}
+                        alt={`Certificate for ${certificate.student_name}`}
                         className="w-full rounded-md border"
                         style={{ maxHeight: 250, objectFit: "contain" }}
                       />
                     </div>
                   )}
 
-                  {/* Información técnica */}
+                  {/* Technical information */}
                   <div
                     className={`mb-4 p-3 rounded text-xs ${
                       modoOscuro
@@ -297,21 +297,21 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                         modoOscuro ? "text-gray-400" : "text-gray-500"
                       }`}
                     >
-                      🆔 <span className="font-mono">{certificado.id}</span>
+                      🆔 <span className="font-mono">{certificate.id}</span>
                     </div>
-                    {certificado.creado_por && (
+                    {certificate.created_by && (
                       <div
                         className={`mb-1 ${
                           modoOscuro ? "text-gray-400" : "text-gray-500"
                         }`}
                       >
-                        🏛️ Emisor:{" "}
+                        🏛️ Issuer:{" "}
                         <span className="font-mono text-xs">
-                          {certificado.creado_por.substring(0, 10)}...
+                          {certificate.created_by.substring(0, 10)}...
                         </span>
                       </div>
                     )}
-                    {certificado.tx_hash && (
+                    {certificate.tx_hash && (
                       <div
                         className={`${
                           modoOscuro ? "text-gray-400" : "text-gray-500"
@@ -319,18 +319,18 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                       >
                         ⛓️ TX:{" "}
                         <span className="font-mono text-xs">
-                          {certificado.tx_hash.substring(0, 10)}...
+                          {certificate.tx_hash.substring(0, 10)}...
                         </span>
                       </div>
                     )}
                   </div>
 
-                  {/* Botones de acción */}
+                  {/* Action buttons */}
                   <div className="space-y-2">
-                    {certificado.ipfs_certificado && (
+                    {certificate.ipfs_certificate && (
                       <button
                         onClick={() =>
-                          verCertificadoIPFS(certificado.ipfs_certificado!)
+                          viewCertificateIPFS(certificate.ipfs_certificate!)
                         }
                         className={`w-full px-3 py-2 rounded text-sm font-medium transition-colors ${
                           modoOscuro
@@ -338,14 +338,14 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                             : "bg-blue-500 hover:bg-blue-600 text-white"
                         }`}
                       >
-                        📜 Ver Certificado (IPFS)
+                        📜 View Certificate (IPFS)
                       </button>
                     )}
 
-                    {certificado.ipfs_metadata && (
+                    {certificate.ipfs_metadata && (
                       <button
                         onClick={() =>
-                          verMetadataJSON(certificado.ipfs_metadata!)
+                          viewMetadataJSON(certificate.ipfs_metadata!)
                         }
                         className={`w-full px-3 py-2 rounded text-sm font-medium transition-colors ${
                           modoOscuro
@@ -353,14 +353,14 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                             : "bg-green-500 hover:bg-green-600 text-white"
                         }`}
                       >
-                        📋 Ver Metadata JSON
+                        📋 View Metadata JSON
                       </button>
                     )}
 
-                    {certificado.tx_hash && (
+                    {certificate.tx_hash && (
                       <button
                         onClick={() =>
-                          verTransaccionBlockchain(certificado.tx_hash!)
+                          viewBlockchainTransaction(certificate.tx_hash!)
                         }
                         className={`w-full px-3 py-2 rounded text-sm font-medium transition-colors ${
                           modoOscuro
@@ -368,20 +368,20 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                             : "bg-purple-500 hover:bg-purple-600 text-white"
                         }`}
                       >
-                        ⛓️ Ver en Blockchain
+                        ⛓️ View on Blockchain
                       </button>
                     )}
 
-                    {/* Botón para compartir certificado */}
+                    {/* Button to share certificate */}
                     <button
-                      onClick={() => compartirCertificado(certificado)}
+                      onClick={() => shareCertificate(certificate)}
                       className={`w-full px-3 py-2 rounded text-sm font-medium transition-colors ${
                         modoOscuro
                           ? "bg-indigo-600 hover:bg-indigo-700 text-white"
                           : "bg-indigo-500 hover:bg-indigo-600 text-white"
                       }`}
                     >
-                      📤 Compartir Certificado
+                      📤 Share Certificate
                     </button>
                   </div>
                 </div>
@@ -395,32 +395,32 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                   modoOscuro ? "text-gray-300" : "text-gray-600"
                 }`}
               >
-                No tienes certificados registrados aún.
+                You don't have any certificates registered yet.
               </p>
               <p
                 className={`mb-6 ${
                   modoOscuro ? "text-gray-400" : "text-gray-500"
                 }`}
               >
-                Los certificados que recibas para la wallet{" "}
-                <strong>{account}</strong> aparecerán aquí automáticamente.
+                Certificates you receive for wallet{" "}
+                <strong>{account}</strong> will appear here automatically.
               </p>
               <button
-                onClick={obtenerCertificadosEstudiante}
+                onClick={getStudentCertificates}
                 className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
                   modoOscuro
                     ? "bg-blue-600 hover:bg-blue-700 text-white"
                     : "bg-blue-500 hover:bg-blue-600 text-white"
                 }`}
               >
-                🔄 Verificar de nuevo
+                🔄 Check again
               </button>
             </div>
           )}
         </div>
 
-        {/* Panel de compartir certificados */}
-        {certificados.length > 0 && (
+        {/* Certificate sharing panel */}
+        {certificates.length > 0 && (
           <div
             className={`mt-8 p-6 rounded-lg ${
               modoOscuro ? "bg-gray-800" : "bg-white shadow"
@@ -431,15 +431,15 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                 modoOscuro ? "text-white" : "text-gray-800"
               }`}
             >
-              🔗 Compartir Certificados
+              🔗 Share Certificates
             </h2>
             <p
               className={`mb-4 ${
                 modoOscuro ? "text-gray-300" : "text-gray-600"
               }`}
             >
-              Puedes compartir tus certificados con empleadores o instituciones
-              usando los enlaces IPFS.
+              You can share your certificates with employers or institutions
+              using IPFS links.
             </p>
 
             <div
@@ -454,7 +454,7 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                   modoOscuro ? "text-white" : "text-gray-800"
                 }`}
               >
-                💡 Opciones para compartir:
+                💡 Sharing options:
               </h3>
               <ul
                 className={`text-sm space-y-1 ${
@@ -462,38 +462,38 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                 }`}
               >
                 <li>
-                  📜 <strong>Certificado visual:</strong> Enlace directo a la
-                  imagen del certificado
+                  📜 <strong>Visual certificate:</strong> Direct link to the
+                  certificate image
                 </li>
                 <li>
-                  📋 <strong>Metadata JSON:</strong> Información técnica y
-                  atributos del certificado
+                  📋 <strong>JSON Metadata:</strong> Technical information and
+                  certificate attributes
                 </li>
                 <li>
-                  ⛓️ <strong>Blockchain:</strong> Prueba inmutable en la
-                  blockchain (solo certificados minteados)
+                  ⛓️ <strong>Blockchain:</strong> Immutable proof on the
+                  blockchain (minted certificates only)
                 </li>
                 <li>
-                  🆔 <strong>ID del certificado:</strong> Identificador único
-                  para verificación
+                  🆔 <strong>Certificate ID:</strong> Unique identifier
+                  for verification
                 </li>
                 <li>
-                  🌐 <strong>Enlace de verificación:</strong> Enlace único para
-                  compartir y verificar tu certificado en nuestra plataforma
+                  🌐 <strong>Verification link:</strong> Unique link to
+                  share and verify your certificate on our platform
                 </li>
               </ul>
             </div>
 
             <div className="mt-4 flex flex-wrap gap-2">
               <button
-                onClick={() => copiarWallet(account)}
+                onClick={() => copyWallet(account)}
                 className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
                   modoOscuro
                     ? "bg-gray-600 hover:bg-gray-700 text-white"
                     : "bg-gray-200 hover:bg-gray-300 text-gray-700"
                 }`}
               >
-                📋 Copiar mi wallet
+                📋 Copy my wallet
               </button>
 
               <button
@@ -503,29 +503,29 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                     : "bg-green-500 hover:bg-green-600 text-white"
                 }`}
                 onClick={() => {
-                  const resumen = `🎓 Tengo ${certificados.length} certificado(s) registrado(s) en la wallet: ${account}`;
-                  navigator.clipboard.writeText(resumen);
-                  alert("Resumen copiado al portapapeles");
+                  const summary = `🎓 I have ${certificates.length} certificate(s) registered in wallet: ${account}`;
+                  navigator.clipboard.writeText(summary);
+                  alert("Summary copied to clipboard");
                 }}
               >
-                📊 Copiar resumen
+                📊 Copy summary
               </button>
 
-              {/* Nuevo botón para importar NFT */}
+              {/* New button to import NFT */}
               <button
                 className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
                   modoOscuro
                     ? "bg-yellow-600 hover:bg-yellow-700 text-white"
                     : "bg-yellow-500 hover:bg-yellow-600 text-white"
                 }`}
-                onClick={() => setMostrarImportar(!mostrarImportar)}
+                onClick={() => setShowImport(!showImport)}
               >
-                🪙 Importar NFT a MetaMask
+                🪙 Import NFT to MetaMask
               </button>
             </div>
 
-            {/* Bloque de instrucciones */}
-            {mostrarImportar && (
+            {/* Instructions block */}
+            {showImport && (
               <div
                 className={`mt-6 p-4 rounded-lg border ${
                   modoOscuro
@@ -538,7 +538,7 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                     modoOscuro ? "text-white" : "text-gray-800"
                   }`}
                 >
-                  🪙 Pasos para importar tu NFT en MetaMask
+                  🪙 Steps to import your NFT in MetaMask
                 </h3>
                 <ol
                   className={`list-decimal list-inside space-y-2 ${
@@ -546,38 +546,38 @@ const StudentPanel = ({ account, modoOscuro }: StudentPanelProps) => {
                   }`}
                 >
                   <li>
-                    En la parte de ariba nos saldra los certificados que hemos
-                    recibido. Le daremos en <strong>Ver en Blochain</strong>{" "}
-                    para que nos lleve a ver donde esta nuetro NFT.
+                    At the top we will see the certificates we have
+                    received. We will click on <strong>View on Blockchain</strong>{" "}
+                    so it takes us to see where our NFT is.
                     <div className="mt-4">
                       <img
                         src={img1}
-                        alt="Ejemplo importar NFT"
+                        alt="NFT import example"
                         className="rounded-lg shadow-md"
                       />
                     </div>
                   </li>
                   <li>
-                    Ve al apartdo <strong>copiar direcion</strong> y verificamos
-                    el numero de ID <strong>"En este caso es el 7"</strong>.
+                    Go to the <strong>copy address</strong> section and verify
+                    the ID number <strong>"In this case it's 7"</strong>.
                     <div className="mt-4">
                       <img
                         src={img2}
-                        alt="Ejemplo importar NFT"
+                        alt="NFT import example"
                         className="rounded-lg shadow-md"
                       />
                     </div>
                   </li>
                   <li>
-                    Abre tu billetera MetaMask y sigue los siguintes pasos{" "}
-                    cuando estemos en agregar nft selecionamos la red de{" "}
-                    <strong>sepolia</strong>, en direcion pegamos lo que
-                    copiamos la direcion de la blockchain y en ID 7 y le damos a{" "}
-                    <strong>Importar</strong>.
+                    Open your MetaMask wallet and follow these steps{" "}
+                    when we are in add NFT we select the{" "}
+                    <strong>sepolia</strong> network, in address we paste what
+                    we copied the blockchain address and in ID 7 and we click{" "}
+                    <strong>Import</strong>.
                     <div className="mt-4">
                       <img
                         src={img3}
-                        alt="Ejemplo importar NFT"
+                        alt="NFT import example"
                         className="rounded-lg shadow-md"
                       />
                     </div>

@@ -12,9 +12,9 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
   const [directorAddress, setDirectorAddress] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [directores, setDirectores] = useState<string[]>([]);
+  const [directors, setDirectors] = useState<string[]>([]);
   const [studentAddress, setStudentAddress] = useState("");
-  const [estudiantes, setEstudiantes] = useState<string[]>([]);
+  const [students, setStudents] = useState<string[]>([]);
 
   const contractAddress = "0x786E41e7a24C8B9031b91749F8f1A649457CC1BF"; // <-- update this
   const abi = abiJson.abi;
@@ -27,11 +27,11 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
     return new Contract(contractAddress, abi, signer);
   };
 
-  const fetchDirectores = async () => {
+  const fetchDirectors = async () => {
     try {
       const contract = await getContract();
       const result = await contract.getAllDirectors();
-      setDirectores(result);
+      setDirectors(result);
     } catch (error) {
       console.error("Error fetching directors:", error);
     }
@@ -39,7 +39,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
 
   useEffect(() => {
     if (activeTab === "directors") {
-      fetchDirectores();
+      fetchDirectors();
     }
   }, [activeTab]);
 
@@ -92,11 +92,11 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
     }
   };
 
-  const fetchEstudiantes = async () => {
+  const fetchStudents = async () => {
     try {
       const contract = await getContract();
       const result = await contract.getAllStudents();
-      setEstudiantes(result);
+      setStudents(result);
     } catch (error) {
       console.error("Error fetching students:", error);
     }
@@ -110,7 +110,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
       await tx.wait();
       setMessage(`Student ${studentAddress} successfully added.`);
       setStudentAddress("");
-      fetchEstudiantes(); // update list
+      fetchStudents(); // update list
     } catch (error: any) {
       if (error.code === "ACTION_REJECTED") {
         setMessage("❌ Action canceled by the user.");
@@ -130,7 +130,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
       await tx.wait();
       setMessage(`Student ${studentAddress} successfully removed.`);
       setStudentAddress("");
-      fetchEstudiantes(); // update list
+      fetchStudents(); // update list
     } catch (error: any) {
       if (error.code === "ACTION_REJECTED") {
         setMessage("❌ Action canceled by the user.");
@@ -144,7 +144,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
 
   useEffect(() => {
   if (activeTab === "students") {
-    fetchEstudiantes();
+    fetchStudents();
   }
 }, [activeTab]);
 
@@ -259,7 +259,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
               </div>
             )}
 
-            {directores.length > 0 && (
+            {directors.length > 0 && (
               <div className="mt-6">
                 <h3
                   className={`text-lg font-semibold mb-2 ${
@@ -269,7 +269,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
                   Directors List:
                 </h3>
                 <ul className="list-disc pl-5">
-                  {directores.map((dir, index) => (
+                  {directors.map((dir, index) => (
                     <li
                       key={index}
                       className={`${
@@ -335,7 +335,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
               </div>
             )}
 
-            {estudiantes.length > 0 && (
+            {students.length > 0 && (
               <div className="mt-6">
                 <h3
                   className={`text-lg font-semibold mb-2 ${
@@ -345,7 +345,7 @@ const AdminPanel = ({ modoOscuro }: AdminPanelProps) => {
                   Students List:
                 </h3>
                 <ul className="list-disc pl-5">
-                  {estudiantes.map((stu, index) => (
+                  {students.map((stu, index) => (
                     <li
                       key={index}
                       className={modoOscuro ? "text-gray-300" : "text-gray-700"}
