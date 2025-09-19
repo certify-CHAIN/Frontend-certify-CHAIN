@@ -3,22 +3,13 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Verificar si las variables de entorno están configuradas correctamente
-const isSupabaseConfigured = supabaseUrl && 
-  supabaseAnonKey && 
-  supabaseUrl !== 'https://placeholder.supabase.co' && 
-  supabaseAnonKey !== 'placeholder_key_here';
+// Crear cliente de Supabase directamente como en CertificatePage.tsx
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-if (!isSupabaseConfigured) {
-  console.warn('⚠️ Supabase no está configurado correctamente. Usando localStorage como fallback.');
-  console.warn('📋 Por favor, configura las variables VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en .env.local');
-}
-
-export const supabase = isSupabaseConfigured 
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
-
-export { isSupabaseConfigured };
+console.log('🔌 Supabase configurado:', {
+  url: supabaseUrl,
+  hasKey: !!supabaseAnonKey
+});
 
 // Tipos para la base de datos
 export interface Database {

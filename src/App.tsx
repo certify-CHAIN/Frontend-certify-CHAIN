@@ -275,6 +275,8 @@ const App = () => {
         
         {/* Footer solo se muestra en landing page */}
         {appState === "landing" && <Footer />}
+        
+        {/* Componente de prueba de Supabase - remover en producción */}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 
 export interface UserData {
   id?: string;
@@ -21,37 +21,36 @@ class UserDatabase {
   // Método para verificar si el usuario ya está registrado
   async getUserByWallet(walletAddress: string): Promise<UserData | null> {
     try {
-      // Solo usar Supabase si está configurado correctamente
-      if (isSupabaseConfigured && supabase) {
-        const { data, error } = await supabase
-          .from('roles')
-          .select('*')
-          .eq('wallet_address', walletAddress)
-          .single();
+      console.log('🔍 Buscando usuario en Supabase:', walletAddress);
+      
+      // Intentar con Supabase primero (como en CertificatePage.tsx)
+      const { data, error } = await supabase
+        .from('roles')
+        .select('*')
+        .eq('wallet_address', walletAddress)
+        .single();
 
-        if (error) {
-          if (error.code === 'PGRST116') {
-            // No se encontró el usuario
-            return null;
-          }
-          throw error;
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // No se encontró el usuario en Supabase
+          console.log('👤 Usuario no encontrado en Supabase');
+          return null;
         }
-
-        return data;
+        console.error('❌ Error de Supabase:', error);
+        throw error;
       }
 
-      // Fallback con localStorage
-      const storedUsers = localStorage.getItem('certifychain_users');
-      if (storedUsers) {
-        const users: UserData[] = JSON.parse(storedUsers);
-        return users.find(user => user.wallet_address === walletAddress) || null;
-      }
+      console.log('✅ Usuario encontrado en Supabase:', data);
       
-      return null;
+      // También guardar en localStorage como backup
+      localStorage.setItem('certifychain_current_user', JSON.stringify(data));
+      
+      return data;
     } catch (error) {
-      console.error('Error al obtener usuario desde Supabase, usando localStorage:', error);
+      console.error('❌ Error al obtener usuario desde Supabase:', error);
       
-      // Fallback con localStorage si Supabase falla
+      // Fallback con localStorage solo si Supabase falla completamente
+      console.log('📋 Usando localStorage como fallback');
       const storedUsers = localStorage.getItem('certifychain_users');
       if (storedUsers) {
         const users: UserData[] = JSON.parse(storedUsers);
@@ -65,35 +64,39 @@ class UserDatabase {
   // Método para registrar un nuevo usuario
   async registerUser(userData: Omit<UserData, 'id' | 'created_at'>): Promise<UserData | null> {
     try {
-      // Solo usar Supabase si está configurado correctamente
-      if (isSupabaseConfigured && supabase) {
-        const { data, error } = await supabase
-          .from('roles')
-          .insert([{
-            wallet_address: userData.wallet_address,
-            rol: userData.rol,
-            nombre: userData.nombre
-          }])
-          .select()
-          .single();
+      console.log('💾 Registrando usuario en Supabase:', userData);
+      
+      // Intentar registrar en Supabase primero (como en CertificatePage.tsx)
+      const { data, error } = await supabase
+        .from('roles')
+        .insert([{
+          wallet_address: userData.wallet_address,
+          rol: userData.rol,
+          nombre: userData.nombre
+        }])
+        .select()
+        .single();
 
-        if (error) {
-          throw error;
-        }
-
-        // También guardar en localStorage como backup
-        const storedUsers = localStorage.getItem('certifychain_users');
-        const users: UserData[] = storedUsers ? JSON.parse(storedUsers) : [];
-        users.push(data);
-        localStorage.setItem('certifychain_users', JSON.stringify(users));
-        localStorage.setItem('certifychain_current_user', JSON.stringify(data));
-
-        console.log('✅ Usuario registrado en Supabase y localStorage');
-        return data;
+      if (error) {
+        console.error('❌ Error al insertar en Supabase:', error);
+        throw error;
       }
 
-      // Fallback con localStorage si Supabase no está configurado
-      console.log('📋 Usando localStorage para registro (Supabase no configurado)');
+      console.log('✅ Usuario registrado exitosamente en Supabase:', data);
+
+      // También guardar en localStorage como backup
+      const storedUsers = localStorage.getItem('certifychain_users');
+      const users: UserData[] = storedUsers ? JSON.parse(storedUsers) : [];
+      users.push(data);
+      localStorage.setItem('certifychain_users', JSON.stringify(users));
+      localStorage.setItem('certifychain_current_user', JSON.stringify(data));
+
+      return data;
+    } catch (error) {
+      console.error('❌ Error al registrar usuario en Supabase:', error);
+      
+      // Fallback con localStorage solo si Supabase falla completamente
+      console.log('📋 Usando localStorage como fallback para registro');
       const newUser: UserData = {
         ...userData,
         id: crypto.randomUUID(),
@@ -114,60 +117,37 @@ class UserDatabase {
       localStorage.setItem('certifychain_current_user', JSON.stringify(newUser));
       
       return newUser;
-    } catch (error) {
-      console.error('Error al registrar usuario:', error);
-      throw error;
     }
   }
 
   // Método para actualizar datos del usuario
   async updateUser(walletAddress: string, updates: Partial<UserData>): Promise<UserData | null> {
     try {
-      // Solo usar Supabase si está configurado correctamente
-      if (isSupabaseConfigured && supabase) {
-        const { data, error } = await supabase
-          .from('roles')
-          .update(updates)
-          .eq('wallet_address', walletAddress)
-          .select()
-          .single();
+      console.log('🔄 Actualizando usuario en Supabase:', walletAddress, updates);
+      
+      // Intentar actualizar en Supabase primero
+      const { data, error } = await supabase
+        .from('roles')
+        .update(updates)
+        .eq('wallet_address', walletAddress)
+        .select()
+        .single();
 
-        if (error) {
-          throw error;
-        }
-
-        // Actualizar también en localStorage
-        const storedUsers = localStorage.getItem('certifychain_users');
-        if (storedUsers) {
-          const users: UserData[] = JSON.parse(storedUsers);
-          const userIndex = users.findIndex(user => user.wallet_address === walletAddress);
-          
-          if (userIndex !== -1) {
-            users[userIndex] = { ...users[userIndex], ...data };
-            localStorage.setItem('certifychain_users', JSON.stringify(users));
-            
-            // Actualizar usuario actual si es el mismo
-            const currentUser = localStorage.getItem('certifychain_current_user');
-            if (currentUser) {
-              const current = JSON.parse(currentUser);
-              if (current.wallet_address === walletAddress) {
-                localStorage.setItem('certifychain_current_user', JSON.stringify(users[userIndex]));
-              }
-            }
-          }
-        }
-
-        return data;
+      if (error) {
+        console.error('❌ Error al actualizar en Supabase:', error);
+        throw error;
       }
 
-      // Fallback con localStorage
+      console.log('✅ Usuario actualizado en Supabase:', data);
+
+      // Actualizar también en localStorage
       const storedUsers = localStorage.getItem('certifychain_users');
       if (storedUsers) {
         const users: UserData[] = JSON.parse(storedUsers);
         const userIndex = users.findIndex(user => user.wallet_address === walletAddress);
         
         if (userIndex !== -1) {
-          users[userIndex] = { ...users[userIndex], ...updates };
+          users[userIndex] = { ...users[userIndex], ...data };
           localStorage.setItem('certifychain_users', JSON.stringify(users));
           
           // Actualizar usuario actual si es el mismo
@@ -178,16 +158,15 @@ class UserDatabase {
               localStorage.setItem('certifychain_current_user', JSON.stringify(users[userIndex]));
             }
           }
-          
-          return users[userIndex];
         }
       }
-      
-      return null;
+
+      return data;
     } catch (error) {
-      console.error('Error al actualizar usuario:', error);
+      console.error('❌ Error al actualizar usuario en Supabase:', error);
       
       // Fallback con localStorage
+      console.log('📋 Usando localStorage como fallback para actualización');
       const storedUsers = localStorage.getItem('certifychain_users');
       if (storedUsers) {
         const users: UserData[] = JSON.parse(storedUsers);

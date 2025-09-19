@@ -12,8 +12,8 @@
 Ejecuta el siguiente SQL en el editor SQL de Supabase:
 
 ```sql
--- Crear tabla roles
-CREATE TABLE roles (
+-- 1. Crear tabla roles (si no existe)
+CREATE TABLE IF NOT EXISTS roles (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   wallet_address TEXT UNIQUE NOT NULL,
   rol TEXT NOT NULL CHECK (rol IN ('director', 'estudiante')),
@@ -21,23 +21,43 @@ CREATE TABLE roles (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Crear índice para búsquedas rápidas por wallet_address
-CREATE INDEX idx_roles_wallet_address ON roles(wallet_address);
+-- 2. Crear índice para búsquedas rápidas por wallet_address
+CREATE INDEX IF NOT EXISTS idx_roles_wallet_address ON roles(wallet_address);
 
--- Habilitar Row Level Security (RLS)
+-- 3. Habilitar Row Level Security (RLS)
 ALTER TABLE roles ENABLE ROW LEVEL SECURITY;
 
--- Política para permitir lectura a todos los usuarios autenticados
+-- 4. Eliminar políticas existentes (si las hay)
+DROP POLICY IF EXISTS "Permitir lectura a todos" ON roles;
+DROP POLICY IF EXISTS "Permitir inserción a todos" ON roles;
+DROP POLICY IF EXISTS "Permitir actualización propia" ON roles;
+
+-- 5. Crear políticas nuevas
 CREATE POLICY "Permitir lectura a todos" ON roles
   FOR SELECT USING (true);
 
--- Política para permitir inserción a todos los usuarios autenticados
 CREATE POLICY "Permitir inserción a todos" ON roles
   FOR INSERT WITH CHECK (true);
 
--- Política para permitir actualización solo del propio registro
 CREATE POLICY "Permitir actualización propia" ON roles
   FOR UPDATE USING (true);
+
+-- 6. Verificar que la tabla existe
+SELECT * FROM roles LIMIT 5;
+```
+
+### 2.1. Verificar estructura de la tabla
+Para verificar que la tabla se creó correctamente:
+
+```sql
+-- Verificar estructura de la tabla
+\d roles;
+
+-- O alternativamente:
+SELECT column_name, data_type, is_nullable, column_default
+FROM information_schema.columns
+WHERE table_name = 'roles'
+ORDER BY ordinal_position;
 ```
 
 ### 3. Configurar variables de entorno
