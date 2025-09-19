@@ -43,7 +43,7 @@ export const Encryption = () => {
           className="w-full h-auto opacity-30"
           style={{ opacity: 0.7 }}
         >
-          <source src="/public/Videos/encryption-bg.webm" type="video/webm" />
+          <source src="/Videos/encryption-bg.webm" type="video/webm" />
         </video>
       </div>
     </div>

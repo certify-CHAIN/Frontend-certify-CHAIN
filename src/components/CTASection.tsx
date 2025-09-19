@@ -169,7 +169,7 @@ const CTASection = () => {
                 className="w-full h-auto opacity-50"
               >
                 <source
-                  src="/public/Videos/encryption-bg.webm"
+                  src="/Videos/encryption-bg.webm"
                   type="video/webm"
                 />
               </video>

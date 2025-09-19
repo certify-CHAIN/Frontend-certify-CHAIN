@@ -11,7 +11,7 @@ return (
           className="w-full h-full object-cover"
           style={{ opacity: 0.7, zIndex: -1 }}
         >
-          <source src="/public/Videos/blackhole.webm" type="video/webm" />
+          <source src="/Videos/blackhole.webm" type="video/webm" />
         </video>
       </div>
       
