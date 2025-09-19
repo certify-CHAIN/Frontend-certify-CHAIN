@@ -9,7 +9,7 @@ return (
           playsInline
           preload="false"
           className="w-full h-full object-cover"
-          style={{ opacity: 0.9, zIndex: -1 }}
+          style={{ opacity: 0.7, zIndex: -1 }}
         >
           <source src="/public/Videos/blackhole.webm" type="video/webm" />
         </video>

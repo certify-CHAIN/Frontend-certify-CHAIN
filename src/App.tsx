@@ -20,7 +20,7 @@ import { userDatabase } from "./utils/userDatabase";
 import type { UserData } from "./utils/userDatabase";
 import logo from "./assets/logo.svg";
 import logoDark from "./assets/logo-black.svg";
-import imgperonaje  from "./assets/somnia titulo per.svg";
+import imgperonaje  from "./assets/somnia titulo per.png";
 
 // Tipos para los roles simplificados
 type UserRole = "director" | "estudiante" | null;

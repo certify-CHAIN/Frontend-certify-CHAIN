@@ -47,7 +47,7 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ onRoleSelect, onCancel }) =
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
-      <div className="relative bg-gray-900/95 backdrop-blur-md rounded-2xl border border-gray-700/50 max-w-3xl w-full max-h-[85vh] overflow-y-auto">
+      <div className="relative bg-gray-900/95 backdrop-blur-md rounded-2xl border border-gray-700/50 max-w-4xl w-full max-h-[90vh] flex flex-col">
         {/* Close button */}
         <button
           onClick={onCancel}
@@ -60,10 +60,10 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ onRoleSelect, onCancel }) =
         </button>
 
         {/* Header */}
-        <div className="p-6 text-center border-b border-gray-700/50">
-          <div className="text-5xl mb-3">🚀</div>
+        <div className="p-4 text-center border-b border-gray-700/50 flex-shrink-0">
+          <div className="text-4xl mb-2">🚀</div>
           <h2 
-            className="text-3xl font-bold mb-3"
+            className="text-2xl font-bold mb-2"
             style={{
               background: "linear-gradient(90deg, #ff0080, #7928ca, #00ffea, #ff0080)",
               backgroundSize: "400% 400%",
@@ -74,49 +74,49 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ onRoleSelect, onCancel }) =
           >
             ¡Bienvenido a CertifyChain!
           </h2>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Para comenzar, selecciona el rol que mejor describa tu función en el ecosistema educativo
+          <p className="text-base text-gray-300">
+            Selecciona tu rol en el ecosistema educativo
           </p>
         </div>
 
         {/* Role Cards */}
-        <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="p-4 flex-1 min-h-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 h-full">
             {roles.map((role) => (
               <div
                 key={role.id}
                 onClick={() => setSelectedRole(role.id as 'director' | 'estudiante')}
-                className={`relative group cursor-pointer transition-all duration-300 hover:scale-105 ${
+                className={`relative group cursor-pointer transition-all duration-300 hover:scale-[1.02] ${
                   selectedRole === role.id 
                     ? 'ring-2 ring-purple-500 ring-offset-2 ring-offset-gray-900' 
                     : ''
                 }`}
               >
-                <div className="bg-gray-800/50 backdrop-blur-md rounded-xl p-5 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 h-full">
+                <div className="bg-gray-800/50 backdrop-blur-md rounded-xl p-4 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 h-full flex flex-col">
                   {/* Icon with gradient */}
-                  <div className="relative mb-4">
+                  <div className="relative mb-3 flex-shrink-0">
                     <div className={`absolute inset-0 bg-gradient-to-r ${role.color} rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300`}></div>
-                    <div className={`relative w-14 h-14 mx-auto bg-gradient-to-r ${role.color} rounded-full flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`relative w-12 h-12 mx-auto bg-gradient-to-r ${role.color} rounded-full flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300`}>
                       {role.icon}
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div className="text-center mb-6">
-                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors duration-300">
+                  <div className="text-center mb-3 flex-grow">
+                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-purple-300 transition-colors duration-300">
                       {role.title}
                     </h3>
-                    <p className="text-purple-400 font-semibold mb-3">
+                    <p className="text-purple-400 font-semibold mb-2 text-sm">
                       {role.subtitle}
                     </p>
-                    <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
+                    <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
                       {role.description}
                     </p>
                   </div>
 
                   {/* Features */}
-                  <ul className="space-y-1.5 mb-4">
-                    {role.features.map((feature, index) => (
+                  <ul className="space-y-1 mb-3 flex-shrink-0">
+                    {role.features.slice(0, 3).map((feature, index) => (
                       <li key={index} className="text-gray-300 text-xs group-hover:text-gray-200 transition-colors duration-300">
                         {feature}
                       </li>
@@ -138,17 +138,17 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ onRoleSelect, onCancel }) =
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-center space-x-3">
+          <div className="flex justify-center space-x-3 pt-3 border-t border-gray-700/50 flex-shrink-0">
             <button
               onClick={onCancel}
-              className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-300 text-sm"
+              className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-5 rounded-lg transition-all duration-300 text-sm"
             >
               Cancelar
             </button>
             <button
               onClick={handleContinue}
               disabled={!selectedRole}
-              className={`font-semibold py-2.5 px-6 rounded-lg transition-all duration-300 text-sm ${
+              className={`font-semibold py-2 px-5 rounded-lg transition-all duration-300 text-sm ${
                 selectedRole
                   ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white hover:scale-105 shadow-lg'
                   : 'bg-gray-600 text-gray-400 cursor-not-allowed'
