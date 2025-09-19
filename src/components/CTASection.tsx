@@ -1,3 +1,4 @@
+import logoSomnia from "../assets/logo somnia.png";
 const CTASection = () => {
   const ctaOptions = [
     {
@@ -153,7 +154,7 @@ const CTASection = () => {
             {/* Logo de Somnia en el centro */}
             <div className="absolute z-[25] flex items-center justify-center">
               <img 
-                src="/src/assets/logo somnia.png" 
+                src={logoSomnia} 
                 alt="Logo Somnia"
                 className="w-32 h-32 object-contain opacity-90 animate-pulse"
               />
