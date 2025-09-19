@@ -1,29 +1,7 @@
 <div align="center">
   <img src="./src/assets/logo_CertifyChain.jpg" alt="CertifyChain Logo" width="400"/>
   
-  [![Build Status](├── 📁 src/
-│   ├── 📁 assets/              # Images and resources
-│   │   ├── 🎓 certificado.jpg
-│   │   ├── 🖼️ img1.png, img2.png, img3.png
-│   │   ├── 🏷️ logo_CertifyChain.jpg
-│   │   └── 🔖 Various logo variants
-│   ├── 📁 chains/              # Blockchain configurations
-│   │   └── ⚙️ chains.ts
-│   ├── 📁 components/          # React components
-│   │   ├── 👑 AdminPanel.tsx
-│   │   ├── ✨ AnimatedBackground.tsx
-│   │   ├── 🎨 BenefitsSection.tsx
-│   │   ├── 📞 CTASection.tsx
-│   │   ├── 🎓 DirectorPanel.tsx
-│   │   ├── 🌟 FeaturesSection.tsx
-│   │   ├── 🦶 Footer.tsx
-│   │   ├── 🔄 HowItWorksSection.tsx
-│   │   ├── 🎯 RoleSelector.tsx
-│   │   ├── 📊 StatsSection.tsx
-│   │   ├── 👨‍🎓 StudentPanel.tsx
-│   │   ├── 💬 TestimonialsSection.tsx
-│   │   ├── ⌨️ TypewriterText.tsx
-│   │   └── 🏛️ UniverityParners.tsxields.io/badge/build-passing-brightgreen.svg)](https://certifi-chain.vercel.app/)
+  [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://certifi-chain.vercel.app/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
   [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
   [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -138,10 +116,11 @@ The entire user interface has been professionally translated from Spanish to Eng
 - � **React Context** - Global state management
 - 🎯 **Custom Hooks** - Reusable logic abstraction
 
-### **File Handling**
+### **Decentralized Storage**
 - 📁 **HTML2Canvas** - Certificate image generation
 - 📷 **QR Code Generation** - Verification QR codes
-- 🌐 **IPFS Integration** - Decentralized file operations
+- 🌐 **IPFS (Pinata)** - Fully decentralized file storage and retrieval
+- 🔗 **Blockchain Metadata** - On-chain certificate references
 
 ---
 
@@ -238,13 +217,9 @@ npm run dev
 Create a `.env.local` file in the root directory:
 
 ```env
-# Pinata IPFS Configuration (Required)
+# Pinata IPFS Configuration (Required for Decentralized Storage)
 VITE_PINATA_JWT=your_pinata_jwt_token
 VITE_PINATA_GATEWAY=your_pinata_gateway_url
-
-# Supabase Configuration (Required)
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 # Optional: Custom RPC endpoints
 VITE_ETHEREUM_RPC_URL=your_custom_rpc_url
@@ -380,8 +355,11 @@ npm run build
 
 ### **Environment Variables for Production**
 ```env
+# Decentralized IPFS Storage Configuration
 VITE_PINATA_JWT=production_pinata_jwt
 VITE_PINATA_GATEWAY=production_gateway_url
+
+# Smart Contract Addresses
 VITE_CONTRACT_ADDRESSES=production_contract_addresses
 ```
 
